@@ -1,0 +1,93 @@
+/*
+ * Design tokens. Everything downstream consumes these; see context/DESIGN_SYSTEM.md.
+ * src/lib/contrast.test.ts reads this file and holds the text pairs to WCAG AA.
+ */
+:root {
+  /* Palette, as given by the owner. */
+  --ink: #181715;
+  --parchment: #E8DDC5;
+  --ash: #777064;
+  --oxide: #702B2B;
+  --gold: #B49A69;
+
+  /*
+   * Ash fails 4.5:1 for text on both grounds (3.4 on ink, 3.5 on parchment), so it is kept
+   * for non-text use. These two carry secondary text instead. Proposal, logged in the roadmap.
+   */
+  --muted-on-ink: #A59D8E;
+  --muted-on-parchment: #5A5448;
+
+  /* Type. Families come from next/font in src/app/layout.tsx. */
+  /* Sized so the title spans the frame: its one line measures 10.2em in the display face. */
+  --type-title: min(calc((100vw - var(--chrome-rail-w) - 2 * var(--frame-gutter)) / 10.3), 20vh);
+  --type-name: clamp(7rem, 19vw, 24rem);
+  --type-statement: clamp(1.875rem, 2.9vw, 3.25rem);
+  --type-lead: clamp(1.5rem, 2.1vw, 2.375rem);
+  --type-body: clamp(1.0625rem, 0.98rem + 0.2vw, 1.1875rem);
+  --type-label: 0.8125rem;
+  --leading-display: 1;
+  --leading-lead: 1.2;
+  --leading-body: 1.6;
+  --tracking-display: -0.02em;
+
+  /* Space, on a 4px base. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-48: 12rem;
+
+  /* The page frame every chapter sits in. */
+  --chrome-header-h: 3.5rem;
+  --chrome-rail-w: 4.5rem;
+  --frame-gutter: var(--space-6);
+  --frame-foot-h: 3rem;
+  /* How far the film settles back once it is in colour. Its top right corner stays put. */
+  --plate-end-scale: 0.72;
+
+  /* Motion, per context/MOTION_SYSTEM.md. */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 700ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layers. */
+  --z-film: 1;
+  --z-chrome: 40;
+  --z-popover: 50;
+  --z-skip: 60;
+
+  /* Paper grain: tile of fine noise, painted once and cached. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .09 0 0 0 0 .08 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/*
+ * The page chrome (header, rail, stage ground) takes its colours from a tone, because
+ * the prologue page turns from paper to ink as its picture stops being a drawing.
+ * Ink is the base, so anything without the film (no script, reduced motion, small
+ * windows) is simply an ink page. The first-paint override for the film is in globals.css.
+ */
+:root,
+[data-chrome="ink"] {
+  --chrome-bg: var(--ink);
+  --chrome-fg: var(--parchment);
+  --chrome-muted: var(--muted-on-ink);
+  --chrome-accent: var(--gold);
+  --chrome-focus: var(--gold);
+  --chrome-grain: none;
+}
+
+[data-chrome="paper"] {
+  --chrome-bg: var(--parchment);
+  --chrome-fg: var(--ink);
+  --chrome-muted: var(--muted-on-parchment);
+  --chrome-accent: var(--oxide);
+  --chrome-focus: var(--oxide);
+  --chrome-grain: var(--grain);
+}

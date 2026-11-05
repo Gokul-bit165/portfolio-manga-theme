@@ -1,0 +1,131 @@
+@import "tailwindcss" source("..");
+@import "../styles/tokens.css";
+@import "../components/prologue/prologue.css";
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-parchment: var(--parchment);
+  --color-oxide: var(--oxide);
+  --color-gold: var(--gold);
+  --color-muted-on-ink: var(--muted-on-ink);
+  --color-muted-on-parchment: var(--muted-on-parchment);
+  --color-chrome: var(--chrome-bg);
+  --color-chrome-fg: var(--chrome-fg);
+  --color-chrome-muted: var(--chrome-muted);
+  --color-chrome-accent: var(--chrome-accent);
+
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --font-body: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --text-name: var(--type-name);
+  --text-statement: var(--type-statement);
+  --text-lead: var(--type-lead);
+  --text-body: var(--type-body);
+  --text-label: var(--type-label);
+}
+
+@layer base {
+  html {
+    background: var(--ink);
+    scroll-padding-top: var(--chrome-header-h);
+    --focus-ring: var(--gold);
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--type-body);
+    line-height: var(--leading-body);
+    color: var(--parchment);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* The base tone is ink. With the film, the page opens on paper, before any script runs. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 600px) and (scripting: enabled) {
+    :root:not([data-chrome]) {
+      --chrome-bg: var(--parchment);
+      --chrome-fg: var(--ink);
+      --chrome-muted: var(--muted-on-parchment);
+      --chrome-accent: var(--oxide);
+      --chrome-focus: var(--oxide);
+      --chrome-grain: var(--grain);
+    }
+  }
+}
+
+@layer components {
+  /* A parchment surface. The gold focus ring only reaches 2:1 here, so it becomes oxide. */
+  .surface-paper {
+    --focus-ring: var(--oxide);
+    background-color: var(--parchment);
+    background-image: var(--grain);
+    color: var(--ink);
+  }
+
+  .surface-ink {
+    --focus-ring: var(--gold);
+    background-color: var(--ink);
+    color: var(--parchment);
+  }
+
+  /* Header, rail and film ground, which all change with the tone together. */
+  .chrome-surface {
+    --focus-ring: var(--chrome-focus);
+    background-color: var(--chrome-bg);
+    background-image: var(--chrome-grain);
+    color: var(--chrome-fg);
+    transition:
+      background-color var(--duration-base) linear,
+      color var(--duration-base) linear;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    line-height: 1.4;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+
+  /* The page's twelve columns. Left edges land on column 1 and column 5. */
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-6);
+    padding-inline: var(--frame-gutter);
+  }
+
+  .link-ink {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--duration-fast) linear;
+  }
+
+  .link-ink:hover {
+    color: var(--oxide);
+  }
+
+  .surface-ink .link-ink:hover {
+    color: var(--gold);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrome-surface,
+  .link-ink {
+    transition: none;
+  }
+}

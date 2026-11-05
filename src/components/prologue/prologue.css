@@ -1,0 +1,265 @@
+/*
+ * The base here is the complete page: four still panels and the title, no script needed.
+ * This is what reduced motion, no script and small windows receive.
+ * The block at the end upgrades it to the film.
+ */
+.prologue {
+  position: relative;
+  background-color: var(--ink);
+  color: var(--parchment);
+}
+
+.prologue-stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: calc(var(--chrome-header-h) + var(--space-6)) var(--frame-gutter) var(--space-16);
+}
+
+.prologue-plate {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.prologue-still img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 46% 50%;
+}
+
+.prologue-still figcaption {
+  padding-top: var(--space-2);
+  color: var(--muted-on-ink);
+}
+
+.prologue-film,
+.prologue-foot {
+  display: none;
+}
+
+.prologue-title h1 {
+  font-size: clamp(3rem, 8.3vw, 11rem);
+  color: var(--parchment);
+}
+
+.prologue-word {
+  display: inline-block;
+  overflow: hidden;
+  /* Room for the descenders of y and g inside the mask. */
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+  vertical-align: bottom;
+}
+
+.prologue-word > span {
+  display: inline-block;
+}
+
+.prologue-title p {
+  margin-top: var(--space-4);
+  font-size: var(--type-lead);
+  line-height: var(--leading-lead);
+  font-family: var(--font-display);
+  color: var(--parchment);
+}
+
+@media (min-width: 1024px) {
+  .prologue-stage {
+    padding-left: calc(var(--chrome-rail-w) + var(--frame-gutter));
+  }
+
+  .prologue-plate {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* The film. Keep this condition in step with CINEMA_QUERY in src/lib/motion.ts. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 600px) and (scripting: enabled) {
+  .prologue {
+    height: 500vh;
+    background-color: var(--chrome-bg);
+    transition: background-color var(--duration-base) linear;
+  }
+
+  .prologue-stage {
+    position: sticky;
+    top: 0;
+    display: block;
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  /* The panel. Its line is ink, so it disappears when the page itself turns to ink. */
+  .prologue-plate {
+    position: absolute;
+    inset: var(--chrome-header-h) var(--frame-gutter) var(--frame-foot-h) var(--chrome-rail-w);
+    display: block;
+    overflow: hidden;
+    outline: 2px solid var(--ink);
+    transform-origin: 100% 0;
+    will-change: transform;
+  }
+
+  /*
+   * Ink arrives once on load. The drawing is already painted under this cover, so it does not
+   * delay the largest paint.
+   */
+  .prologue-plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-film);
+    background-color: var(--parchment);
+    mask-image: linear-gradient(100deg, transparent 0 40%, #000 60%);
+    mask-size: 300% 100%;
+    mask-position: 100% 0;
+    animation: prologue-ink-in 1.2s var(--ease-out-expo) 0.1s forwards;
+    pointer-events: none;
+  }
+
+  .prologue-still {
+    position: absolute;
+    inset: 0;
+    display: none;
+  }
+
+  .prologue-still img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-position: 50% 60%;
+  }
+
+  .prologue-still figcaption {
+    display: none;
+  }
+
+  /* The drawing is always there underneath, as the poster. */
+  .prologue-still[data-still="ink"] {
+    display: block;
+  }
+
+  /*
+   * While the film loads, or if it never can, the current stage is shown as a still.
+   * Stills are lazy and undisplayed until needed, so a working film costs only the poster.
+   */
+  .prologue:not([data-film="ready"])[data-stage="monochrome"] [data-still="monochrome"],
+  .prologue:not([data-film="ready"])[data-stage="sepia"] [data-still="sepia"],
+  .prologue:not([data-film="ready"])[data-stage="colour"] [data-still="colour"] {
+    display: block;
+  }
+
+  .prologue-film {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+    opacity: 0;
+  }
+
+  .prologue[data-film="ready"] .prologue-film {
+    opacity: 1;
+  }
+
+  /* Once the film is up nothing should show beneath it, not even at the edges while it scales. */
+  .prologue[data-film="ready"] .prologue-still {
+    visibility: hidden;
+  }
+
+  /* Bottom margin of the page: where we are in the story. */
+  .prologue-foot {
+    position: absolute;
+    inset: auto var(--frame-gutter) 0 var(--chrome-rail-w);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--frame-foot-h);
+    color: var(--chrome-muted);
+    transition: color var(--duration-base) linear;
+  }
+
+  .prologue-stages {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .prologue[data-stage="ink"] [data-stage-label="ink"],
+  .prologue[data-stage="monochrome"] [data-stage-label="monochrome"],
+  .prologue[data-stage="sepia"] [data-stage-label="sepia"],
+  .prologue[data-stage="colour"] [data-stage-label="colour"] {
+    color: var(--chrome-fg);
+  }
+
+  /* The title spans the ink the picture leaves behind. Nothing here ever sits on the picture. */
+  .prologue-title h1 {
+    position: absolute;
+    inset: auto var(--frame-gutter) var(--space-6) calc(var(--chrome-rail-w) + var(--frame-gutter));
+    font-size: var(--type-title);
+    white-space: nowrap;
+  }
+
+  /* The supporting line stands in the column beside the settled picture, on its bottom edge. */
+  .prologue-title p {
+    --plate-h: calc(100vh - var(--chrome-header-h) - var(--frame-foot-h));
+    --plate-w: calc(100vw - var(--chrome-rail-w) - var(--frame-gutter));
+    position: absolute;
+    top: calc(var(--chrome-header-h) + var(--plate-h) * var(--plate-end-scale));
+    left: calc(var(--chrome-rail-w) + var(--frame-gutter));
+    width: calc(var(--plate-w) * (1 - var(--plate-end-scale)) - 2 * var(--frame-gutter));
+    margin: 0;
+    font-size: var(--type-lead);
+    translate: 0 -100%;
+    text-wrap: balance;
+    visibility: hidden;
+  }
+
+  /* Hidden until the director takes over. GSAP then owns these, so this rule must let go. */
+  .prologue:not([data-directed]) [data-title-word] {
+    transform: translateY(118%);
+  }
+
+  /* If the director never arrives (a failed script), the title still reaches the reader. */
+  .prologue:not([data-directed]) .prologue-title {
+    position: absolute;
+    inset: auto 0 0;
+    height: 40vh;
+    background-color: var(--ink);
+    animation: prologue-show-title 0s 6s both;
+  }
+
+  .prologue:not([data-directed]) [data-title-word],
+  .prologue:not([data-directed]) .prologue-title p {
+    animation: prologue-release 0s 6s forwards;
+  }
+}
+
+@keyframes prologue-ink-in {
+  to {
+    mask-position: 0 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes prologue-show-title {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes prologue-release {
+  to {
+    transform: none;
+    visibility: visible;
+  }
+}

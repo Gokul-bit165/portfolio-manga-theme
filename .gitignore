@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.env*
+.vercel/
+.playwright-mcp/
+.taste-skill/
+# Private study material. Licensing unverified: never commit or publish (see References/berserk/README.md).
+References/*
+!References/berserk/
