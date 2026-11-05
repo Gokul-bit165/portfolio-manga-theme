@@ -29,3 +29,9 @@ Lazy-init each chapter's animations on approach; kill/refresh triggers on unmoun
 
 ## Open
 Whether to use GSAP's now-free plugins vs. CSS scroll-driven animations for simple cases `[VERIFY current GSAP license/plugin availability and browser support for CSS scroll-driven animations]`.
+
+
+## Status (milestone 1)
+Built: M1 (Identity entrances), M6 and M8 and M9 (the V7 film scrubbed by native scroll), M12 (rail). Not built: M2, M4, M5, M7, M10, M11. M3 is approximated by a wipe on the name.
+Reduced motion, no script, or a window under 1024×600 gets four still panels and no scrub. The condition lives in `CINEMA_QUERY` (`src/lib/motion.ts`) and `prologue.css`, and a test keeps them in step.
+Open question above resolved for now: GSAP for the scroll timeline; CSS scroll-driven animations not used.

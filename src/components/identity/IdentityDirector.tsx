@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { gsap } from "@/lib/gsap";
+import { loadGsap } from "@/lib/gsap-loader";
 
 const ENTRANCE_START = "top 84%";
 
@@ -12,35 +12,37 @@ const ENTRANCE_START = "top 84%";
  */
 export function IdentityDirector() {
   useEffect(() => {
-    const media = gsap.matchMedia();
+    return loadGsap(({ gsap }) => {
+      const media = gsap.matchMedia();
 
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      document.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach((group) => {
-        const parts = group.querySelectorAll("[data-reveal]");
-        if (parts.length > 0) {
-          gsap.from(parts, {
-            autoAlpha: 0,
-            y: 24,
-            duration: 0.7,
-            stagger: 0.07,
-            ease: "expo.out",
-            scrollTrigger: { trigger: group, start: ENTRANCE_START, once: true },
-          });
-        }
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        document.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach((group) => {
+          const parts = group.querySelectorAll("[data-reveal]");
+          if (parts.length > 0) {
+            gsap.from(parts, {
+              autoAlpha: 0,
+              y: 24,
+              duration: 0.7,
+              stagger: 0.07,
+              ease: "expo.out",
+              scrollTrigger: { trigger: group, start: ENTRANCE_START, once: true },
+            });
+          }
 
-        const name = group.querySelector("[data-reveal-wipe]");
-        if (name) {
-          gsap.from(name, {
-            clipPath: "inset(0 100% 0 0)",
-            duration: 1.1,
-            ease: "expo.out",
-            scrollTrigger: { trigger: group, start: ENTRANCE_START, once: true },
-          });
-        }
+          const name = group.querySelector("[data-reveal-wipe]");
+          if (name) {
+            gsap.from(name, {
+              clipPath: "inset(0 100% 0 0)",
+              duration: 1.1,
+              ease: "expo.out",
+              scrollTrigger: { trigger: group, start: ENTRANCE_START, once: true },
+            });
+          }
+        });
       });
-    });
 
-    return () => media.revert();
+      return () => media.revert();
+    });
   }, []);
 
   return null;

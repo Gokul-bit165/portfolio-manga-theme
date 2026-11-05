@@ -2,7 +2,7 @@
 
 Concept: **"THE JOURNEY OF AN ENGINEER — A STORY TOLD THROUGH INK"**. Vertical, scrollable, manga-inspired editorial portfolio for Gokul (CSE-AI&DS, BIT, grad Sep 2028).
 
-Current phase: **CONTEXT PACK ONLY. No website code, no asset production until the owner approves the pack.** Start at [README.md](README.md) (documentation index).
+Current phase: **Phase 1, desktop implementation, approved by the owner 2026-11-05.** Prologue and Identity are built and awaiting review. **Do not build further chapters until the owner approves them.** Start at [README.md](README.md) (documentation index).
 
 ## Hard rules
 1. **Never fabricate** achievements, metrics, dates, users, awards, internship terms or project features. Unknown = `[NEEDS CONFIRMATION]`. Facts live in [context/MY_PROFILE.md](context/MY_PROFILE.md) and [context/PROJECTS.md](context/PROJECTS.md) only.

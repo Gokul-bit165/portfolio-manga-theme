@@ -21,6 +21,16 @@ describe("chooseFilmSource", () => {
     expect(chooseFilmSource({ viewportWidth: 1100, devicePixelRatio: 2 })).toBe("hd");
   });
 
+  test("a 3g estimate gets the 960 version, not stills", () => {
+    // Regression: Chrome derives effectiveType from observed timing. A desktop in this project
+    // reported 4g, then 3g, in one session, and permanently lost the film to stills.
+    expect(chooseFilmSource({ ...desktop, effectiveType: "3g" })).toBe("sd");
+  });
+
+  test("a 3g estimate does not override too little memory", () => {
+    expect(chooseFilmSource({ ...desktop, effectiveType: "3g", deviceMemory: 2 })).toBeNull();
+  });
+
   test("limited memory gets the 960 version", () => {
     expect(chooseFilmSource({ ...desktop, deviceMemory: 4 })).toBe("sd");
   });
@@ -29,7 +39,6 @@ describe("chooseFilmSource", () => {
     ["data saver", { saveData: true }],
     ["2g", { effectiveType: "2g" }],
     ["slow 2g", { effectiveType: "slow-2g" }],
-    ["3g", { effectiveType: "3g" }],
     ["2 GB of memory", { deviceMemory: 2 }],
   ])("%s gets stills and no video", (_name, extra) => {
     expect(chooseFilmSource({ ...desktop, ...extra })).toBeNull();

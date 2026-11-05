@@ -1,0 +1,172 @@
+{
+ "RTX 4050": {
+  "full": {
+   "ink wide": {
+    "avg": 3,
+    "p50": 2.9,
+    "p95": 3.9,
+    "max": 4.3
+   },
+   "memory wide": {
+    "avg": 2.44,
+    "p50": 2.5,
+    "p95": 2.9,
+    "max": 3.1
+   },
+   "anime wide": {
+    "avg": 2.1,
+    "p50": 2.1,
+    "p95": 2.5,
+    "max": 2.7
+   },
+   "night wide": {
+    "avg": 1.77,
+    "p50": 1.8,
+    "p95": 2,
+    "max": 2.1
+   },
+   "ink>memory": {
+    "avg": 2.11,
+    "p50": 2.1,
+    "p95": 2.3,
+    "max": 2.4
+   },
+   "memory>anime": {
+    "avg": 2.01,
+    "p50": 2,
+    "p95": 2.2,
+    "max": 2.3
+   },
+   "anime>night": {
+    "avg": 1.88,
+    "p50": 1.9,
+    "p95": 2.1,
+    "max": 2.2
+   },
+   "anime passage": {
+    "avg": 2.34,
+    "p50": 2.3,
+    "p95": 2.6,
+    "max": 2.7
+   }
+  },
+  "pass": {
+   "gbufferMs": 1.06
+  },
+  "mem": {
+   "info": {
+    "geometries": 6,
+    "textures": 14
+   },
+   "heapMB": 23.4,
+   "drawBuffers": 8,
+   "colorAttach": 8
+  },
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "boot": {
+   "sceneReadyMs": 375,
+   "compileMs": [
+    92,
+    3323,
+    1230
+   ],
+   "totalMs": 9270
+  },
+  "coldLoadMs": 9727,
+  "warmLoadMs": 374,
+  "warmBoot": {
+   "sceneReadyMs": 187,
+   "compileMs": [
+    9,
+    12,
+    13
+   ],
+   "totalMs": 250
+  }
+ },
+ "Intel UHD": {
+  "full": {
+   "ink wide": {
+    "avg": 12.48,
+    "p50": 12.4,
+    "p95": 13.3,
+    "max": 13.7
+   },
+   "memory wide": {
+    "avg": 13.75,
+    "p50": 13.7,
+    "p95": 14.7,
+    "max": 15.2
+   },
+   "anime wide": {
+    "avg": 12.49,
+    "p50": 12.4,
+    "p95": 13.5,
+    "max": 14.5
+   },
+   "night wide": {
+    "avg": 11.51,
+    "p50": 11.5,
+    "p95": 12.5,
+    "max": 14.4
+   },
+   "ink>memory": {
+    "avg": 15.22,
+    "p50": 15.1,
+    "p95": 16.3,
+    "max": 18.4
+   },
+   "memory>anime": {
+    "avg": 14.95,
+    "p50": 14.8,
+    "p95": 16.5,
+    "max": 17.3
+   },
+   "anime>night": {
+    "avg": 12.93,
+    "p50": 12.8,
+    "p95": 13.9,
+    "max": 14.2
+   },
+   "anime passage": {
+    "avg": 15.36,
+    "p50": 15.3,
+    "p95": 16.4,
+    "max": 16.7
+   }
+  },
+  "pass": {
+   "gbufferMs": 6.15
+  },
+  "mem": {
+   "info": {
+    "geometries": 6,
+    "textures": 14
+   },
+   "heapMB": 26.3,
+   "drawBuffers": 8,
+   "colorAttach": 8
+  },
+  "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "boot": {
+   "sceneReadyMs": 409,
+   "compileMs": [
+    44,
+    2684,
+    957
+   ],
+   "totalMs": 7910
+  },
+  "coldLoadMs": 8237,
+  "warmLoadMs": 625,
+  "warmBoot": {
+   "sceneReadyMs": 246,
+   "compileMs": [
+    123,
+    45,
+    27
+   ],
+   "totalMs": 484
+  }
+ }
+}

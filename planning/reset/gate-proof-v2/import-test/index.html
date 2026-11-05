@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Import test (throwaway prototype)</title>
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html, body { margin: 0; background: #171513; color: #ece8df; font: 12px/1.45 ui-monospace, "Cascadia Mono", Consolas, monospace; }
+  canvas#world { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  #spacer { height: 1400vh; }
+  #hud { position: fixed; left: 12px; bottom: 12px; background: #171513e6; padding: 8px 10px; max-width: 760px; }
+  #hud b { color: #d8553c; font-weight: 600; }
+  #hud .row { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+  #hud button { font: inherit; color: #ece8df; background: #2a2622; border: 1px solid #4b443c; padding: 3px 8px; cursor: pointer; }
+  #hud button[aria-pressed="true"] { background: #a33a2c; border-color: #a33a2c; }
+  #hud button:focus-visible { outline: 2px solid #ece8df; outline-offset: 1px; }
+  #load { position: fixed; inset: 0; display: grid; place-items: center; background: #ece8df; color: #171513; }
+  body.capture #hud { display: none; }
+  body.capture::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<div id="spacer"></div>
+<div id="load">Loading the gate…</div>
+<div id="hud" role="status">
+  <div><b>Throwaway proof, not the website.</b> Scroll to walk. <span id="stats">measuring…</span></div>
+  <div class="row" id="views"></div>
+</div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

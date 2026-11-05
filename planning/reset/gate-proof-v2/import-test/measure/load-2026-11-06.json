@@ -1,0 +1,114 @@
+{
+ "RTX 4050": {
+  "import cold": {
+   "readyMs": 12567,
+   "boot": {
+    "sceneReadyMs": 653,
+    "compileMs": [
+     78,
+     3947,
+     1543
+    ],
+    "totalMs": 11523
+   },
+   "timings": {
+    "groundTris": 84097,
+    "groundRaysMs": 255,
+    "assetsLoadMs": 323
+   }
+  },
+  "import warm": {
+   "readyMs": 729,
+   "boot": {
+    "sceneReadyMs": 433,
+    "compileMs": [
+     147,
+     21,
+     20
+    ],
+    "totalMs": 661
+   },
+   "timings": {
+    "groundTris": 84097,
+    "groundRaysMs": 235,
+    "assetsLoadMs": 272
+   }
+  },
+  "baseline warm": {
+   "readyMs": 7261,
+   "boot": {
+    "sceneReadyMs": 181,
+    "compileMs": [
+     85,
+     2401,
+     1042
+    ],
+    "totalMs": 7130
+   },
+   "timings": null
+  },
+  "frame": {
+   "avg": 3,
+   "p50": 2.3,
+   "p95": 15.5,
+   "max": 18.4
+  },
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+ },
+ "Intel UHD": {
+  "import cold": {
+   "readyMs": 11980,
+   "boot": {
+    "sceneReadyMs": 651,
+    "compileMs": [
+     35,
+     3970,
+     1516
+    ],
+    "totalMs": 11728
+   },
+   "timings": {
+    "groundTris": 84097,
+    "groundRaysMs": 254,
+    "assetsLoadMs": 328
+   }
+  },
+  "import warm": {
+   "readyMs": 666,
+   "boot": {
+    "sceneReadyMs": 426,
+    "compileMs": [
+     72,
+     20,
+     17
+    ],
+    "totalMs": 599
+   },
+   "timings": {
+    "groundTris": 84097,
+    "groundRaysMs": 236,
+    "assetsLoadMs": 276
+   }
+  },
+  "baseline warm": {
+   "readyMs": 7117,
+   "boot": {
+    "sceneReadyMs": 188,
+    "compileMs": [
+     64,
+     2442,
+     992
+    ],
+    "totalMs": 6990
+   },
+   "timings": null
+  },
+  "frame": {
+   "avg": 11.58,
+   "p50": 11.5,
+   "p95": 12.1,
+   "max": 12.1
+  },
+  "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+ }
+}

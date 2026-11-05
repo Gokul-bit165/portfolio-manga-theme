@@ -1,0 +1,123 @@
+{
+ "forecourt-wind-frozen": {
+  "branches": {
+   "pixels": 24050,
+   "step": 17.534,
+   "flicker": 9.681,
+   "ratio": 0.552
+  },
+  "figure": {
+   "pixels": 26703,
+   "step": 6.879,
+   "flicker": 3.995,
+   "ratio": 0.581
+  },
+  "grass": {
+   "pixels": 59544,
+   "step": 48.986,
+   "flicker": 40.656,
+   "ratio": 0.83
+  },
+  "plants": {
+   "pixels": 322227,
+   "step": 35.21,
+   "flicker": 27.59,
+   "ratio": 0.784
+  },
+  "statue": {
+   "pixels": 90206,
+   "step": 17.51,
+   "flicker": 10.937,
+   "ratio": 0.625
+  },
+  "stone (reference)": {
+   "pixels": 874657,
+   "step": 10.161,
+   "flicker": 5.497,
+   "ratio": 0.541
+  }
+ },
+ "forecourt-with-wind": {
+  "branches": {
+   "pixels": 24030,
+   "step": 17.535,
+   "flicker": 9.681,
+   "ratio": 0.552
+  },
+  "figure": {
+   "pixels": 26703,
+   "step": 6.879,
+   "flicker": 3.995,
+   "ratio": 0.581
+  },
+  "grass": {
+   "pixels": 59500,
+   "step": 47.852,
+   "flicker": 39.267,
+   "ratio": 0.821
+  },
+  "plants": {
+   "pixels": 322184,
+   "step": 35.084,
+   "flicker": 27.419,
+   "ratio": 0.782
+  },
+  "statue": {
+   "pixels": 90206,
+   "step": 17.509,
+   "flicker": 10.936,
+   "ratio": 0.625
+  },
+  "stone (reference)": {
+   "pixels": 875877,
+   "step": 10.195,
+   "flicker": 5.519,
+   "ratio": 0.541
+  }
+ },
+ "nearer": {
+  "figure": {
+   "pixels": 108203,
+   "step": 18.134,
+   "flicker": 14.407,
+   "ratio": 0.794
+  },
+  "grass": null,
+  "plants": null,
+  "props": null,
+  "stone (reference)": {
+   "pixels": 1202961,
+   "step": 23.165,
+   "flicker": 18.437,
+   "ratio": 0.796
+  }
+ },
+ "walk-anchor-off": {
+  "figure": {
+   "pixels": 136928,
+   "step": 14.161,
+   "flicker": 8.109,
+   "ratio": 0.573
+  },
+  "stone (reference)": {
+   "pixels": 1181831,
+   "step": 20.624,
+   "flicker": 14.287,
+   "ratio": 0.693
+  }
+ },
+ "walk-anchor-on": {
+  "figure": {
+   "pixels": 136901,
+   "step": 13.737,
+   "flicker": 7.78,
+   "ratio": 0.566
+  },
+  "stone (reference)": {
+   "pixels": 1181855,
+   "step": 20.624,
+   "flicker": 14.286,
+   "ratio": 0.693
+  }
+ }
+}

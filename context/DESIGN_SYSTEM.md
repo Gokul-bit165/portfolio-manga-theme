@@ -52,3 +52,12 @@ Color roles (surface, text, muted, accent, highlight), spacing scale (4px base),
 
 ## Accessibility
 AA contrast, keyboard focus order follows DOM, all art `alt` or decorative `aria-hidden`, reduced-motion variants, no info conveyed by color alone, min touch target 44px.
+
+
+## As implemented (milestone 1)
+Source of truth is `src/styles/tokens.css`; `src/lib/contrast.test.ts` holds the text pairs to AA.
+- **Fonts (D4, provisional):** Cormorant Garamond 500 for display, IBM Plex Sans 400 for body, IBM Plex Mono 400 for metadata. Three files.
+- **Added tones (proposal):** `--muted-on-ink` #A59D8E and `--muted-on-parchment` #5A5448, because ash fails 4.5:1 for text on both grounds. Ash is unused as text.
+- **Focus ring:** gold on ink, but oxide on parchment, because gold on parchment is below 3:1. This changes "gold 2px" above.
+- **Page tone:** header, rail and film ground share a tone that turns from paper to ink as the film leaves the drawing.
+- **Mono is metadata only,** as specified here. This overrides the Taste skill's ban on monospace (authority order: project docs first).

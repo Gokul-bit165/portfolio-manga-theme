@@ -11,7 +11,7 @@
   --gold: #B49A69;
 
   /*
-   * Ash fails 4.5:1 for text on both grounds (3.4 on ink, 3.5 on parchment), so it is kept
+   * Ash fails 4.5:1 for text on both grounds (3.66 on ink, 3.64 on parchment), so it is kept
    * for non-text use. These two carry secondary text instead. Proposal, logged in the roadmap.
    */
   --muted-on-ink: #A59D8E;

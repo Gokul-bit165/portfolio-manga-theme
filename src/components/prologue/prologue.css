@@ -82,6 +82,7 @@
   .prologue {
     height: 500vh;
     background-color: var(--chrome-bg);
+    background-image: var(--chrome-grain);
     transition: background-color var(--duration-base) linear;
   }
 
@@ -201,7 +202,7 @@
   /* The title spans the ink the picture leaves behind. Nothing here ever sits on the picture. */
   .prologue-title h1 {
     position: absolute;
-    inset: auto var(--frame-gutter) var(--space-6) calc(var(--chrome-rail-w) + var(--frame-gutter));
+    inset: auto var(--frame-gutter) var(--space-8) calc(var(--chrome-rail-w) + var(--frame-gutter));
     font-size: var(--type-title);
     white-space: nowrap;
   }
@@ -211,12 +212,11 @@
     --plate-h: calc(100vh - var(--chrome-header-h) - var(--frame-foot-h));
     --plate-w: calc(100vw - var(--chrome-rail-w) - var(--frame-gutter));
     position: absolute;
-    top: calc(var(--chrome-header-h) + var(--plate-h) * var(--plate-end-scale));
+    bottom: calc(100vh - var(--chrome-header-h) - var(--plate-h) * var(--plate-end-scale));
     left: calc(var(--chrome-rail-w) + var(--frame-gutter));
     width: calc(var(--plate-w) * (1 - var(--plate-end-scale)) - 2 * var(--frame-gutter));
     margin: 0;
     font-size: var(--type-lead);
-    translate: 0 -100%;
     text-wrap: balance;
     visibility: hidden;
   }

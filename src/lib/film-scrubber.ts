@@ -96,7 +96,7 @@ export function createFilmScrubber({ video, url, onProgress, onReady, onFail }: 
       video.src = objectUrl;
       video.load();
     } catch (error) {
-      if (!abort.signal.aborted || !finished) fail(error instanceof Error ? error.message : "load failed");
+      fail(error instanceof Error ? error.message : "load failed");
     } finally {
       window.clearTimeout(timeout);
     }

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Type comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Dela+Gothic+One&family=DM+Mono&family=Fragment+Mono&family=Grenze+Gotisch:wght@700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+Great+Primer+SC&family=JetBrains+Mono&family=Literata:opsz,wght@7..72,400&family=Martian+Mono:wght@400&family=Newsreader:opsz,wght@6..72,400&family=Noto+Serif+Tamil:wght@700&family=Source+Serif+4:opsz,wght@8..60,400&family=Spectral&family=Spline+Sans+Mono&family=Texturina:opsz,wght@12..72,800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400&display=block" rel="stylesheet">
+<style>
+:root{--ink:#181715;--paper:#E8DDC5;--red:#A33A2C;--mute:#A59D8E;--mute2:#5A5448}
+*{box-sizing:border-box;margin:0}
+body{background:#3b3936;width:1640px}
+.board{width:1600px;height:800px;margin:20px;display:grid;grid-template-columns:1100px 1fr;gap:12px;background:#3b3936;position:relative}
+.name{position:absolute;left:140px;top:9px;z-index:9;background:var(--ink);color:var(--paper);font:13px/1 Consolas,monospace;padding:7px 10px}
+.scene{position:relative;height:800px;background:url(../assets/gate-ink.jpg) center 62%/cover;overflow:hidden}
+.side{display:grid;grid-template-rows:290px 1fr;gap:12px}
+.opener{background:var(--ink);color:var(--paper);padding:30px;display:flex;flex-direction:column;justify-content:space-between}
+.sheet{background:var(--paper);color:var(--ink);padding:26px 28px;display:flex;flex-direction:column;gap:10px}
+.seal{display:inline-grid;place-items:center;background:var(--red);color:var(--paper);width:40px;height:40px;font:700 24px/1 "Noto Serif Tamil",serif}
+.nav{position:absolute;inset:0 0 auto 0;height:46px;background:var(--ink);color:var(--paper);display:flex;justify-content:space-between;align-items:center;padding:0 22px}
+.progress{position:absolute;inset:auto 0 0 0;height:50px;background:var(--ink);padding:0 22px;display:flex;align-items:center;gap:18px;color:var(--mute)}
+.progress svg{flex:1;height:30px}
+.leader{position:absolute;height:1px;background:var(--red);transform-origin:0 0}
+.tag{position:absolute;background:var(--ink);color:var(--paper);padding:7px 10px}
+.mono{font-family:var(--m);font-size:var(--ms,12.5px);line-height:1.5}
+.body{font-family:var(--b);font-size:var(--bs,17px);line-height:1.55}
+
+/* A: Cut Stone */
+#a{--d:"Grenze Gotisch";--b:"Source Serif 4";--m:"Spline Sans Mono"}
+#a .title{position:absolute;right:38px;top:80px;width:430px;background:var(--ink);color:var(--paper);padding:20px 24px 22px}
+#a .title h1{font:800 62px/0.98 var(--d)}
+#a .title p{margin-top:12px;font:17px/1.4 var(--b);color:var(--paper)}
+#a .ch{font:800 74px/1 var(--d)}
+#a .proj{font:800 36px/1.05 var(--d)}
+
+/* B: Seinen Block */
+#b{--d:"Dela Gothic One";--b:"Zen Kaku Gothic New";--m:"JetBrains Mono"}
+#b .title{position:absolute;right:38px;top:80px;background:var(--ink);color:var(--paper);padding:18px 20px 20px;width:360px}
+#b .title h1{font:400 49px/1.04 var(--d);text-transform:uppercase;letter-spacing:-.01em}
+#b .title h1 span{display:block}
+#b .title h1 .small{font-size:23px;line-height:1.3}
+#b .title p{margin-top:12px;font:15px/1.45 var(--b)}
+#b .ch{font:400 52px/1 var(--d);text-transform:uppercase}
+#b .proj{font:400 25px/1.15 var(--d)}
+
+/* C: Archive Press */
+#c{--d:"IM Fell Great Primer SC";--b:"Newsreader";--m:"DM Mono"}
+#c .title{position:absolute;right:38px;top:84px;width:470px;background:var(--paper);color:var(--ink);padding:9px;text-align:center}
+#c .title>div{border:2px solid var(--ink);padding:18px 20px 20px;outline:1px solid var(--ink);outline-offset:3px}
+#c .title h1{font:400 39px/1.12 var(--d);letter-spacing:.015em}
+#c .title p{margin-top:9px;font:italic 19px/1.3 "IM Fell English",serif}
+#c .ch{font:400 58px/1 var(--d)}
+#c .proj{font:400 32px/1.05 var(--d)}
+
+/* D: Engraver */
+#d{--d:"Texturina";--b:"Literata";--m:"Fragment Mono"}
+#d .title{position:absolute;right:0;top:46px;bottom:50px;width:128px;background:var(--ink);color:var(--paper);display:flex;align-items:flex-start;justify-content:center;padding-top:22px}
+#d .title h1{writing-mode:vertical-rl;font:800 49px/1 var(--d);letter-spacing:-.01em;font-variation-settings:"opsz" 72;white-space:nowrap}
+#d .sub{position:absolute;right:146px;top:80px;width:300px;background:var(--paper);color:var(--ink);padding:12px 16px;font:17px/1.4 var(--b)}
+#d .ch{font:800 56px/1 var(--d);font-variation-settings:"opsz" 72}
+#d .proj{font:800 27px/1.1 var(--d);font-variation-settings:"opsz" 72}
+
+/* E: Brush and Seal */
+#e{--d:"Yuji Boku";--b:"Spectral";--m:"Martian Mono";--ms:10.5px}
+#e .title{position:absolute;right:38px;top:80px;width:470px;background:var(--paper);color:var(--ink);padding:18px 24px 20px}
+#e .title h1{font:400 51px/1.08 var(--d)}
+#e .title p{margin-top:10px;font:18px/1.4 var(--b)}
+#e .title .seal{position:absolute;right:18px;bottom:18px}
+#e .ch{font:400 66px/1 var(--d)}
+#e .proj{font:400 31px/1.1 var(--d)}
+
+/* F: Volume Spine, the recommendation */
+#f{--d:"Dela Gothic One";--b:"Newsreader";--m:"DM Mono";--bs:18px}
+#f .title{position:absolute;right:0;top:46px;bottom:50px;width:136px;background:var(--ink);color:var(--paper);display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:20px}
+#f .title h1{writing-mode:vertical-rl;font:400 39px/1.12 var(--d);letter-spacing:.005em;white-space:nowrap;text-transform:uppercase}
+#f .sub{position:absolute;right:152px;top:62px;width:282px;background:var(--paper);color:var(--ink);padding:11px 15px;font:italic 18px/1.35 var(--b)}
+#f .ch{font:400 40px/1.05 var(--d);text-transform:uppercase}
+#f .proj{font:400 23px/1.15 var(--d)}
+
+/* Every candidate's title at the same size, for direct comparison */
+#side-by-side{width:1600px;margin:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#side-by-side>div{background:var(--ink);color:var(--paper);height:262px;padding:18px 24px;display:flex;flex-direction:column;justify-content:space-between}
+#side-by-side small{font:12px Consolas,monospace;color:var(--mute)}
+#side-by-side .t{line-height:1}
+</style></head><body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="section" viewBox="0 0 1500 100" preserveAspectRatio="none">
+    <polyline points="0,90 110,90 150,90 210,86 400,85 590,84 650,62 880,60 960,62 1080,34 1180,32 1360,16 1500,4" fill="none" stroke="#6d675b" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polyline points="0,90 110,90 150,90 210,86 400,85" fill="none" stroke="#A33A2C" stroke-width="3" vector-effect="non-scaling-stroke"/>
+  </symbol></defs></svg>
+
+<template id="tpl">
+  <div class="name"></div>
+  <div class="scene">
+    <div class="nav"><span class="wm"></span><span class="mono">Chapters &nbsp;&nbsp; GitHub</span></div>
+    <div class="leader" style="left:462px;top:220px;width:150px;transform:rotate(68deg)"></div>
+    <div class="tag mono" style="left:338px;top:176px">The Gate. Stop 0c of 18</div>
+    <div class="progress mono"><span>0 The Beginning</span><svg><use href="#section"/></svg><span>Scroll to walk</span></div>
+    <div class="slot"></div>
+  </div>
+  <div class="side">
+    <div class="opener">
+      <div style="display:flex;gap:14px;align-items:center"><span class="seal">௧</span><span class="mono" style="color:var(--mute)">Chapter 1</span></div>
+      <div><div class="ch">Identity</div><div class="body" style="margin-top:10px;color:var(--paper)">The person behind the code</div></div>
+    </div>
+    <div class="sheet">
+      <div class="mono" style="color:var(--mute2)">Stop 3.2. The Loom</div>
+      <div class="proj">Weaving Intelligence</div>
+      <div class="body">Industrial intelligence dashboard for textile weaving, built to analyse machine production, power consumption, compressed-air consumption, abnormalities and machine performance.</div>
+      <div class="mono" style="color:var(--mute2);margin-top:auto">Goal: real machine data<br>Evidence, stack, status: to be supplied by the owner</div>
+    </div>
+  </div>
+</template>
+
+<section class="board" id="a"></section>
+<section class="board" id="b"></section>
+<section class="board" id="c"></section>
+<section class="board" id="d"></section>
+<section class="board" id="e"></section>
+<section class="board" id="f"></section>
+
+<section id="side-by-side">
+  <div><small>CURRENT SITE: Cormorant Garamond 500</small><div class="t" style="font:500 52px/1 'Cormorant Garamond'">The Journey of an Engineer</div></div>
+  <div><small>A: Grenze Gotisch 800</small><div class="t" style="font:800 52px/1 'Grenze Gotisch'">The Journey of an Engineer</div></div>
+  <div><small>B: Dela Gothic One</small><div class="t" style="font:400 40px/1.08 'Dela Gothic One'">THE JOURNEY OF AN ENGINEER</div></div>
+  <div><small>C: IM Fell Great Primer SC</small><div class="t" style="font:400 46px/1.08 'IM Fell Great Primer SC'">The Journey of an Engineer</div></div>
+  <div><small>D: Texturina 800</small><div class="t" style="font:800 44px/1.04 Texturina;font-variation-settings:'opsz' 72">The Journey of an Engineer</div></div>
+  <div><small>E: Yuji Boku</small><div class="t" style="font:400 44px/1.1 'Yuji Boku'">The Journey of an Engineer</div></div>
+</section>
+
+<script>
+const titles={
+ a:['A  CUT STONE: Grenze Gotisch / Source Serif 4 / Spline Sans Mono','<div class="title"><h1>The Journey of an Engineer</h1><p>A story told through ink, imagination and engineering.</p></div>'],
+ b:['B  SEINEN BLOCK: Dela Gothic One / Zen Kaku Gothic New / JetBrains Mono','<div class="title"><h1><span>The Journey</span><span class="small">of an</span><span>Engineer</span></h1><p>A story told through ink, imagination and engineering.</p></div>'],
+ c:['C  ARCHIVE PRESS: IM Fell Great Primer SC / Newsreader / DM Mono','<div class="title"><div><h1>The Journey of an Engineer</h1><p>A story told through ink, imagination and engineering.</p></div></div>'],
+ d:['D  ENGRAVER: Texturina / Literata / Fragment Mono','<div class="title"><h1>The Journey of an Engineer</h1></div><div class="sub">A story told through ink, imagination and engineering.</div>'],
+ f:['F  VOLUME SPINE (recommended): Dela Gothic One / Newsreader / DM Mono','<div class="title"><span class="seal">௦</span><h1>The Journey<br>of an Engineer</h1></div><div class="sub">A story told through ink, imagination and engineering.</div>'],
+ e:['E  BRUSH AND SEAL: Yuji Boku / Spectral / Martian Mono','<div class="title"><h1>The Journey of an Engineer</h1><p style="max-width:330px">A story told through ink, imagination and engineering.</p><span class="seal">௦</span></div>'],
+};
+for(const [id,[name,html]] of Object.entries(titles)){
+  const b=document.getElementById(id);
+  b.append(document.getElementById('tpl').content.cloneNode(true));
+  b.querySelector('.name').textContent=name;
+  b.querySelector('.slot').innerHTML=html;
+  const wm=b.querySelector('.wm');wm.textContent='Gokul';wm.style.font=getComputedStyle(b).getPropertyValue('--d')==='"Dela Gothic One"'?'400 19px var(--d)':'800 25px var(--d)';
+}
+</script>
+</body></html>

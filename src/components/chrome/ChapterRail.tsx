@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { CHAPTERS } from "@/content/site";
 import { setChromeTone } from "@/lib/chrome-tone";
 import type { PageTone } from "@/lib/film";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { loadGsap } from "@/lib/gsap-loader";
 
 const BUILT = CHAPTERS.filter((chapter) => chapter.built);
 const HEADER_LINE = "top top+=56";
@@ -18,44 +18,46 @@ export function ChapterRail() {
   const rail = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const context = gsap.context(() => {
-      BUILT.forEach((chapter) => {
-        const section = document.getElementById(chapter.id);
-        if (!section) return;
+    return loadGsap(({ gsap, ScrollTrigger }) => {
+      const context = gsap.context(() => {
+        BUILT.forEach((chapter) => {
+          const section = document.getElementById(chapter.id);
+          if (!section) return;
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onToggle: (self) => {
-            if (self.isActive) setActiveId(chapter.id);
-          },
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top center",
+            end: "bottom center",
+            onToggle: (self) => {
+              if (self.isActive) setActiveId(chapter.id);
+            },
+          });
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+              const mark = rail.current?.querySelector<HTMLElement>(`[data-rail-mark="${chapter.id}"]`);
+              mark?.style.setProperty("--rail-progress", self.progress.toFixed(3));
+            },
+          });
         });
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          end: "bottom bottom",
-          onUpdate: (self) => {
-            const mark = rail.current?.querySelector<HTMLElement>(`[data-rail-mark="${chapter.id}"]`);
-            mark?.style.setProperty("--rail-progress", self.progress.toFixed(3));
-          },
+        document.querySelectorAll<HTMLElement>("[data-tone]").forEach((section) => {
+          ScrollTrigger.create({
+            trigger: section,
+            start: HEADER_LINE,
+            end: `bottom top+=56`,
+            onToggle: (self) => {
+              if (self.isActive) setChromeTone(section.dataset.tone as PageTone);
+            },
+          });
         });
       });
 
-      document.querySelectorAll<HTMLElement>("[data-tone]").forEach((section) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: HEADER_LINE,
-          end: `bottom top+=56`,
-          onToggle: (self) => {
-            if (self.isActive) setChromeTone(section.dataset.tone as PageTone);
-          },
-        });
-      });
+      return () => context.revert();
     });
-
-    return () => context.revert();
   }, []);
 
   const active = CHAPTERS.find((chapter) => chapter.id === activeId);

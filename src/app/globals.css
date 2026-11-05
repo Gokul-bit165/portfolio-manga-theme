@@ -27,6 +27,7 @@
 
 @layer base {
   html {
+    color-scheme: dark;
     background: var(--ink);
     scroll-padding-top: var(--chrome-header-h);
     --focus-ring: var(--gold);
@@ -120,6 +121,11 @@
 
   .surface-ink .link-ink:hover {
     color: var(--gold);
+  }
+
+  /* Oxide is unreadable on ink, so links in the header follow the chrome's own accent. */
+  .chrome-surface .link-ink:hover {
+    color: var(--chrome-accent);
   }
 }
 

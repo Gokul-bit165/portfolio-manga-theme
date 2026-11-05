@@ -37,3 +37,20 @@ Vercel is the default assumption. [NEEDS CONFIRMATION] Domain, analytics (defaul
 
 ## Content model (proposal)
 Typed TS/MDX data files for chapters and projects, with a `verified: boolean` flag per fact so unverified text cannot ship. [D10]
+
+
+## Installed (milestone 1, 2026-11-05)
+| Package | Version | Why | Impact |
+|---|---|---|---|
+| next, react, react-dom | 16.4.5, 19.3.1 | Core, as above | 178.7 KB gz initial JS including app code (over the proposed ~170 KB budget, see roadmap D19) |
+| gsap (with ScrollTrigger) | 3.15.1 | Scrubbed prologue timeline, entrances, chapter tracking (M1, M6, M8, M12). "No charge" standard licence | 48 KB gz, loaded after first paint via `lib/gsap-loader.ts` |
+| tailwindcss, @tailwindcss/postcss | 4.3.4 (dev) | Styling on CSS-variable tokens. Scoped with `source("..")` so it never scans `References/` | Build time only |
+| vitest | 4.1.12 (dev) | Logic tests. 4.1.11+ required: earlier versions carry critical advisories | Dev only |
+| sharp | 0.35.5 (dev) | Cuts the AVIF and WebP stills in `scripts/prepare-media.mjs` | Dev only |
+| typescript, eslint, eslint-config-next, @types/* | 6.0.3, 9.39.5, 16.4.5 | Quality gates | Dev only |
+
+Not added: `@gsap/react` (a small effect wrapper is enough), Three.js (nothing in this milestone needs it), FFmpeg (film used as delivered).
+
+`npm audit --omit=dev`: 0 vulnerabilities. Full audit: 8 moderate, all dev tooling.
+
+**Runtime note:** Node 23 is outside the supported range of current vitest and eslint, though everything here ran on it. Node 24 LTS is the better long-term choice. [NEEDS CONFIRMATION]

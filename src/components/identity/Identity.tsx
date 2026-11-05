@@ -82,7 +82,7 @@ export function Identity() {
       <section
         data-tone="ink"
         aria-labelledby="philosophy-heading"
-        className="surface-ink flex min-h-screen flex-col justify-between lg:pl-[var(--chrome-rail-w)]"
+        className="surface-ink flex min-h-svh flex-col justify-between lg:pl-[var(--chrome-rail-w)]"
       >
         <div data-reveal-group className="page-grid gap-y-[var(--space-8)] pt-[var(--space-32)] pb-[var(--space-24)] lg:pt-[var(--space-48)]">
           <h3 id="philosophy-heading" data-reveal className={SECTION_HEADING}>

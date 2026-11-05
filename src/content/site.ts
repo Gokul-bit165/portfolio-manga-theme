@@ -61,7 +61,8 @@ const interestClaims: readonly Claim<string>[] = [
 
 export const identity = {
   name: "Gokul",
-  role: "An engineering undergraduate building across agentic AI, full-stack systems and interactive 3D.",
+  // U+2060 after the hyphen keeps "full-stack" on one line.
+  role: "An engineering undergraduate building across agentic AI, full-⁠stack systems and interactive 3D.",
   introduction:
     "I study Computer Science and Engineering, in Artificial Intelligence and Data Science, at Bannari Amman Institute of Technology in Tamil Nadu, India. I expect to graduate in September 2028.",
   facts: publishable(factClaims),

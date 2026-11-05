@@ -1,0 +1,672 @@
+{
+ "RTX 4050": {
+  "cold": {
+   "ms": 14905,
+   "boot": {
+    "sceneReadyMs": 4211,
+    "compileMs": [
+     69,
+     3702,
+     1447
+    ],
+    "totalMs": 14463
+   },
+   "timings": {
+    "assetsLoadMs": 3890,
+    "groundRaysMs": 3832
+   }
+  },
+  "warm": {
+   "ms": 4291,
+   "boot": {
+    "sceneReadyMs": 4008,
+    "compileMs": [
+     127,
+     21,
+     23
+    ],
+    "totalMs": 4214
+   }
+  },
+  "frames": [
+   {
+    "view": "E04 forecourt",
+    "l": 0,
+    "avg": 3.08,
+    "p50": 3.1,
+    "p95": 3.4,
+    "max": 3.5,
+    "tris": 495407,
+    "draws": 18,
+    "gbuffer": {
+     "avg": 1.93,
+     "p95": 2.2
+    }
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 1,
+    "avg": 2.89,
+    "p50": 2.9,
+    "p95": 3.1,
+    "max": 3.1,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 2,
+    "avg": 2.82,
+    "p50": 2.8,
+    "p95": 3.2,
+    "max": 3.3,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 3,
+    "avg": 2.59,
+    "p50": 2.6,
+    "p95": 2.9,
+    "max": 2.9,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "approach",
+    "l": 0,
+    "avg": 2.82,
+    "p50": 2.8,
+    "p95": 3,
+    "max": 3.1,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 1.92,
+     "p95": 2.2
+    }
+   },
+   {
+    "view": "approach",
+    "l": 1,
+    "avg": 3.14,
+    "p50": 3.1,
+    "p95": 3.4,
+    "max": 3.6,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "approach",
+    "l": 2,
+    "avg": 2.96,
+    "p50": 2.9,
+    "p95": 3.2,
+    "max": 3.2,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "approach",
+    "l": 3,
+    "avg": 2.67,
+    "p50": 2.7,
+    "p95": 2.9,
+    "max": 3,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 0,
+    "avg": 2.82,
+    "p50": 2.8,
+    "p95": 3,
+    "max": 3.1,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 1.73,
+     "p95": 1.9
+    }
+   },
+   {
+    "view": "under the arch",
+    "l": 1,
+    "avg": 3.13,
+    "p50": 3.1,
+    "p95": 3.4,
+    "max": 3.4,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 2,
+    "avg": 2.84,
+    "p50": 2.8,
+    "p95": 3.1,
+    "max": 3.2,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 3,
+    "avg": 2.58,
+    "p50": 2.6,
+    "p95": 2.9,
+    "max": 3.1,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 0,
+    "avg": 3.27,
+    "p50": 3.2,
+    "p95": 3.8,
+    "max": 3.8,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 2.02,
+     "p95": 2.3
+    }
+   },
+   {
+    "view": "passage",
+    "l": 1,
+    "avg": 3.47,
+    "p50": 3.5,
+    "p95": 3.7,
+    "max": 3.8,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 2,
+    "avg": 3.21,
+    "p50": 3.2,
+    "p95": 3.4,
+    "max": 3.5,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 3,
+    "avg": 3.11,
+    "p50": 3.1,
+    "p95": 3.3,
+    "max": 3.3,
+    "tris": 491207,
+    "draws": 17
+   }
+  ],
+  "variants": [
+   {
+    "tag": "assets off",
+    "avg": 2.33,
+    "p50": 2.3,
+    "p95": 2.6,
+    "max": 2.6,
+    "gbuffer": {
+     "avg": 1.42,
+     "p95": 1.6
+    },
+    "tris": 329756,
+    "draws": 4
+   },
+   {
+    "tag": "all on",
+    "avg": 2.94,
+    "p50": 2.9,
+    "p95": 3.4,
+    "max": 3.5,
+    "gbuffer": {
+     "avg": 1.98,
+     "p95": 2.2
+    },
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "tag": "no grass",
+    "avg": 3.34,
+    "p50": 3.4,
+    "p95": 3.7,
+    "max": 3.8,
+    "gbuffer": {
+     "avg": 1.65,
+     "p95": 2
+    },
+    "tris": 475407,
+    "draws": 17
+   },
+   {
+    "tag": "no plants",
+    "avg": 2.97,
+    "p50": 3,
+    "p95": 3.3,
+    "max": 3.4,
+    "gbuffer": {
+     "avg": 1.65,
+     "p95": 2.1
+    },
+    "tris": 390435,
+    "draws": 8
+   },
+   {
+    "tag": "grass as alpha cards",
+    "avg": 3.01,
+    "p50": 3,
+    "p95": 3.3,
+    "max": 3.4,
+    "gbuffer": {
+     "avg": 1.72,
+     "p95": 2
+    },
+    "tris": 477407,
+    "draws": 18
+   },
+   {
+    "tag": "grass x4 blades",
+    "avg": 3.5,
+    "p50": 3.5,
+    "p95": 3.8,
+    "max": 4,
+    "gbuffer": {
+     "avg": 2.25,
+     "p95": 2.5
+    },
+    "tris": 555407,
+    "draws": 18
+   },
+   {
+    "tag": "grass x4 as cards",
+    "avg": 3.06,
+    "p50": 3,
+    "p95": 3.4,
+    "max": 3.5,
+    "gbuffer": {
+     "avg": 1.83,
+     "p95": 2.1
+    },
+    "tris": 483407,
+    "draws": 18
+   }
+  ],
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "memory": {
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "smoothMs": 16,
+   "gpuMs": 0,
+   "tris": 325376,
+   "gbTris": 491207,
+   "draws": 17,
+   "extraTris": 165651,
+   "opts": {
+    "assets": true,
+    "grass": 4000,
+    "grassMode": "blades",
+    "plants": 140,
+    "anchor": true
+   },
+   "assetsLoadMs": 3863,
+   "res": [
+    1920,
+    1080
+   ],
+   "L": 3,
+   "p": 0.5,
+   "heapMB": 26.2
+  },
+  "baseline": {
+   "frame": {
+    "avg": 2.15,
+    "p50": 2.1,
+    "p95": 2.5,
+    "max": 3.5
+   }
+  },
+  "errors": []
+ },
+ "Intel UHD": {
+  "cold": {
+   "ms": 14509,
+   "boot": {
+    "sceneReadyMs": 4319,
+    "compileMs": [
+     29,
+     3649,
+     1416
+    ],
+    "totalMs": 14219
+   },
+   "timings": {
+    "assetsLoadMs": 3996,
+    "groundRaysMs": 3935
+   }
+  },
+  "warm": {
+   "ms": 4218,
+   "boot": {
+    "sceneReadyMs": 3988,
+    "compileMs": [
+     48,
+     22,
+     17
+    ],
+    "totalMs": 4140
+   }
+  },
+  "frames": [
+   {
+    "view": "E04 forecourt",
+    "l": 0,
+    "avg": 13.96,
+    "p50": 13.7,
+    "p95": 15.3,
+    "max": 15.7,
+    "tris": 495407,
+    "draws": 18,
+    "gbuffer": {
+     "avg": 6.99,
+     "p95": 7.2
+    }
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 1,
+    "avg": 14.87,
+    "p50": 14.8,
+    "p95": 15.4,
+    "max": 15.9,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 2,
+    "avg": 13.9,
+    "p50": 13.9,
+    "p95": 14.5,
+    "max": 14.9,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "E04 forecourt",
+    "l": 3,
+    "avg": 12.67,
+    "p50": 12.7,
+    "p95": 13.1,
+    "max": 13.2,
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "view": "approach",
+    "l": 0,
+    "avg": 15.06,
+    "p50": 14.8,
+    "p95": 16.5,
+    "max": 16.8,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 7.83,
+     "p95": 8.5
+    }
+   },
+   {
+    "view": "approach",
+    "l": 1,
+    "avg": 16.38,
+    "p50": 16.4,
+    "p95": 16.8,
+    "max": 16.8,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "approach",
+    "l": 2,
+    "avg": 15.46,
+    "p50": 15.3,
+    "p95": 16.9,
+    "max": 19.8,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "approach",
+    "l": 3,
+    "avg": 13.61,
+    "p50": 13.5,
+    "p95": 14.2,
+    "max": 15.4,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 0,
+    "avg": 15.75,
+    "p50": 15.6,
+    "p95": 16.8,
+    "max": 16.9,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 7.42,
+     "p95": 7.8
+    }
+   },
+   {
+    "view": "under the arch",
+    "l": 1,
+    "avg": 17.35,
+    "p50": 17.3,
+    "p95": 18.3,
+    "max": 19.6,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 2,
+    "avg": 15.19,
+    "p50": 15.1,
+    "p95": 16.1,
+    "max": 16.2,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "under the arch",
+    "l": 3,
+    "avg": 13.88,
+    "p50": 13.7,
+    "p95": 15.1,
+    "max": 15.4,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 0,
+    "avg": 16.74,
+    "p50": 16.7,
+    "p95": 17.5,
+    "max": 17.8,
+    "tris": 491207,
+    "draws": 17,
+    "gbuffer": {
+     "avg": 8.8,
+     "p95": 9.6
+    }
+   },
+   {
+    "view": "passage",
+    "l": 1,
+    "avg": 18.82,
+    "p50": 18.7,
+    "p95": 19.8,
+    "max": 20.3,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 2,
+    "avg": 16.79,
+    "p50": 16.8,
+    "p95": 17.6,
+    "max": 17.6,
+    "tris": 491207,
+    "draws": 17
+   },
+   {
+    "view": "passage",
+    "l": 3,
+    "avg": 15.97,
+    "p50": 15.8,
+    "p95": 17,
+    "max": 18.1,
+    "tris": 491207,
+    "draws": 17
+   }
+  ],
+  "variants": [
+   {
+    "tag": "assets off",
+    "avg": 13.1,
+    "p50": 13,
+    "p95": 13.9,
+    "max": 14.2,
+    "gbuffer": {
+     "avg": 6.19,
+     "p95": 6.7
+    },
+    "tris": 329756,
+    "draws": 4
+   },
+   {
+    "tag": "all on",
+    "avg": 13.91,
+    "p50": 13.9,
+    "p95": 14.4,
+    "max": 14.5,
+    "gbuffer": {
+     "avg": 7.1,
+     "p95": 7.5
+    },
+    "tris": 495407,
+    "draws": 18
+   },
+   {
+    "tag": "no grass",
+    "avg": 13.62,
+    "p50": 13.6,
+    "p95": 14.3,
+    "max": 14.5,
+    "gbuffer": {
+     "avg": 6.93,
+     "p95": 7.2
+    },
+    "tris": 475407,
+    "draws": 17
+   },
+   {
+    "tag": "no plants",
+    "avg": 13.57,
+    "p50": 13.5,
+    "p95": 13.9,
+    "max": 14.6,
+    "gbuffer": {
+     "avg": 6.78,
+     "p95": 7.6
+    },
+    "tris": 390435,
+    "draws": 8
+   },
+   {
+    "tag": "grass as alpha cards",
+    "avg": 14.03,
+    "p50": 13.9,
+    "p95": 14.7,
+    "max": 14.8,
+    "gbuffer": {
+     "avg": 7.58,
+     "p95": 8.1
+    },
+    "tris": 477407,
+    "draws": 18
+   },
+   {
+    "tag": "grass x4 blades",
+    "avg": 13.95,
+    "p50": 13.9,
+    "p95": 14.5,
+    "max": 15.2,
+    "gbuffer": {
+     "avg": 7.06,
+     "p95": 7.2
+    },
+    "tris": 555407,
+    "draws": 18
+   },
+   {
+    "tag": "grass x4 as cards",
+    "avg": 13.9,
+    "p50": 13.9,
+    "p95": 14.3,
+    "max": 14.7,
+    "gbuffer": {
+     "avg": 7.1,
+     "p95": 7.4
+    },
+    "tris": 483407,
+    "draws": 18
+   }
+  ],
+  "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "memory": {
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "smoothMs": 16,
+   "gpuMs": 0,
+   "tris": 325376,
+   "gbTris": 491207,
+   "draws": 17,
+   "extraTris": 165651,
+   "opts": {
+    "assets": true,
+    "grass": 4000,
+    "grassMode": "blades",
+    "plants": 140,
+    "anchor": true
+   },
+   "assetsLoadMs": 3825,
+   "res": [
+    1920,
+    1080
+   ],
+   "L": 3,
+   "p": 0.5,
+   "heapMB": 20.7
+  },
+  "baseline": {
+   "frame": {
+    "avg": 11.56,
+    "p50": 11.4,
+    "p95": 11.8,
+    "max": 15.8
+   }
+  },
+  "errors": []
+ }
+}

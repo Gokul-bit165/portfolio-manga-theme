@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -34,6 +34,8 @@ export const metadata: Metadata = {
   description:
     "Portfolio of Gokul, CSE — Artificial Intelligence and Data Science at Bannari Amman Institute of Technology. A story told through ink, imagination and engineering.",
 };
+
+export const viewport: Viewport = { themeColor: "#181715" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
