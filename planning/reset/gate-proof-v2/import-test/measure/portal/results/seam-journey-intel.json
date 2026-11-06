@@ -1,0 +1,267 @@
+{
+ "res": [
+  1280,
+  720
+ ],
+ "crossings": [
+  {
+   "into": "vael",
+   "cross": 0.217092,
+   "worlds": [
+    0,
+    1
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 47.077,
+    "over8Pct": 10.948,
+    "mean": 5.216,
+    "max": 200
+   },
+   "before": {
+    "anyPct": 50.101,
+    "over8Pct": 13.064,
+    "mean": 6.316,
+    "max": 200
+   },
+   "after": {
+    "anyPct": 52.492,
+    "over8Pct": 15.352,
+    "mean": 6.967,
+    "max": 200
+   }
+  },
+  {
+   "into": "forge",
+   "cross": 0.366299,
+   "worlds": [
+    1,
+    2
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 72.681,
+    "over8Pct": 17.479,
+    "mean": 6.569,
+    "max": 222
+   },
+   "before": {
+    "anyPct": 89.074,
+    "over8Pct": 58.659,
+    "mean": 30.179,
+    "max": 223
+   },
+   "after": {
+    "anyPct": 67.888,
+    "over8Pct": 15.568,
+    "mean": 7.038,
+    "max": 219
+   }
+  },
+  {
+   "into": "muster",
+   "cross": 0.439145,
+   "worlds": [
+    2,
+    3
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 58.408,
+    "over8Pct": 17.379,
+    "mean": 7.427,
+    "max": 198
+   },
+   "before": {
+    "anyPct": 71.903,
+    "over8Pct": 28.11,
+    "mean": 17.407,
+    "max": 204
+   },
+   "after": {
+    "anyPct": 52.916,
+    "over8Pct": 19.138,
+    "mean": 6.94,
+    "max": 197
+   }
+  },
+  {
+   "into": "maphall",
+   "cross": 0.555615,
+   "worlds": [
+    3,
+    4
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 75.941,
+    "over8Pct": 28.044,
+    "mean": 14.025,
+    "max": 194
+   },
+   "before": {
+    "anyPct": 83.439,
+    "over8Pct": 39.493,
+    "mean": 19.914,
+    "max": 193
+   },
+   "after": {
+    "anyPct": 72.559,
+    "over8Pct": 25.477,
+    "mean": 12.618,
+    "max": 189
+   }
+  },
+  {
+   "into": "standards",
+   "cross": 0.628492,
+   "worlds": [
+    4,
+    5
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 54.474,
+    "over8Pct": 23.638,
+    "mean": 8.565,
+    "max": 208
+   },
+   "before": {
+    "anyPct": 50,
+    "over8Pct": 19.677,
+    "mean": 6.924,
+    "max": 207
+   },
+   "after": {
+    "anyPct": 57.53,
+    "over8Pct": 26.427,
+    "mean": 9.867,
+    "max": 207
+   }
+  },
+  {
+   "into": "highroad",
+   "cross": 0.744975,
+   "worlds": [
+    5,
+    6
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 1
+   },
+   "straddle": {
+    "anyPct": 67.235,
+    "over8Pct": 24.453,
+    "mean": 11.084,
+    "max": 199
+   },
+   "before": {
+    "anyPct": 73.507,
+    "over8Pct": 35.195,
+    "mean": 15.718,
+    "max": 195
+   },
+   "after": {
+    "anyPct": 64.908,
+    "over8Pct": 22.492,
+    "mean": 9.861,
+    "max": 195
+   }
+  },
+  {
+   "into": "camp",
+   "cross": 0.854219,
+   "worlds": [
+    6,
+    7
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 38.986,
+    "over8Pct": 9.443,
+    "mean": 3.138,
+    "max": 245
+   },
+   "before": {
+    "anyPct": 46.52,
+    "over8Pct": 16.781,
+    "mean": 7.353,
+    "max": 246
+   },
+   "after": {
+    "anyPct": 39.495,
+    "over8Pct": 10.678,
+    "mean": 3.474,
+    "max": 247
+   }
+  },
+  {
+   "into": "ridge",
+   "cross": 0.92726,
+   "worlds": [
+    7,
+    8
+   ],
+   "swap": {
+    "anyPct": 0,
+    "over8Pct": 0,
+    "mean": 0,
+    "max": 0
+   },
+   "straddle": {
+    "anyPct": 57.931,
+    "over8Pct": 17.912,
+    "mean": 7.763,
+    "max": 206
+   },
+   "before": {
+    "anyPct": 70.002,
+    "over8Pct": 28.651,
+    "mean": 24.302,
+    "max": 224
+   },
+   "after": {
+    "anyPct": 55.638,
+    "over8Pct": 15.246,
+    "mean": 6.653,
+    "max": 207
+   }
+  }
+ ],
+ "reverseMismatches": [],
+ "reverseFramesChecked": 57,
+ "errors": []
+}

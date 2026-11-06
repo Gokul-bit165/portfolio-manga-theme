@@ -1,0 +1,28 @@
+# Private cast configurations and assets: never committed, never published.
+private-cast/
+
+# Screenshots, comparison boards and test recordings: reproducible, and hundreds of MB.
+captures/
+measure/results-vael/
+
+# Local restore points. They stay on disk; git does not hold them.
+_backup-*/
+_checkpoint-*/
+
+# Loose images and video anywhere else here. What the prototype loads lives in assets/ and stays in.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tif
+*.tiff
+*.webp
+*.avif
+*.mp4
+*.webm
+!assets/**
+
+# Tool leftovers.
+*.log
+__pycache__/

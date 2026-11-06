@@ -1,0 +1,1581 @@
+{
+ "when": "2026-11-06T03:19:11.163Z",
+ "before": "http://localhost:4177",
+ "after": "http://localhost:4186",
+ "rtx": {
+  "before": {
+   "label": "RTX 4050",
+   "cold": {
+    "navToReadyMs": 11815,
+    "firstFrameMs": 11660,
+    "fullReadyMs": 11660,
+    "boot": {
+     "sceneReadyMs": 700,
+     "compileMs": [
+      55,
+      3865,
+      1522
+     ],
+     "totalMs": 11660
+    },
+    "tier": null,
+    "fcp": 52
+   },
+   "warm": {
+    "navToReadyMs": 769,
+    "firstFrameMs": 688,
+    "fullReadyMs": 688,
+    "boot": {
+     "sceneReadyMs": 483,
+     "compileMs": [
+      131,
+      21,
+      15
+     ],
+     "totalMs": 688
+    },
+    "tier": null,
+    "fcp": 28
+   },
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "frames": [
+    {
+     "view": "forecourt",
+     "l": 0,
+     "avg": 3.4,
+     "p50": 3.4,
+     "p95": 3.8,
+     "max": 3.9,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 1,
+     "avg": 3.18,
+     "p50": 2.8,
+     "p95": 3.1,
+     "max": 18.3,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 2,
+     "avg": 2.75,
+     "p50": 2.7,
+     "p95": 3,
+     "max": 3.2,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 3,
+     "avg": 2.6,
+     "p50": 2.6,
+     "p95": 2.8,
+     "max": 3,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 0,
+     "avg": 2.86,
+     "p50": 2.9,
+     "p95": 3.1,
+     "max": 3.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 1,
+     "avg": 3.18,
+     "p50": 3.1,
+     "p95": 3.6,
+     "max": 3.7,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 2,
+     "avg": 2.97,
+     "p50": 3,
+     "p95": 3.4,
+     "max": 3.6,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 3,
+     "avg": 2.84,
+     "p50": 2.8,
+     "p95": 3.1,
+     "max": 3.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 0,
+     "avg": 2.91,
+     "p50": 2.9,
+     "p95": 3.3,
+     "max": 3.4,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 1,
+     "avg": 3.05,
+     "p50": 3.1,
+     "p95": 3.2,
+     "max": 3.3,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 2,
+     "avg": 2.84,
+     "p50": 2.8,
+     "p95": 3.1,
+     "max": 3.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 3,
+     "avg": 2.59,
+     "p50": 2.6,
+     "p95": 2.8,
+     "max": 3.1,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 0,
+     "avg": 3.25,
+     "p50": 3.3,
+     "p95": 3.5,
+     "max": 4.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 1,
+     "avg": 3.47,
+     "p50": 3.5,
+     "p95": 3.9,
+     "max": 4,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 2,
+     "avg": 3.24,
+     "p50": 3.2,
+     "p95": 3.6,
+     "max": 4,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 3,
+     "avg": 2.93,
+     "p50": 2.9,
+     "p95": 3.2,
+     "max": 3.3,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "gbufferPass": {
+      "avg": 1.58,
+      "p95": 1.7
+     }
+    },
+    {
+     "view": "approach",
+     "gbufferPass": {
+      "avg": 1.75,
+      "p95": 2
+     }
+    },
+    {
+     "view": "arch",
+     "gbufferPass": {
+      "avg": 1.74,
+      "p95": 2.1
+     }
+    },
+    {
+     "view": "passage",
+     "gbufferPass": {
+      "avg": 2.13,
+      "p95": 2.4
+     }
+    }
+   ],
+   "heapMB": 42,
+   "errors": []
+  },
+  "after": {
+   "label": "RTX 4050",
+   "cold": {
+    "navToReadyMs": 9618,
+    "firstFrameMs": 2076,
+    "fullReadyMs": 9580,
+    "boot": {
+     "compileMs": {
+      "clouds": 225,
+      "gbuffer": 75,
+      "stars": 74,
+      "first": 619,
+      "stage2": 2301,
+      "stage1": 5947,
+      "stage0": 7503
+     },
+     "marks": {
+      "gateLoaded": 141,
+      "assetsLoaded": 639,
+      "firstProgramsReady": 1539,
+      "tierChosen": 2074,
+      "firstFrame": 2076,
+      "fullReady": 9580
+     }
+    },
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.6 ms per frame at high quality",
+     "frameMsAtHigh": 2.6,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "fcp": 48
+   },
+   "warm": {
+    "navToReadyMs": 1229,
+    "firstFrameMs": 1158,
+    "fullReadyMs": 1181,
+    "boot": {
+     "compileMs": {
+      "clouds": 11,
+      "gbuffer": 11,
+      "stars": 11,
+      "first": 23,
+      "stage0": 22,
+      "stage1": 22,
+      "stage2": 21
+     },
+     "marks": {
+      "gateLoaded": 116,
+      "assetsLoaded": 552,
+      "firstProgramsReady": 628,
+      "tierChosen": 1156,
+      "firstFrame": 1158,
+      "fullReady": 1181
+     }
+    },
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.1 ms per frame at high quality",
+     "frameMsAtHigh": 2.1,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "fcp": 32
+   },
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "frames": [
+    {
+     "view": "forecourt",
+     "l": 0,
+     "avg": 2.33,
+     "p50": 2.3,
+     "p95": 2.9,
+     "max": 2.9,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 1,
+     "avg": 2.58,
+     "p50": 2.5,
+     "p95": 3.3,
+     "max": 3.4,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 2,
+     "avg": 2.07,
+     "p50": 2.1,
+     "p95": 2.3,
+     "max": 2.4,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 3,
+     "avg": 1.83,
+     "p50": 1.8,
+     "p95": 2.1,
+     "max": 2.2,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 0,
+     "avg": 2.23,
+     "p50": 2.2,
+     "p95": 2.5,
+     "max": 2.6,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 1,
+     "avg": 2.37,
+     "p50": 2.4,
+     "p95": 2.6,
+     "max": 2.7,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 2,
+     "avg": 2.28,
+     "p50": 2.3,
+     "p95": 2.5,
+     "max": 2.6,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 3,
+     "avg": 2.58,
+     "p50": 2.4,
+     "p95": 4.8,
+     "max": 7.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 0,
+     "avg": 2.34,
+     "p50": 2.3,
+     "p95": 2.6,
+     "max": 2.8,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 1,
+     "avg": 2.51,
+     "p50": 2.4,
+     "p95": 3,
+     "max": 3.1,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 2,
+     "avg": 2.27,
+     "p50": 2.3,
+     "p95": 2.5,
+     "max": 2.5,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 3,
+     "avg": 2.12,
+     "p50": 2.1,
+     "p95": 2.4,
+     "max": 2.4,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 0,
+     "avg": 2.53,
+     "p50": 2.5,
+     "p95": 2.9,
+     "max": 3,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 1,
+     "avg": 2.91,
+     "p50": 3,
+     "p95": 3.3,
+     "max": 3.3,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 2,
+     "avg": 2.63,
+     "p50": 2.6,
+     "p95": 3,
+     "max": 3.1,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 3,
+     "avg": 2.54,
+     "p50": 2.5,
+     "p95": 2.9,
+     "max": 2.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "gbufferPass": {
+      "avg": 1.32,
+      "p95": 1.8
+     }
+    },
+    {
+     "view": "approach",
+     "gbufferPass": {
+      "avg": 1.35,
+      "p95": 1.6
+     }
+    },
+    {
+     "view": "arch",
+     "gbufferPass": {
+      "avg": 1.22,
+      "p95": 1.5
+     }
+    },
+    {
+     "view": "passage",
+     "gbufferPass": {
+      "avg": 1.4,
+      "p95": 1.6
+     }
+    }
+   ],
+   "heapMB": 23.2,
+   "errors": []
+  }
+ },
+ "intel": {
+  "before": {
+   "label": "Intel UHD",
+   "cold": {
+    "navToReadyMs": 11438,
+    "firstFrameMs": 11271,
+    "fullReadyMs": 11271,
+    "boot": {
+     "sceneReadyMs": 694,
+     "compileMs": [
+      19,
+      3671,
+      1575
+     ],
+     "totalMs": 11271
+    },
+    "tier": null,
+    "fcp": 44
+   },
+   "warm": {
+    "navToReadyMs": 716,
+    "firstFrameMs": 615,
+    "fullReadyMs": 615,
+    "boot": {
+     "sceneReadyMs": 455,
+     "compileMs": [
+      63,
+      23,
+      19
+     ],
+     "totalMs": 615
+    },
+    "tier": null,
+    "fcp": 40
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "frames": [
+    {
+     "view": "forecourt",
+     "l": 0,
+     "avg": 14.57,
+     "p50": 14.5,
+     "p95": 15.5,
+     "max": 15.8,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 1,
+     "avg": 15.64,
+     "p50": 15.8,
+     "p95": 16.4,
+     "max": 16.9,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 2,
+     "avg": 14.87,
+     "p50": 14.9,
+     "p95": 15.4,
+     "max": 15.6,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 3,
+     "avg": 13.4,
+     "p50": 13.4,
+     "p95": 14,
+     "max": 14,
+     "tris": 495407,
+     "draws": 18,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 0,
+     "avg": 15.81,
+     "p50": 15.7,
+     "p95": 16.7,
+     "max": 16.7,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 1,
+     "avg": 16.58,
+     "p50": 16.5,
+     "p95": 17.7,
+     "max": 17.7,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 2,
+     "avg": 16.26,
+     "p50": 15.9,
+     "p95": 16.8,
+     "max": 34.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 3,
+     "avg": 14.11,
+     "p50": 14.1,
+     "p95": 14.6,
+     "max": 14.8,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 0,
+     "avg": 15.86,
+     "p50": 15.9,
+     "p95": 17,
+     "max": 17.2,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 1,
+     "avg": 17.47,
+     "p50": 17.4,
+     "p95": 18.3,
+     "max": 18.3,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 2,
+     "avg": 15.61,
+     "p50": 15.5,
+     "p95": 16.6,
+     "max": 16.9,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 3,
+     "avg": 14.3,
+     "p50": 14.3,
+     "p95": 14.8,
+     "max": 14.9,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 0,
+     "avg": 17.03,
+     "p50": 17,
+     "p95": 17.7,
+     "max": 18.1,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 1,
+     "avg": 18.84,
+     "p50": 18.8,
+     "p95": 19.8,
+     "max": 20,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 2,
+     "avg": 17.7,
+     "p50": 17.8,
+     "p95": 18.8,
+     "max": 19.1,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 3,
+     "avg": 15.56,
+     "p50": 15.7,
+     "p95": 16.7,
+     "max": 17.1,
+     "tris": 491207,
+     "draws": 17,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "gbufferPass": {
+      "avg": 7.48,
+      "p95": 7.8
+     }
+    },
+    {
+     "view": "approach",
+     "gbufferPass": {
+      "avg": 7.97,
+      "p95": 8.4
+     }
+    },
+    {
+     "view": "arch",
+     "gbufferPass": {
+      "avg": 7.42,
+      "p95": 7.9
+     }
+    },
+    {
+     "view": "passage",
+     "gbufferPass": {
+      "avg": 8.97,
+      "p95": 9.3
+     }
+    }
+   ],
+   "heapMB": 23.7,
+   "errors": []
+  },
+  "after": {
+   "label": "Intel UHD",
+   "cold": {
+    "navToReadyMs": 9270,
+    "firstFrameMs": 2023,
+    "fullReadyMs": 9234,
+    "boot": {
+     "compileMs": {
+      "clouds": 193,
+      "gbuffer": 54,
+      "stars": 53,
+      "first": 506,
+      "stage2": 2231,
+      "stage1": 5647,
+      "stage0": 7211
+     },
+     "marks": {
+      "gateLoaded": 134,
+      "assetsLoaded": 600,
+      "firstProgramsReady": 1346,
+      "tierChosen": 2006,
+      "firstFrame": 2023,
+      "fullReady": 9234
+     }
+    },
+    "tier": {
+     "tier": "reduced",
+     "source": "measured",
+     "why": "12.7 ms per frame at high quality",
+     "frameMsAtHigh": 12.7,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "fcp": 56
+   },
+   "warm": {
+    "navToReadyMs": 1352,
+    "firstFrameMs": 1283,
+    "fullReadyMs": 1308,
+    "boot": {
+     "compileMs": {
+      "clouds": 11,
+      "gbuffer": 12,
+      "stars": 12,
+      "first": 21,
+      "stage0": 25,
+      "stage1": 24,
+      "stage2": 24
+     },
+     "marks": {
+      "gateLoaded": 115,
+      "assetsLoaded": 535,
+      "firstProgramsReady": 606,
+      "tierChosen": 1269,
+      "firstFrame": 1283,
+      "fullReady": 1308
+     }
+    },
+    "tier": {
+     "tier": "reduced",
+     "source": "measured",
+     "why": "12.4 ms per frame at high quality",
+     "frameMsAtHigh": 12.4,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "fcp": 36
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "frames": [
+    {
+     "view": "forecourt",
+     "l": 0,
+     "avg": 9.93,
+     "p50": 9.6,
+     "p95": 11.9,
+     "max": 12.1,
+     "tris": 378766,
+     "draws": 13,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 1,
+     "avg": 9.97,
+     "p50": 10,
+     "p95": 10.4,
+     "max": 10.8,
+     "tris": 378766,
+     "draws": 13,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 2,
+     "avg": 9.22,
+     "p50": 9.2,
+     "p95": 9.8,
+     "max": 10,
+     "tris": 378766,
+     "draws": 13,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 3,
+     "avg": 8.65,
+     "p50": 8.6,
+     "p95": 9.2,
+     "max": 9.4,
+     "tris": 378766,
+     "draws": 13,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 0,
+     "avg": 9.44,
+     "p50": 9.4,
+     "p95": 9.9,
+     "max": 10.1,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 1,
+     "avg": 10.24,
+     "p50": 10.2,
+     "p95": 10.8,
+     "max": 11,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 2,
+     "avg": 9.69,
+     "p50": 9.7,
+     "p95": 10.2,
+     "max": 10.4,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 3,
+     "avg": 8.95,
+     "p50": 8.9,
+     "p95": 9.5,
+     "max": 9.7,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 0,
+     "avg": 9.65,
+     "p50": 9.6,
+     "p95": 10,
+     "max": 10,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 1,
+     "avg": 10.78,
+     "p50": 10.7,
+     "p95": 11.7,
+     "max": 12.3,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 2,
+     "avg": 9.82,
+     "p50": 9.6,
+     "p95": 10.2,
+     "max": 18.8,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 3,
+     "avg": 9.29,
+     "p50": 9.3,
+     "p95": 9.7,
+     "max": 9.7,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 0,
+     "avg": 10.21,
+     "p50": 10.2,
+     "p95": 10.5,
+     "max": 10.6,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 1,
+     "avg": 11.15,
+     "p50": 11.2,
+     "p95": 11.4,
+     "max": 11.8,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 2,
+     "avg": 10.16,
+     "p50": 10.2,
+     "p95": 10.8,
+     "max": 11,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 3,
+     "avg": 9.93,
+     "p50": 9.9,
+     "p95": 10.7,
+     "max": 10.8,
+     "tris": 374566,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ]
+    },
+    {
+     "view": "forecourt",
+     "gbufferPass": {
+      "avg": 4.39,
+      "p95": 4.6
+     }
+    },
+    {
+     "view": "approach",
+     "gbufferPass": {
+      "avg": 4.69,
+      "p95": 5.2
+     }
+    },
+    {
+     "view": "arch",
+     "gbufferPass": {
+      "avg": 4.2,
+      "p95": 4.5
+     }
+    },
+    {
+     "view": "passage",
+     "gbufferPass": {
+      "avg": 4.67,
+      "p95": 4.9
+     }
+    }
+   ],
+   "heapMB": 23.5,
+   "errors": []
+  },
+  "afterHigh": {
+   "label": "Intel UHD",
+   "cold": {
+    "navToReadyMs": 9310,
+    "firstFrameMs": 2023,
+    "fullReadyMs": 9270,
+    "boot": {
+     "compileMs": {
+      "clouds": 177,
+      "stars": 55,
+      "gbuffer": 67,
+      "first": 489,
+      "stage2": 2219,
+      "stage1": 5680,
+      "stage0": 7246
+     },
+     "marks": {
+      "gateLoaded": 143,
+      "assetsLoaded": 632,
+      "firstProgramsReady": 1346,
+      "tierChosen": 2012,
+      "firstFrame": 2023,
+      "fullReady": 9270
+     }
+    },
+    "tier": {
+     "tier": "high",
+     "source": "url",
+     "frameMsAtHigh": 13.4,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "fcp": 44
+   },
+   "warm": {
+    "navToReadyMs": 1318,
+    "firstFrameMs": 1252,
+    "fullReadyMs": 1272,
+    "boot": {
+     "compileMs": {
+      "clouds": 11,
+      "gbuffer": 12,
+      "stars": 11,
+      "first": 23,
+      "stage0": 19,
+      "stage1": 19,
+      "stage2": 18
+     },
+     "marks": {
+      "gateLoaded": 111,
+      "assetsLoaded": 518,
+      "firstProgramsReady": 591,
+      "tierChosen": 1239,
+      "firstFrame": 1252,
+      "fullReady": 1272
+     }
+    },
+    "tier": {
+     "tier": "high",
+     "source": "url",
+     "frameMsAtHigh": 12,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "fcp": 44
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "frames": [
+    {
+     "view": "forecourt",
+     "l": 0,
+     "avg": 12.66,
+     "p50": 12.5,
+     "p95": 14,
+     "max": 14.3,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 1,
+     "avg": 13.83,
+     "p50": 13.9,
+     "p95": 14.8,
+     "max": 14.8,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 2,
+     "avg": 12.76,
+     "p50": 12.6,
+     "p95": 13.6,
+     "max": 15.4,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "l": 3,
+     "avg": 11.91,
+     "p50": 11.9,
+     "p95": 12.3,
+     "max": 12.5,
+     "tris": 391078,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 0,
+     "avg": 13.57,
+     "p50": 13.5,
+     "p95": 14.4,
+     "max": 14.5,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 1,
+     "avg": 14.73,
+     "p50": 14.6,
+     "p95": 15.3,
+     "max": 15.6,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 2,
+     "avg": 13.79,
+     "p50": 13.7,
+     "p95": 14.5,
+     "max": 18.6,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "approach",
+     "l": 3,
+     "avg": 13.13,
+     "p50": 13.2,
+     "p95": 13.7,
+     "max": 14,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 0,
+     "avg": 13.63,
+     "p50": 13.5,
+     "p95": 14.7,
+     "max": 14.7,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 1,
+     "avg": 16.1,
+     "p50": 16.2,
+     "p95": 16.7,
+     "max": 16.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 2,
+     "avg": 13.64,
+     "p50": 13.5,
+     "p95": 14.4,
+     "max": 14.7,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "arch",
+     "l": 3,
+     "avg": 13.09,
+     "p50": 13.1,
+     "p95": 13.7,
+     "max": 14.2,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 0,
+     "avg": 14.94,
+     "p50": 15,
+     "p95": 15.9,
+     "max": 15.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 1,
+     "avg": 17.12,
+     "p50": 17.1,
+     "p95": 17.9,
+     "max": 18.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 2,
+     "avg": 14.89,
+     "p50": 14.9,
+     "p95": 15.8,
+     "max": 15.9,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "passage",
+     "l": 3,
+     "avg": 14.14,
+     "p50": 14.1,
+     "p95": 14.9,
+     "max": 15,
+     "tris": 386878,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ]
+    },
+    {
+     "view": "forecourt",
+     "gbufferPass": {
+      "avg": 5.62,
+      "p95": 6
+     }
+    },
+    {
+     "view": "approach",
+     "gbufferPass": {
+      "avg": 5.88,
+      "p95": 6.1
+     }
+    },
+    {
+     "view": "arch",
+     "gbufferPass": {
+      "avg": 5.74,
+      "p95": 6.1
+     }
+    },
+    {
+     "view": "passage",
+     "gbufferPass": {
+      "avg": 6.33,
+      "p95": 7
+     }
+    }
+   ],
+   "heapMB": 23.6,
+   "errors": []
+  }
+ }
+}

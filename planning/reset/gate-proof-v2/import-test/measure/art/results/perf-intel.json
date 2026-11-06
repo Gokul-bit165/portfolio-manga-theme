@@ -1,0 +1,175 @@
+[
+ {
+  "name": "A baseline",
+  "navMs": 13186,
+  "res": {
+   "camp shot": {
+    "avg": 12.1,
+    "p50": 12.3,
+    "p95": 14.4,
+    "max": 14.5,
+    "tris": 181254
+   },
+   "ring": {
+    "avg": 10.8,
+    "p50": 10.5,
+    "p95": 12.7,
+    "max": 12.7,
+    "tris": 181254
+   },
+   "lane": {
+    "avg": 10.02,
+    "p50": 9.7,
+    "p95": 11.4,
+    "max": 12.5,
+    "tris": 181254
+   }
+  },
+  "paintedProgramsMs": 1998,
+  "vaelMarks": {
+   "geometry": 742,
+   "meshes": 742,
+   "programs": 2740,
+   "bakeBlockMs": 4,
+   "prewarmBlockMs": 53
+  },
+  "compile": {
+   "clouds": 198,
+   "stars": 69,
+   "gbuffer": 81,
+   "vael-gbuffer": 32,
+   "sprites": 0,
+   "first": 912,
+   "painted": 0,
+   "stage1": 8069,
+   "stage0": 10490,
+   "flock": 32,
+   "forge-gbuffer": 1,
+   "maphall-gbuffer": 32,
+   "muster-gbuffer": 46
+  },
+  "firstFrame": 2594,
+  "tier": "reduced",
+  "px": [
+   1536,
+   864
+  ],
+  "errors": []
+ },
+ {
+  "name": "B ink",
+  "navMs": 12457,
+  "res": {
+   "camp shot": {
+    "avg": 13.57,
+    "p50": 13.5,
+    "p95": 14,
+    "max": 14,
+    "tris": 103046
+   },
+   "ring": {
+    "avg": 13.88,
+    "p50": 13.9,
+    "p95": 14.3,
+    "max": 14.3,
+    "tris": 103046
+   },
+   "lane": {
+    "avg": 12.83,
+    "p50": 12.9,
+    "p95": 13.3,
+    "max": 13.5,
+    "tris": 103046
+   }
+  },
+  "paintedProgramsMs": 1533,
+  "vaelMarks": {
+   "geometry": 593,
+   "meshes": 594,
+   "programs": 2127,
+   "bakeBlockMs": 4,
+   "prewarmBlockMs": 45
+  },
+  "compile": {
+   "clouds": 203,
+   "gbuffer": 65,
+   "stars": 64,
+   "vael-gbuffer": 32,
+   "sprites": 0,
+   "first": 768,
+   "painted": 0,
+   "stage1": 7821,
+   "stage0": 9964,
+   "flock": 32,
+   "forge-gbuffer": 0,
+   "maphall-gbuffer": 33,
+   "muster-gbuffer": 1,
+   "painted-art": 2935
+  },
+  "firstFrame": 2419,
+  "tier": "reduced",
+  "px": [
+   1536,
+   864
+  ],
+  "errors": []
+ },
+ {
+  "name": "C painted",
+  "navMs": 12839,
+  "res": {
+   "camp shot": {
+    "avg": 11.28,
+    "p50": 11.3,
+    "p95": 11.6,
+    "max": 11.8,
+    "tris": 103046
+   },
+   "ring": {
+    "avg": 11.14,
+    "p50": 11.1,
+    "p95": 11.4,
+    "max": 11.5,
+    "tris": 103046
+   },
+   "lane": {
+    "avg": 10.58,
+    "p50": 10.6,
+    "p95": 11.1,
+    "max": 11.2,
+    "tris": 103046
+   }
+  },
+  "paintedProgramsMs": 1593,
+  "vaelMarks": {
+   "geometry": 587,
+   "meshes": 587,
+   "programs": 2180,
+   "bakeBlockMs": 4,
+   "prewarmBlockMs": 47
+  },
+  "compile": {
+   "clouds": 175,
+   "stars": 57,
+   "gbuffer": 69,
+   "vael-gbuffer": 21,
+   "sprites": 0,
+   "first": 726,
+   "painted": 0,
+   "stage1": 7965,
+   "stage0": 10405,
+   "flock": 32,
+   "forge-gbuffer": 0,
+   "maphall-gbuffer": 32,
+   "muster-gbuffer": 1,
+   "painted-art": 2990
+  },
+  "firstFrame": 2325,
+  "tier": "reduced",
+  "px": [
+   1536,
+   864
+  ],
+  "errors": []
+ }
+]

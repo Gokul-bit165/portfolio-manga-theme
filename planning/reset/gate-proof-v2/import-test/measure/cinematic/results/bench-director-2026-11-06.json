@@ -1,0 +1,660 @@
+{
+ "when": "2026-11-06T05:44:13.357Z",
+ "rtx": {
+  "auto": {
+   "cold": {
+    "navToReadyMs": 25302,
+    "first": 2348,
+    "full": 25243,
+    "compile": {
+     "clouds": 186,
+     "stars": 42,
+     "gbuffer": 55,
+     "first": 948,
+     "stage2": 8588,
+     "stage1": 19034,
+     "stage0": 22866
+    },
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "4.1 ms per frame at high quality",
+     "frameMsAtHigh": 4.1,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    }
+   },
+   "warm": {
+    "navToReadyMs": 1877,
+    "first": 1449,
+    "full": 1495
+   },
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "shots": [
+    {
+     "name": "establish",
+     "p": 0,
+     "avg": 3.53,
+     "p50": 3.6,
+     "p95": 4,
+     "max": 4.1,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 1.46,
+      "p95": 1.7
+     }
+    },
+    {
+     "name": "track",
+     "p": 0.175,
+     "avg": 3.25,
+     "p50": 3.2,
+     "p95": 3.9,
+     "max": 4.2,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 1.33,
+      "p95": 1.5
+     }
+    },
+    {
+     "name": "crane",
+     "p": 0.245,
+     "avg": 3.79,
+     "p50": 3.8,
+     "p95": 4.2,
+     "max": 4.7,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 1.61,
+      "p95": 1.9
+     }
+    },
+    {
+     "name": "frame",
+     "p": 0.385,
+     "avg": 2.86,
+     "p50": 2.8,
+     "p95": 3.3,
+     "max": 3.8,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 1.71,
+      "p95": 1.9
+     }
+    },
+    {
+     "name": "arch transition",
+     "p": 0.455,
+     "avg": 2.9,
+     "p50": 2.8,
+     "p95": 3.3,
+     "max": 4.7,
+     "tris": 405228,
+     "draws": 14,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0.59,
+     "gbuffer": {
+      "avg": 1.76,
+      "p95": 2
+     }
+    },
+    {
+     "name": "passage",
+     "p": 0.58,
+     "avg": 3.65,
+     "p50": 3.6,
+     "p95": 4,
+     "max": 4.1,
+     "tris": 382492,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 1,
+     "gbuffer": {
+      "avg": 2.11,
+      "p95": 2.4
+     }
+    },
+    {
+     "name": "inner arch",
+     "p": 0.745,
+     "avg": 3.34,
+     "p50": 3.3,
+     "p95": 3.8,
+     "max": 4.2,
+     "tris": 373493,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 1.41,
+     "gbuffer": {
+      "avg": 1.34,
+      "p95": 1.9
+     }
+    },
+    {
+     "name": "push-in",
+     "p": 0.85,
+     "avg": 2.84,
+     "p50": 2.8,
+     "p95": 3.2,
+     "max": 3.3,
+     "tris": 369293,
+     "draws": 11,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 2,
+     "gbuffer": {
+      "avg": 1.17,
+      "p95": 1.4
+     }
+    },
+    {
+     "name": "look back",
+     "p": 1,
+     "avg": 3.12,
+     "p50": 3.1,
+     "p95": 3.6,
+     "max": 3.9,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 3,
+     "gbuffer": {
+      "avg": 1.58,
+      "p95": 1.9
+     }
+    }
+   ],
+   "scroll": {
+    "frames": 5024,
+    "median": 6.9,
+    "p95": 7.1,
+    "p99": 7.2,
+    "max": 13.9,
+    "over20": 0,
+    "over33": 0,
+    "over50": 0,
+    "endP": 2.074221472313053e-9
+   },
+   "errors": []
+  }
+ },
+ "intel": {
+  "auto": {
+   "cold": {
+    "navToReadyMs": 20186,
+    "first": 2297,
+    "full": 20120,
+    "compile": {
+     "clouds": 175,
+     "stars": 82,
+     "gbuffer": 93,
+     "first": 618,
+     "stage2": 6162,
+     "stage1": 14440,
+     "stage0": 17788
+    },
+    "tier": {
+     "tier": "reduced",
+     "source": "measured",
+     "why": "16.2 ms per frame at high quality",
+     "frameMsAtHigh": 16.2,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    }
+   },
+   "warm": {
+    "navToReadyMs": 4025,
+    "first": 3595,
+    "full": 3630
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "shots": [
+    {
+     "name": "establish",
+     "p": 0,
+     "avg": 10.27,
+     "p50": 10.3,
+     "p95": 10.5,
+     "max": 10.6,
+     "tris": 397116,
+     "draws": 15,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 3.26,
+      "p95": 3.8
+     }
+    },
+    {
+     "name": "track",
+     "p": 0.175,
+     "avg": 11.04,
+     "p50": 11.1,
+     "p95": 11.6,
+     "max": 11.6,
+     "tris": 397116,
+     "draws": 15,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 3.98,
+      "p95": 5.5
+     }
+    },
+    {
+     "name": "crane",
+     "p": 0.245,
+     "avg": 15.55,
+     "p50": 15.1,
+     "p95": 20.2,
+     "max": 21.5,
+     "tris": 397116,
+     "draws": 15,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 5.2,
+      "p95": 6.4
+     }
+    },
+    {
+     "name": "frame",
+     "p": 0.385,
+     "avg": 10.91,
+     "p50": 10.9,
+     "p95": 11.6,
+     "max": 11.7,
+     "tris": 397116,
+     "draws": 15,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 5.42,
+      "p95": 5.8
+     }
+    },
+    {
+     "name": "arch transition",
+     "p": 0.455,
+     "avg": 11.15,
+     "p50": 11.1,
+     "p95": 12,
+     "max": 12,
+     "tris": 392916,
+     "draws": 14,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 0.59,
+     "gbuffer": {
+      "avg": 4.98,
+      "p95": 5.3
+     }
+    },
+    {
+     "name": "passage",
+     "p": 0.58,
+     "avg": 12.68,
+     "p50": 12.6,
+     "p95": 13.3,
+     "max": 13.5,
+     "tris": 370180,
+     "draws": 13,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 1,
+     "gbuffer": {
+      "avg": 5.07,
+      "p95": 5.3
+     }
+    },
+    {
+     "name": "inner arch",
+     "p": 0.745,
+     "avg": 11.52,
+     "p50": 11.5,
+     "p95": 11.9,
+     "max": 12,
+     "tris": 361181,
+     "draws": 12,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 1.41,
+     "gbuffer": {
+      "avg": 3.26,
+      "p95": 3.6
+     }
+    },
+    {
+     "name": "push-in",
+     "p": 0.85,
+     "avg": 9.95,
+     "p50": 10,
+     "p95": 10.3,
+     "max": 10.6,
+     "tris": 356981,
+     "draws": 11,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 2,
+     "gbuffer": {
+      "avg": 3.4,
+      "p95": 3.8
+     }
+    },
+    {
+     "name": "look back",
+     "p": 1,
+     "avg": 10.59,
+     "p50": 10.6,
+     "p95": 11.1,
+     "max": 11.4,
+     "tris": 397116,
+     "draws": 15,
+     "res": [
+      1536,
+      864
+     ],
+     "L": 3,
+     "gbuffer": {
+      "avg": 4.06,
+      "p95": 4.9
+     }
+    }
+   ],
+   "scroll": {
+    "frames": 3514,
+    "median": 7.1,
+    "p95": 14,
+    "p99": 14.6,
+    "max": 34.8,
+    "over20": 35,
+    "over33": 3,
+    "over50": 0,
+    "endP": 3.168691303825201e-9
+   },
+   "errors": []
+  },
+  "high": {
+   "cold": {
+    "navToReadyMs": 28222,
+    "first": 1521,
+    "full": 28164,
+    "compile": {
+     "clouds": 168,
+     "gbuffer": 64,
+     "stars": 74,
+     "first": 643,
+     "stage2": 10882,
+     "stage1": 22393,
+     "stage0": 26626
+    },
+    "tier": {
+     "tier": "high",
+     "source": "url",
+     "frameMsAtHigh": null,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    }
+   },
+   "warm": {
+    "navToReadyMs": 2282,
+    "first": 1831,
+    "full": 1945
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "shots": [
+    {
+     "name": "establish",
+     "p": 0,
+     "avg": 15.6,
+     "p50": 15.4,
+     "p95": 16.8,
+     "max": 16.9,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 4.57,
+      "p95": 4.9
+     }
+    },
+    {
+     "name": "track",
+     "p": 0.175,
+     "avg": 16.14,
+     "p50": 16,
+     "p95": 17.3,
+     "max": 19.8,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 5.04,
+      "p95": 5.4
+     }
+    },
+    {
+     "name": "crane",
+     "p": 0.245,
+     "avg": 19.69,
+     "p50": 19.6,
+     "p95": 20.8,
+     "max": 22.9,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 6.56,
+      "p95": 7.8
+     }
+    },
+    {
+     "name": "frame",
+     "p": 0.385,
+     "avg": 14.03,
+     "p50": 13.9,
+     "p95": 15.1,
+     "max": 15.1,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0,
+     "gbuffer": {
+      "avg": 6.87,
+      "p95": 8.4
+     }
+    },
+    {
+     "name": "arch transition",
+     "p": 0.455,
+     "avg": 15.77,
+     "p50": 15.4,
+     "p95": 19.1,
+     "max": 21,
+     "tris": 405228,
+     "draws": 14,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 0.59,
+     "gbuffer": {
+      "avg": 6.35,
+      "p95": 6.5
+     }
+    },
+    {
+     "name": "passage",
+     "p": 0.58,
+     "avg": 18.03,
+     "p50": 18,
+     "p95": 19,
+     "max": 19.9,
+     "tris": 382492,
+     "draws": 13,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 1,
+     "gbuffer": {
+      "avg": 6.99,
+      "p95": 7.3
+     }
+    },
+    {
+     "name": "inner arch",
+     "p": 0.745,
+     "avg": 15.99,
+     "p50": 15.9,
+     "p95": 17.2,
+     "max": 17.3,
+     "tris": 373493,
+     "draws": 12,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 1.41,
+     "gbuffer": {
+      "avg": 4.32,
+      "p95": 4.9
+     }
+    },
+    {
+     "name": "push-in",
+     "p": 0.85,
+     "avg": 13.99,
+     "p50": 13.8,
+     "p95": 15.6,
+     "max": 17.6,
+     "tris": 369293,
+     "draws": 11,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 2,
+     "gbuffer": {
+      "avg": 4.48,
+      "p95": 6
+     }
+    },
+    {
+     "name": "look back",
+     "p": 1,
+     "avg": 14.65,
+     "p50": 13.9,
+     "p95": 18.6,
+     "max": 19.6,
+     "tris": 409428,
+     "draws": 15,
+     "res": [
+      1920,
+      1080
+     ],
+     "L": 3,
+     "gbuffer": {
+      "avg": 5.23,
+      "p95": 6.1
+     }
+    }
+   ],
+   "scroll": {
+    "frames": 2508,
+    "median": 13.9,
+    "p95": 21,
+    "p99": 21.9,
+    "max": 48.6,
+    "over20": 639,
+    "over33": 17,
+    "over50": 0,
+    "endP": 3.5986009534095296e-9
+   },
+   "errors": []
+  }
+ }
+}

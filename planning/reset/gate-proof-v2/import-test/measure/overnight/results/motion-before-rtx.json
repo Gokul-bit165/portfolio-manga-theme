@@ -1,0 +1,144 @@
+{
+ "approach-moving": {
+  "branches": {
+   "pixels": 38053,
+   "step": 29.334,
+   "flicker": 20.491,
+   "ratio": 0.699
+  },
+  "figure": {
+   "pixels": 119363,
+   "step": 15.773,
+   "flicker": 8.859,
+   "ratio": 0.562
+  },
+  "grass": null,
+  "plants": {
+   "pixels": 50679,
+   "step": 27.574,
+   "flicker": 21.029,
+   "ratio": 0.763
+  },
+  "statue": null,
+  "stone (reference)": {
+   "pixels": 1119763,
+   "step": 22.083,
+   "flicker": 15.559,
+   "ratio": 0.705
+  }
+ },
+ "forecourt-moving": {
+  "branches": {
+   "pixels": 29132,
+   "step": 20.708,
+   "flicker": 12.235,
+   "ratio": 0.591
+  },
+  "figure": {
+   "pixels": 31355,
+   "step": 8.714,
+   "flicker": 4.802,
+   "ratio": 0.551
+  },
+  "grass": {
+   "pixels": 62284,
+   "step": 54.677,
+   "flicker": 46.824,
+   "ratio": 0.856
+  },
+  "plants": {
+   "pixels": 342518,
+   "step": 37.593,
+   "flicker": 30.096,
+   "ratio": 0.801
+  },
+  "statue": {
+   "pixels": 97679,
+   "step": 21.465,
+   "flicker": 14.576,
+   "ratio": 0.679
+  },
+  "stone (reference)": {
+   "pixels": 853110,
+   "step": 11.887,
+   "flicker": 6.654,
+   "ratio": 0.56
+  }
+ },
+ "forecourt-moving-anime": {
+  "branches": {
+   "pixels": 31859,
+   "step": 6.453,
+   "flicker": 3.503,
+   "ratio": 0.543
+  },
+  "figure": {
+   "pixels": 31231,
+   "step": 2.063,
+   "flicker": 0.999,
+   "ratio": 0.484
+  },
+  "grass": {
+   "pixels": 62409,
+   "step": 17.205,
+   "flicker": 14.256,
+   "ratio": 0.829
+  },
+  "plants": {
+   "pixels": 341597,
+   "step": 11.095,
+   "flicker": 8.416,
+   "ratio": 0.759
+  },
+  "statue": {
+   "pixels": 97647,
+   "step": 8.515,
+   "flicker": 5.581,
+   "ratio": 0.655
+  },
+  "stone (reference)": {
+   "pixels": 879242,
+   "step": 3.446,
+   "flicker": 1.514,
+   "ratio": 0.439
+  }
+ },
+ "forecourt-still-wind": {
+  "branches": {
+   "pixels": 7719,
+   "step": 0.017,
+   "flicker": 0.014,
+   "ratio": 0.818
+  },
+  "figure": {
+   "pixels": 27838,
+   "step": 2.089,
+   "flicker": 1.466,
+   "ratio": 0.702
+  },
+  "grass": {
+   "pixels": 21661,
+   "step": 8.491,
+   "flicker": 6.147,
+   "ratio": 0.724
+  },
+  "plants": {
+   "pixels": 100074,
+   "step": 2.042,
+   "flicker": 1.547,
+   "ratio": 0.758
+  },
+  "statue": {
+   "pixels": 52512,
+   "step": 0.0,
+   "flicker": 0.0,
+   "ratio": 1.041
+  },
+  "stone (reference)": {
+   "pixels": 1117731,
+   "step": 0.012,
+   "flicker": 0.007,
+   "ratio": 0.542
+  }
+ }
+}

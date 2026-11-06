@@ -1,0 +1,91 @@
+{
+ "contacts": [
+  {
+   "foot": "l",
+   "contacts": [
+    {
+     "start": 0.094,
+     "length": 0.5
+    }
+   ]
+  },
+  {
+   "foot": "r",
+   "contacts": [
+    {
+     "start": 0.583,
+     "length": 0.521
+    }
+   ]
+  }
+ ],
+ "runs": {
+  "off 1.0x": {
+   "l": {
+    "slipShare": 0.0696,
+    "maxFootStepM": 0.0916
+   },
+   "r": {
+    "slipShare": 0.0702,
+    "maxFootStepM": 0.0916
+   },
+   "bodyWalkedM": 15.037,
+   "slipShare": 0.0699
+  },
+  "on 1.0x": {
+   "l": {
+    "slipShare": 0.0093,
+    "maxFootStepM": 0.0916
+   },
+   "r": {
+    "slipShare": 0.012,
+    "maxFootStepM": 0.0916
+   },
+   "bodyWalkedM": 15.037,
+   "slipShare": 0.0106
+  },
+  "off 1.1x": {
+   "l": {
+    "slipShare": 0.0539,
+    "maxFootStepM": 0.0852
+   },
+   "r": {
+    "slipShare": 0.0576,
+    "maxFootStepM": 0.0853
+   },
+   "bodyWalkedM": 15.037,
+   "slipShare": 0.0558
+  },
+  "on 1.1x": {
+   "l": {
+    "slipShare": 0.0263,
+    "maxFootStepM": 0.0852
+   },
+   "r": {
+    "slipShare": 0.0772,
+    "maxFootStepM": 0.0853
+   },
+   "bodyWalkedM": 15.037,
+   "slipShare": 0.0518
+  }
+ },
+ "reverse": {
+  "lockOff": {
+   "maxFootDifferenceM": 0
+  },
+  "lockOn": {
+   "maxFootDifferenceM": 0
+  }
+ },
+ "directionChange": {
+  "lockOff": {
+   "maxDifferenceFromForwardPassM": 0,
+   "maxFootStepM": 0.0927
+  },
+  "lockOn": {
+   "maxDifferenceFromForwardPassM": 0,
+   "maxFootStepM": 0.0927
+  }
+ },
+ "errors": []
+}

@@ -15,19 +15,76 @@
   #hud button { font: inherit; color: #ece8df; background: #2a2622; border: 1px solid #4b443c; padding: 3px 8px; cursor: pointer; }
   #hud button[aria-pressed="true"] { background: #a33a2c; border-color: #a33a2c; }
   #hud button:focus-visible { outline: 2px solid #ece8df; outline-offset: 1px; }
-  #load { position: fixed; inset: 0; display: grid; place-items: center; background: #ece8df; color: #171513; }
+  #load { position: fixed; inset: 0; display: grid; place-items: center; background: #ece8df; color: #171513; transition: opacity 360ms ease-out; }
+  #load.gone { opacity: 0; pointer-events: none; }
+  #load p { margin: 0 0 10px; }
+  /* A pen line drawn across the page while shaders compile. CSS only, so it keeps moving even if the main thread is busy. */
+  #load .rule { display: block; width: 180px; height: 2px; background: #171513; transform-origin: left; animation: draw 2.4s cubic-bezier(.6,0,.3,1) infinite; }
+  @keyframes draw { 0% { transform: scaleX(0); } 70% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #load .rule { animation: none; } #load { transition: none; } }
   body.capture #hud { display: none; }
+  /* Cinematic director: the page is six chapter sections; the proof's spacer is only for ?director=legacy. */
+  body.director #spacer { display: none; }
+  body.no-hud #hud { display: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* Chapter caption: a small mono label on an ink plate, bottom left. Text is never set on raw art. */
+  #caption { position: fixed; left: 24px; bottom: 24px; padding: 9px 13px 10px; background: rgb(24 23 21 / 0.92); color: #E8DDC5;
+    font: 13px/1.35 "DM Mono", "IBM Plex Mono", ui-monospace, Consolas, monospace; opacity: 0; transform: translateY(4px);
+    transition: opacity 700ms ease-out, transform 700ms ease-out; pointer-events: none; }
+  #caption.on { opacity: 1; transform: none; }
+  #caption .n { display: block; color: #A59D8E; letter-spacing: 0.04em; }
+  #caption .t { display: block; font-size: 15px; margin-top: 2px; }
+  body.capture #caption { display: none; }
+  /* Chapter index: out of sight until focused, for keyboard and screen-reader visitors (a skip-link pattern). */
+  #chapters { position: fixed; left: 12px; top: 12px; display: flex; flex-direction: column; gap: 2px; transform: translateY(-200%); }
+  #chapters:focus-within { transform: none; }
+  #chapters a { font: 13px/1.4 "DM Mono", ui-monospace, Consolas, monospace; color: #E8DDC5; background: #181715; padding: 6px 10px; text-decoration: none; }
+  #chapters a[aria-current] { color: #B49A69; }
+  #chapters a:focus-visible { outline: 2px solid #B49A69; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { #caption { transition: none; transform: none; } }
   body.capture::-webkit-scrollbar { display: none; }
+  /* Content plates (journey): real text on an ink plate, set beside the picture, never on raw art. They ride the native scroll. */
+  .chapter { position: relative; }
+  .plate-wrap { position: absolute; left: 0; right: 0; pointer-events: none; }
+  .plate { position: sticky; top: 14vh; margin: 0 4vw 0 auto; max-width: 400px; max-height: 74vh; overflow: auto; pointer-events: auto; background: rgb(24 23 21 / 0.93); color: #E8DDC5;
+    padding: 18px 22px 20px; font: 15px/1.55 "Iowan Old Style", "Palatino Linotype", Georgia, serif; border-left: 3px solid #a33a2c; }
+  .plate .n { margin: 0 0 6px; font: 12px/1.3 "DM Mono", ui-monospace, Consolas, monospace; letter-spacing: 0.06em; text-transform: uppercase; color: #A59D8E; }
+  .plate h3 { margin: 0 0 10px; font: 600 22px/1.25 "Iowan Old Style", "Palatino Linotype", Georgia, serif; color: #F2E8D2; }
+  .plate p { margin: 0 0 10px; } .plate ul { margin: 0 0 12px; padding-left: 18px; } .plate li { margin: 0 0 4px; }
+  .plate .k { margin: 12px 0 4px; font: 12px/1.3 "DM Mono", ui-monospace, Consolas, monospace; letter-spacing: 0.06em; text-transform: uppercase; color: #B49A69; }
+  .plate .todo { color: #A59D8E; font-style: italic; }
+  .plate .lede { color: #CFC3A8; }
+  .plate a { color: #F2C9A0; text-underline-offset: 3px; }
+  .plate a:focus-visible, .plate summary:focus-visible { outline: 2px solid #B49A69; outline-offset: 2px; }
+  .plate details { border-top: 1px solid #3a352e; padding: 8px 0; } .plate summary { cursor: pointer; font-weight: 600; color: #F2E8D2; }
+  .plate details p { margin: 8px 0 2px; font-size: 14px; }
+  @media (max-width: 640px) { .plate { top: auto; bottom: 0; margin: 0 10px; max-width: none; max-height: 52vh; } .plate-wrap { display: flex; flex-direction: column; justify-content: flex-end; } }
+  body.capture .plate-wrap { display: none; }
+  /* A world whose words are in the scene keeps its plate for screen readers only. */
+  .plate-wrap.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  /* Discoveries: a small row of quiet buttons, the keyboard way to what the pointer finds in the scene. */
+  #discover { position: fixed; right: 24px; bottom: 24px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; max-width: min(560px, 70vw); }
+  #discover button { font: 13px/1.2 "DM Mono", ui-monospace, Consolas, monospace; color: #E8DDC5; background: rgb(24 23 21 / 0.86); border: 1px solid #4b443c; padding: 7px 10px; cursor: pointer; }
+  #discover button:hover { border-color: #B49A69; }
+  #discover button:focus-visible { outline: 2px solid #B49A69; outline-offset: 2px; }
+  body.capture #discover { display: none; }
+  @media (max-width: 640px) { #discover { left: 10px; right: 10px; bottom: 10px; max-width: none; justify-content: flex-start; } }
 </style>
 </head>
 <body>
 <canvas id="world"></canvas>
+<nav id="chapters" aria-label="Chapters"></nav>
+<main id="story" aria-label="The journey, in six chapters"></main>
 <div id="spacer"></div>
-<div id="load">Loading the gate…</div>
+<p id="caption" aria-live="polite"><span class="n"></span><span class="t"></span></p>
+<nav id="discover" aria-label="Discoveries in this place" hidden></nav>
+<div id="load"><div><p id="load-msg">Loading the gate…</p><span class="rule" aria-hidden="true"></span></div></div>
 <div id="hud" role="status">
   <div><b>Throwaway proof, not the website.</b> Scroll to walk. <span id="stats">measuring…</span></div>
   <div class="row" id="views"></div>
 </div>
+<script src="./vendor/gsap.min.js" defer></script>
+<script src="./vendor/ScrollTrigger.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module" src="./src/main.js"></script>
 </body>

@@ -1,0 +1,56 @@
+{
+ "what": "Optimised import test with ?assets=0 against the original baseline (gate-proof-v2/baseline), RTX 4050, 1920x1080, 4 views x 4 languages, two runs. Each run loads the baseline twice (before and after the test page).",
+ "result": "Mid-pass runs (below): ink, memory and anime 0 differing pixels. Final code: 0 on a warm load, but a first, cold load showed 618 px at 1/255 in one ink frame (see final_code, open_item). Ink night: the baseline differs from itself between loads.",
+ "runs": {
+  "run1": {
+   "test_vs_baseline_load2": 2,
+   "test_vs_baseline_load1": 3,
+   "baseline_load1_vs_load2": 1,
+   "frames_with_any_difference": [
+    "approach_3",
+    "arch_3"
+   ],
+   "max_channel_difference": 1
+  },
+  "run2": {
+   "test_vs_baseline_load2": 2,
+   "test_vs_baseline_load1": 2544,
+   "baseline_load1_vs_load2": 2546,
+   "frames_with_any_difference": [
+    "approach_3",
+    "forecourt_3"
+   ]
+  }
+ },
+ "pre_existing_nondeterminism": "Only in ink night (language 3), only in the upper sky where the stars are drawn. Present between two loads of the unmodified baseline. Not investigated further tonight.",
+ "harness_faults_found_and_fixed": [
+  "Pointer parallax: Chrome sends mousemove when content under a resting OS cursor changes, which panned the camera on whichever page happened to get one. lib.mjs now centres the mouse after each load.",
+  "Idle clock: the figure's idle animation accumulated time between captures. __set now accepts idleT to pin it.",
+  "Loading fade: the loading page fades over 360 ms; firstcheck.mjs waits for it to be removed.",
+  "Loading fade on warm loads: open() now waits for the loading page to be removed.",
+  "Capture-mode re-render at time 0 after background compilation raced with tests; it now uses the last capture's time.",
+  "Capture mode ignores pointer parallax entirely and logs pointer events (1-3 arrived per capture run, confirming the cause)."
+ ],
+ "regression_found_and_fixed": "Statue colour in paintAnime was first written with ternaries over shared constants, which changed compiler constant folding for every surface: 34 pixels differed by 1/255 in anime. Rewritten as a separate statue-only branch; anime is now 0.",
+ "raw": [
+  "identity-post-rtx.json",
+  "identity-post-rtx-run2.json",
+  "identity-pre-rtx.json"
+ ],
+ "final_code": {
+  "warm_load": {
+   "test_vs_baseline": "0 in ink, memory and anime; 2 px at 1/255 in ink night (baseline vs itself: 1)"
+  },
+  "cold_load": {
+   "test_vs_baseline": "arch_0 (ink): 618 px at 1/255, reproducible on the first, cold load only; arch_3: 1 px"
+  },
+  "first_program_vs_full_ink": "0 px in two runs; 992 and 1003 px at 1/255 in two others",
+  "open_item": "1/255 differences only in frames drawn by cold-compiled programs. Harness causes ruled out (pointer, loading fade, idle clock, capture re-render race, mask contamination). Suspected: compiled shader binary differs between cold compile and cache. Unverified.",
+  "raw": [
+   "identity-final-rtx.json",
+   "identity-noise-floor-final.txt",
+   "first-program-identity-final-rtx-run1.json",
+   "first-program-identity-final-rtx-run2.json"
+  ]
+ }
+}

@@ -16,8 +16,24 @@ out vec3 vP; out vec3 vA; out vec4 vC; out float vLine; out vec3 vN;
 #ifdef INST
 in mat4 instanceMatrix;
 #endif
-#ifdef ALPHA
+#if defined(ALPHA)||defined(FOLIAGE)
 in vec2 uv; out vec2 vUv;
+#endif
+#if defined(GRASS)||defined(THIN)
+in float aRand; uniform vec3 uCamPos; uniform float uFpx;   // aRand: one value per instance, decides thinning order
+#endif
+#ifdef FLAG
+in vec2 aFlag; uniform float uStep;                          // aFlag: 0 at the hoist to 1 at the fly, then a phase. uStep moves on twos
+#endif
+#ifdef MOVER
+in vec4 aMove; in vec4 aMove2; uniform float uStep;          // centre (three), radius; phase, speed, leg pivot, leg group. See worlds/kit.js
+uniform vec2 uDrive;                                          // a walker moved by script: gait phase and amount (0 = standing)
+#endif
+#ifdef GRASS
+in float aSide; in float aRow; uniform vec3 uKeep;            // aSide: signed half width (m). uKeep: min px, keep floor, base half width
+#endif
+#ifdef THIN
+uniform vec3 uThin;                                           // thinning starts at x m, reaches floor z at y m
 #endif
 #ifdef SKIN
 in vec4 skinIndex; in vec4 skinWeight;
@@ -42,17 +58,66 @@ void main(){
 #ifdef INST
   M=modelMatrix*instanceMatrix;
 #endif
+#if defined(GRASS)||defined(THIN)
+  // Distance thinning without popping: past the threshold an instance shrinks into the ground over a band of aRand, so
+  // each one goes smoothly and in a fixed order. Grass keeps the share whose true width still covers uKeep.x pixels,
+  // so widening thin blades does not darken the far field.
+  vec3 root=(M*vec4(0.0,0.0,0.0,1.0)).xyz;
+  float d0=max(distance(root,uCamPos),0.5);
+#ifdef GRASS
+  float keep=clamp(2.0*uKeep.z*uFpx/(d0*uKeep.x),uKeep.y,1.0);
+#else
+  float keep=mix(1.0,uThin.z,clamp((d0-uThin.x)/(uThin.y-uThin.x),0.0,1.0));
+#endif
+  float fade=clamp((keep-aRand*0.85)/0.15,0.0,1.0);
+  p*=fade; rest*=fade;
+#endif
+#ifdef MOVER
+  {
+    // Placed and turned on twos. A walker's legs swing in diagonal pairs and its body bobs, at a rate set by its ground speed.
+    float th=aMove2.x+aMove2.y*uStep, lin=abs(aMove2.y)*aMove.w, wph=uStep*lin*2.6+aMove2.x*5.0;
+    if(lin>0.0){
+      if(aMove2.w!=0.0){ float k=clamp((aMove2.z-p.y)/aMove2.z,0.0,1.0); p.x+=sin(wph+(aMove2.w>0.0?0.0:3.14159))*0.32*k; }
+      p.y+=abs(sin(wph))*0.05;
+    } else if(uDrive.y>0.0){
+      if(aMove2.w!=0.0){ float k=clamp((aMove2.z-p.y)/aMove2.z,0.0,1.0); p.x+=sin(uDrive.x+(aMove2.w>0.0?0.0:3.14159))*0.32*k*uDrive.y; }
+      p.y+=abs(sin(uDrive.x))*0.05*uDrive.y;
+    }
+    float ang=aMove.w>0.0?th+1.5707963*sign(aMove2.y):th, c=cos(ang), s=sin(ang);
+    p=vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z); n=vec3(c*n.x+s*n.z,n.y,-s*n.x+c*n.z);
+    p+=aMove.xyz+(aMove.w>0.0?aMove.w*vec3(cos(th),0.0,-sin(th)):vec3(0.0));
+    rest=p;
+  }
+#endif
   vec4 w=M*vec4(p,1.0), a=M*vec4(rest,1.0);
 #ifdef WIND
-  float h=max(position.y,0.0)*uWind.z;
+  float h=max(p.y,0.0)*uWind.z;
   float ph=dot(a.xz,vec2(0.37,0.21))+uTime*1.7;
   w.xz+=uWind.xy*(sin(ph)*0.6+0.45+0.25*sin(ph*2.3+1.1))*h*h;
+#endif
+#ifdef FLAG
+  float fph=uStep*5.5-aFlag.x*6.0+aFlag.y;
+  w.z+=(sin(fph)+0.45*sin(fph*2.3+1.0))*0.6*aFlag.x*(0.4+0.6*aFlag.x);
+  w.y+=sin(fph*0.7+1.3)*0.28*aFlag.x;
 #endif
 #ifndef NOFIG
   if(isFigure(a.xyz)){ w.xyz+=uFig; a.xyz+=uFig; }
 #endif
-  vN=mat3(M)*n; vP=w.xyz; vA=a.xyz; vC=color; vLine=aLine;
-#ifdef ALPHA
+#ifdef GRASS
+  // Width is added here, facing the camera, and never narrower than uKeep.x pixels: no sub-pixel slivers to shimmer.
+  vec3 up=normalize(mat3(M)*vec3(0.0,1.0,0.0));
+  vec3 toC=uCamPos-w.xyz; float dc=max(length(toC),0.05); toC/=dc;
+  vec3 sd=cross(up,toC); float sl=length(sd);
+  sd=(sl>1e-3)?sd/sl:normalize(mat3(M)*vec3(1.0,0.0,0.0));
+  float hw=max(abs(aSide),0.5*uKeep.x*dc/uFpx*abs(aSide)/uKeep.z)*fade;
+  vec3 off=sd*sign(aSide)*hw;
+  w.xyz+=off; a.xyz+=off;
+  vN=normalize(up*0.65+toC*0.35);
+#else
+  vN=mat3(M)*n;
+#endif
+  vP=w.xyz; vA=a.xyz; vC=color; vLine=aLine;
+#if defined(ALPHA)||defined(FOLIAGE)
   vUv=uv;
 #endif
   gl_Position=projectionMatrix*viewMatrix*w;
@@ -61,25 +126,43 @@ void main(){
 export const GB_FRAG = /* glsl */`
 precision highp float;
 in vec3 vP; in vec3 vA; in vec4 vC; in float vLine; in vec3 vN;
-#ifdef ALPHA
+#if defined(ALPHA)||defined(FOLIAGE)
 in vec2 vUv; uniform sampler2D tMap;
 #endif
 layout(location=0) out vec4 gA;
 layout(location=1) out vec4 gB;
 layout(location=2) out vec4 gC;
 layout(location=3) out vec4 gD;
+#ifndef NOANCHOR
 layout(location=4) out vec4 gE;
+#endif
 void main(){
 #ifdef ALPHA
   if(texture(tMap,vUv).a<0.5) discard;
 #endif
+#ifdef FOLIAGE
+  vec4 leafT=texture(tMap,vUv); if(leafT.b<0.42) discard;
+#endif
+#ifdef SMOOTHN
+  vec3 n = normalize(vN);                                   // thin parts: derivatives across one or two pixels are noise
+#else
   vec3 n = normalize(cross(dFdx(vP),dFdy(vP)));
+#endif
   float mid = floor(vC.b*32.0);
   gA = vec4(vP, mid+0.25);
   gB = vec4(n*0.5+0.5, vC.a);
   gC = vec4(vC.r, vC.g, clamp(vLine/40.0,0.0,1.0), 1.0);
   gD = vec4(normalize(vN)*0.5+0.5, 1.0);
+#ifdef FOLIAGE
+  // Tone and turn of the painted leaf: the deferred pass sees separate leaves on a card, while the shape of the light follows the crown.
+  gB.w = clamp(0.16+leafT.r*(0.62+0.5*vC.a),0.15,1.0);
+  vec3 leafSide=normalize(cross(vN,vec3(0.0,1.0,0.0))+vec3(1e-4));
+  gD = vec4(normalize(normalize(vN)+leafSide*(leafT.g-0.5)*1.5)*0.5+0.5, 1.0);
+  gC.r *= mix(0.62,1.0,leafT.r);
+#endif
+#ifndef NOANCHOR
   gE = vec4(vA, 1.0);
+#endif
 }`;
 
 export const SHADOW_VERT = /* glsl */`
@@ -137,14 +220,22 @@ in vec2 vUv; out vec4 o;
 #ifndef STAGE
 #define STAGE -1
 #endif
-uniform sampler2D tA,tB,tC,tD,tE,tClouds,tS0,tS1,tS2,tS3;
+uniform sampler2D tA,tB,tC,tD,tClouds,tS0,tS1,tS2,tS3;
+#ifndef NOANCHOR
+uniform sampler2D tE;
+#endif
 uniform mat4 uSV[4];
 uniform vec3 uSD[4];
 uniform mat4 uInvVP;
 uniform vec3 uCam;
 uniform vec2 uRes;
 uniform float uFpx,uL,uTime,uGrainT;
+uniform float uLF,uLB,uArchOn,uArchZ; uniform vec4 uArchBox;   // the First Gate as a language boundary (cinematic pass)
+uniform float uStreak;   // painted cirrus in the colour sky: 1 in the cinematic world, 0 in the proof
 uniform int uView;
+#ifdef PORTAL
+uniform sampler2D tPortal; uniform float uOpen,uPlaneZ; uniform vec4 uOpening; uniform vec2 uFlowFrom;
+#endif
 ${NOISE}
 const vec3 PAPER=vec3(0.925,0.905,0.86), INK=vec3(0.085,0.075,0.07);
 const float S0=0.01;
@@ -220,11 +311,24 @@ float inkCover(Surf S,int li,float reveal,float blacks,float gain){
   else if(m<5.5){ val=0.10;ang=62.0;s0=0.08;seg=2.4;sol=0.0;b=vec4(0.62,0.05,0.0,0.0); }
   else if(m<6.5){ val=0.44;ang=70.0;s0=0.10;seg=3.0;sol=0.0;b=vec4(0.62,0.05,0.0,0.0); }
   else if(m<7.5){ val=0.55;ang=5.0;s0=0.12;seg=4.0;sol=0.0;b=vec4(0.62,0.05,0.0,0.0); }
-  else if(m>9.5&&m<10.5){ ang=70.0;cross_=64.0;seg=0.45;sol=0.15;s0=0.007; }                     // worked stone: finer marks
+  else if(m>9.5&&m<10.5){
+    // Statue: its fine folds, decimated, became black noise. Smooth normals, three grouped tones, and a raised floor (it lies on
+    // the ground, so its baked occlusion is low everywhere). One hatch family for the shadow side and no solid fill: the shadow
+    // reads as one mass of lines, and the contour gives the silhouette.
+    float v2=(0.52*softDiffuse(li,S)*sh+0.10*S.sky+0.22*sh*S.sky)*1.72*gain*(0.55+0.45*S.ao);
+    val=0.07+0.93*mix(v2,floor(v2*3.0+0.5)/3.0,0.7)+(fbmF(S.P,3.0)-0.5)*0.05;
+    ang=62.0;cross_=58.0;seg=0.7;sol=0.05;s0=0.012;b=vec4(0.86,0.42,0.2,0.06);
+  }
   else if(m>10.5&&m<11.5){ ang=88.0;cross_=40.0;seg=1.4;sol=0.2;s0=0.006;b=vec4(0.86,0.4,0.42,0.22); } // wood: long marks
-  else if(m>11.5&&m<12.5){ return blacks*(1.0-step(0.55,val)); }                               // plants: a black mass, lit tops open
+  // Plants: outline (from the contour pass), single-direction strokes on about half the leaves, black only at the root.
+  // They share the two stroke calls below: a third call site here made the ink program take 27 s to compile on D3D11.
+  else if(m>11.5&&m<12.5){ ang=75.0+S.bj*40.0;cross_=0.0;seg=0.16;sol=0.0;s0=0.011;b=vec4(0.78,0.28,0.0,0.0); }
   else if(m>12.5&&m<13.5){ return blacks; }                                                     // grass: a blade is a stroke
   else if(m>13.5&&m<14.5){ ang=60.0;cross_=70.0;seg=0.5;sol=0.2;s0=0.006; }                     // figure: fine cloth marks
+  // Cinematic world (2026-11-06). 16: far ranges, not yet drawn in ink (outline only; black at night). 17: the open plain, sparse
+  // long strokes that thin with distance, so the foreground stays quiet and the gate remains the subject.
+  else if(m>15.5&&m<16.5){ return (li==3)?blacks:0.0; }
+  else if(m>16.5&&m<17.5){ val=0.64+0.16*(fbmF(S.P,0.05)-0.5)+rmp(S.dist,25.0,300.0)*0.3-0.3*(1.0-sh); ang=3.0;cross_=60.0;seg=2.4;sol=0.0;s0=0.03;b=vec4(0.8,0.3,0.12,0.0); }
   else return 0.0;
   // Grazing views compress marks on the floor: fade them, as V7 recommended.
   float graze=sat(abs(dot(S.N,normalize(uCam-S.W)))*5.0);
@@ -234,9 +338,12 @@ float inkCover(Surf S,int li,float reveal,float blacks,float gain){
   float c2=rmp(b.z-val,0.0,max(b.z-b.w,0.001))*0.98*(gate+rmp(0.3-val,0.0,0.14));
   c1=min(c1,0.98)*mix(0.45,1.0,graze);
   c2=min(c2,0.98)*mix(0.3,1.0,graze);
+  bool plant=m>11.5&&m<12.5;
+  if(plant) c1=max(c1*mix(0.55,0.9,step(S.bj,0.5)),0.22);   // every leaf hatched, half of them lighter: a mid-tone, not a black mass or blank paper
   float h=stroke(S.uv,S.dist,c1,ang,11.0,S.bj,s0,seg,1.3,82.0,0.2,1.15,reveal);
   h=max(h,stroke(S.uv,S.dist,c2,ang+cross_,23.0,S.bj,s0,seg,1.15,82.0,0.2,1.15,reveal));
   float soli=(1.0-smoothstep(sol-0.012,sol+0.012,val/max(blacks,0.0001)))*step(0.001,blacks);
+  if(plant) soli=blacks*(1.0-smoothstep(0.47,0.56,S.ao));
   return max(h,soli);
 }
 
@@ -259,12 +366,15 @@ vec3 washSepia(Surf S){
   c=mix(c,c*albedo(S)*1.55,0.24);                      // colour bleeding through
   c=mix(c,hex(0xd9b27c),rmp(S.dist,22.0,120.0)*0.72);  // warm air
   if(S.mid>6.5&&S.mid<7.5) c=mix(hex(0xc8a06a),hex(0xecd2a2),rmp(S.P.y,0.0,11.0));
+  if(S.mid>15.5&&S.mid<16.5) c=mix(hex(0xc39a66),hex(0xecd6aa),rmp(S.P.y,0.0,420.0));   // far ranges: warm haze, paler with height
   return c;
 }
 
 // ---- Anime colour. Limited cel shading over painted texture.
 vec3 albedo(Surf S){
   float m=S.mid;
+  if(m>16.5&&m<17.5) m=3.0;   // the open plain paints like V7's terrain
+  if(m>15.5&&m<16.5) m=7.0;   // far ranges like the farthest masses
   float large=fbmF(S.P,0.42);
   float stain=fbmF(vec3(S.P.x*2.1+S.P.z*1.1,S.P.y*0.27,S.P.z*1.9-S.P.x*0.8),1.0)*0.6+fbmF(vec3(S.P.x*0.73+S.P.z*0.41,S.P.y*0.2,S.P.z*0.67-S.P.x*0.37),1.0)*0.4;
   float dab=fbmF(S.P*vec3(1.5,3.4,1.5)+m,1.0);
@@ -285,7 +395,7 @@ vec3 albedo(Surf S){
   if(m<5.5) return hex(0x4d5694);
   if(m<6.5) return hex(0x5f67a3);
   if(m<7.5) return hex(0x6e75ab);
-  if(m>9.5&&m<10.5){ vec3 c=mix(hex(0xa9a497),hex(0xd2cab6),dab); return c*mix(0.78,1.0,rmp(stain,0.3,0.56)); }
+  if(m>9.5&&m<10.5){ vec3 c=mix(hex(0x957a5a),hex(0xc4a67c),dab); c=mix(c,hex(0x6f6a48),rmp(large,0.52,0.7)*0.35); return c*mix(0.8,1.0,rmp(stain,0.3,0.56)); }  // warm worked stone, a little lichen
   if(m>10.5&&m<11.5) return mix(hex(0x65523f),hex(0x93795e),dab);
   if(m>11.5&&m<12.5) return mix(hex(0x4d6a3a),hex(0x8a9a4a),S.block);
   if(m>12.5&&m<13.5) return mix(hex(0x55683a),hex(0xb0a060),S.ao);
@@ -300,16 +410,33 @@ vec3 paintAnime(Surf S,out float toneOut){
   float dusk=smoothstep(0.5,2.3,S.P.y+wob*3.4+fbmF(S.P,0.3)*1.6);
   float l=d*sh*mix(0.34,1.12,dusk)+wob*0.2*sat(d*3.0);
   float band=smoothstep(0.06,0.085,l)*0.5+smoothstep(0.215,0.245,l)*0.5;
+#ifdef PORTAL
+  vec3 shadowT=hex(0xa08ea6), midT=hex(0xd8b09a), lightT=hex(0xfbdcae);
+#else
   vec3 shadowT=hex(0x9391bb), midT=hex(0xcfaea0), lightT=hex(0xf8d9b2);
+#endif
   vec3 tint=band<0.5?mix(shadowT,midT,band*2.0):mix(midT,lightT,band*2.0-1.0);
   vec3 c=a*tint*1.14;
+#ifdef PORTAL
+  c+=hex(0x2a3468)*0.1*S.sky*(0.35+0.65*sat(S.Ns.y));
+  c=mix(c*hex(0x8a6a72),c,smoothstep(0.10,0.42,S.ao+(wob*0.14)));
+#else
   c+=hex(0x2a3468)*0.26*S.sky*(0.35+0.65*sat(S.Ns.y));    // cobalt from the sky
   // Painted accents: a dark, thinned wash sits in every joint.
   c=mix(c*hex(0x6e6fa8),c,smoothstep(0.10,0.42,S.ao+(wob*0.14)));
+#endif
+  if(S.mid>9.5&&S.mid<10.5){
+    // The statue is warmer, so it is not a pale violet ghost: a warm shadow tint, half the sky's cobalt, a brown wash in its folds.
+    // Its own branch, so that every other surface keeps exactly the arithmetic of the baseline.
+    vec3 ts=band<0.5?mix(hex(0x8e7c88),midT,band*2.0):mix(midT,lightT,band*2.0-1.0);
+    vec3 cs=a*ts*1.14+hex(0x2a3468)*0.12*S.sky*(0.35+0.65*sat(S.Ns.y));
+    c=mix(cs*hex(0x8e6e5e),cs,smoothstep(0.10,0.42,S.ao+(wob*0.14)));
+  }
   c+=hex(0x5a3a22)*0.22*(1.0-sat(S.Ns.y*2.0+0.5))*(1.0-band);   // warm bounce off the ground into shadow
   if(S.mid>4.5&&S.mid<6.5) c=mix(a,hex(0x7c80bc),0.2);    // far masses sit in the air, unshaded
   c=mix(c,hex(0x5a6cb4),rmp(S.dist,26.0,170.0)*0.62);
   if(S.mid>6.5&&S.mid<7.5) c=mix(hex(0x6b78b2),hex(0x8ea4cc),rmp(S.P.y,0.0,11.0));
+  if(S.mid>15.5&&S.mid<16.5) c=mix(hex(0x55639f),hex(0x9cafd4),rmp(S.P.y,0.0,520.0));   // far ranges: cobalt in the air, paler at the summits
   toneOut=dot(c,vec3(0.3,0.59,0.11));
   return c;
 }
@@ -361,6 +488,15 @@ vec3 skyAnime(vec3 dir,vec4 c){
   vec3 g=mix(hex(0x8ea4cc),hex(0x3a5ab8),rmp(e,0.0,0.14));
   g=mix(g,hex(0x1c33a6),rmp(e,0.10,0.38));
   g=mix(g,hex(0x101f78),rmp(e,0.38,0.95));
+  if(uStreak>0.0){
+    // Painted cirrus: long brush streaks sweeping diagonally up the open sky, gathered into a few broad sweeps. Uses the streak
+    // channel already baked into the cloud field, skewed so the streaks rise across the frame instead of lying flat.
+    float az=atan(dir.x,-dir.z)/3.14159265;
+    vec2 su=vec2(az*1.6+e*1.3,e*0.55-az*0.22);
+    float sb=textureLod(tClouds,su,1.0).b, sweep=smoothstep(0.42,0.66,textureLod(tClouds,su*0.32+vec2(0.31,0.17),2.0).a);
+    float streak=smoothstep(0.5,0.78,sb)*sweep*rmp(e,0.06,0.26)*(1.0-rmp(e,0.7,0.95));
+    g=mix(g,mix(hex(0xc4d0ee),hex(0xf2e2c8),rmp(1.0-e,0.4,0.9)),streak*0.6*uStreak);
+  }
   float dm=smoothstep(0.40,0.44,c.r+(c.b-0.5)*0.07);
   float l=c.g+(c.b-0.5)*0.22;
   float low=1.0-rmp(e,0.06,0.52);                       // clouds low in the sky still hold the last sun
@@ -395,6 +531,10 @@ float film(vec2 fc,float t){ return (h1(vec3(floor(fc/1.4),t))-0.5); }
 
 // ---- The three transitions. Each is a different physical idea, never a cross-fade.
 vec3 shadeSurface(Surf S,float L){
+#ifdef FIRST
+  // The first frame's program: ink at rest, L = 0, nothing else. Equal to STAGE 0 at L = 0, and far cheaper to compile.
+  return mix(PAPER,INK,inkCover(S,0,1.0,1.0,1.0));
+#else
   float st=min(floor(L),2.0), prog=L-st;
   float n=fbmF(S.P,0.55);
   float gr=fbmF(S.P,7.0);
@@ -440,9 +580,13 @@ vec3 shadeSurface(Surf S,float L){
   float k=inkCover(S,3,m,m,0.9);
   float dr=smoothstep(0.0,1.0,sat(prog*1.6-0.15-tn*0.35));
   return mix(mix(b,PAPER,dr),INK,k);
+#endif
 }
 
 vec3 shadeSky(vec3 dir,vec4 c,float L){
+#ifdef FIRST
+  return mix(PAPER,INK,skyInkDay(dir,c,1.0));
+#else
   float st=min(floor(L),2.0), prog=L-st;
   float e=sat(dir.y*1.4);
 #if STAGE==0||STAGE==-1
@@ -466,9 +610,43 @@ vec3 shadeSky(vec3 dir,vec4 c,float L){
   float x=prog*1.6-e*0.45-c.g*0.2-0.14;
   float m=smoothstep(0.0,0.24,x+(g-0.5)*0.26);
   return mix(skyAnime(dir,c),skyInkNight(dir,c,rmp(prog,0.35,0.95)),m);
+#endif
 }
 
 float invZ(vec4 a){ return a.w<0.0?0.0:1.0/max(distance(a.xyz,uCam),0.02); }
+
+// The First Gate's arch is the boundary between ink and memory (transition choreography, idea B + F). While the camera is south
+// of the arch, only what is seen through its opening is "beyond"; once it is through, everything north is. 1 = beyond.
+// Three's axes: the arch plane is z = uArchZ, north is -z; the opening spans x in uArchBox.xy, height up to uArchBox.w.
+float throughArch(vec3 P,bool isSky,vec3 dir){
+  vec3 d=isSky?dir:(P-uCam);
+  bool beyond=isSky?(d.z<0.0):(P.z<uArchZ);
+  if(!beyond) return 0.0;
+  if(uCam.z<uArchZ) return 1.0;
+  if(abs(d.z)<1e-5) return 0.0;
+  float t=(uArchZ-uCam.z)/d.z;
+  if(t<=0.0||(!isSky&&t>=1.0)) return 0.0;
+  vec3 h=uCam+d*t; const float e=0.05;
+  float inX=smoothstep(uArchBox.x-e,uArchBox.x+e,h.x)*(1.0-smoothstep(uArchBox.y-e,uArchBox.y+e,h.x));
+  return inX*(1.0-smoothstep(uArchBox.w-e,uArchBox.w+e,h.y))*smoothstep(uArchBox.z-e,uArchBox.z+e,h.y);
+}
+
+#ifdef PORTAL
+// A world seen through the First Gate. A pixel shows it if its ray crosses the portal plane inside the opening, and what it hit lies
+// beyond that plane. Analytic, so it holds at any distance, right up to the camera reaching the plane. Paint comes in along the Red
+// Line as uOpen goes from 0 to 1, with a wet, irregular edge.
+float portalMask(vec3 P,bool isSky,vec3 dir){
+  vec3 d=isSky?dir:(P-uCam);
+  bool beyond=isSky?(d.z<0.0):(P.z<uPlaneZ);
+  if(!beyond||uCam.z<=uPlaneZ) return 0.0;
+  float t=(uPlaneZ-uCam.z)/d.z;
+  if(t<=0.0) return 0.0;
+  vec3 h=uCam+d*t;
+  if(h.x<uOpening.x||h.x>uOpening.y||h.y<uOpening.z||h.y>uOpening.w) return 0.0;
+  float flow=uOpen*8.6-distance(h.xy,uFlowFrom)+(fbmF(vec3(h.xy*1.4,0.7),1.0)-0.5)*1.8;
+  return smoothstep(0.0,0.16,flow);
+}
+#endif
 
 void main(){
   ivec2 fc=ivec2(gl_FragCoord.xy);
@@ -478,19 +656,34 @@ void main(){
   if(uView==3) L=min(floor(vUv.x*4.0),3.0);
   if(uView==2) L=vUv.x*3.0;
   L=clamp(L,0.0,3.0);
+  vec3 dir=rayDir();
+  if(uArchOn>0.5&&uView==0) L=mix(uLB,uLF,throughArch(A.xyz,A.w<0.0,dir));
   float st=min(floor(L),2.0), prog=L-st;
 
   // Language weights for the finish: 0 ink day, 1 sepia, 2 anime, 3 ink night.
   float wFilm=(st<0.5)?smoothstep(0.5,1.0,prog)*0.3:(st<1.5)?mix(0.3,1.0,prog):(1.0-prog);
   float wFibre=1.0-wFilm;
 
-  gFpx=uFpx; vec3 dir=rayDir(); vec4 c=cloudAt(dir); gCw=max(fwidth(c.r),0.004);
+  gFpx=uFpx; vec4 c=cloudAt(dir); gCw=max(fwidth(c.r),0.004);
+#ifdef PORTAL
+  float pm=0.0; vec3 pc=vec3(0.0);
+  if(uOpen>0.0){
+    pm=portalMask(A.xyz,A.w<0.0,dir);
+    if(pm>0.0){ pc=texelFetch(tPortal,fc,0).rgb; if(pm>=1.0){ o=vec4(pc,1.0); return; } }
+  }
+#endif
   vec3 col;
   if(A.w<0.0){
     col=shadeSky(dir,c,L);
   } else {
     vec4 B=texelFetch(tB,fc,0), C=texelFetch(tC,fc,0);
-    Surf S; S.W=A.xyz; S.P=texelFetch(tE,fc,0).xyz; S.N=normalize(B.xyz*2.0-1.0); S.Ns=normalize(texelFetch(tD,fc,0).xyz*2.0-1.0); S.mid=floor(A.w); S.block=B.w; S.ao=C.r; S.sky=C.g; S.line=C.b;
+    Surf S; S.W=A.xyz;
+#ifdef NOANCHOR
+    S.P=S.W;
+#else
+    S.P=texelFetch(tE,fc,0).xyz;
+#endif
+    S.N=normalize(B.xyz*2.0-1.0); S.Ns=normalize(texelFetch(tD,fc,0).xyz*2.0-1.0); S.mid=floor(A.w); S.block=B.w; S.ao=C.r; S.sky=C.g; S.line=C.b;
     S.dist=distance(S.W,uCam); gDist=S.dist; S.bj=fract(B.w*255.0*0.618034);
     vec3 V=normalize(uCam-S.W); if(dot(S.N,V)<0.0) S.N=-S.N; if(dot(S.Ns,S.N)<0.0) S.Ns=-S.Ns;
     vec3 an=abs(S.N);
@@ -519,8 +712,10 @@ void main(){
       float z1=(a0.w>8.0&&a0.w<9.0)?z0:invZ(a0), z2=(a1.w>8.0&&a1.w<9.0)?z0:invZ(a1), z3=(a2.w>8.0&&a2.w<9.0)?z0:invZ(a2), z4=(a3.w>8.0&&a3.w<9.0)?z0:invZ(a3);
       float lap=abs(z1+z2+z3+z4-4.0*z0)/(r*r);
       float rel=lap*S.dist;
-      float e=smoothstep(0.075,0.16,rel);
-      float over=step(0.2,rel);
+      float ek=(S.mid>9.5&&S.mid<10.5)?1.5:1.0;            // the statue's fine folds are not outlines; its silhouette and big folds are
+      if(S.mid>15.5) ek=3.0;                              // far ranges and the open plain: silhouettes only, no speckle on their slopes
+      float e=smoothstep(0.075*ek,0.16*ek,rel);
+      float over=step(0.2*ek,rel);
       // In ink the line is heavy and flips to paper over solid black. In colour it thins, warms and breaks.
       float ink=(st<0.5)?(1.0-prog):(st<1.5)?0.0:prog;
       float anime=(st<0.5)?0.0:(st<1.5)?prog:(1.0-prog);
@@ -537,6 +732,17 @@ void main(){
   col+=paper(f)*wFibre;
   col+=film(f,uGrainT)*0.05*wFilm;
   col*=1.0-0.10*wFilm*pow(length(vUv-0.5)*1.25,3.0);
+#ifdef PORTAL
+  if(uOpen>0.0){
+    if(A.w>=0.0){
+      // Late sun comes back through the opening: the page warms around the threshold, ink lines untouched, with a painted edge.
+      vec3 sq=(A.xyz-vec3(0.5*(uOpening.x+uOpening.y),0.5,uPlaneZ+1.6))*vec3(0.5,0.4,0.36);
+      float spill=smoothstep(0.34,0.62,exp(-dot(sq,sq))*uOpen+(fbmF(A.xyz,1.3)-0.5)*0.42);
+      col=mix(col,col*hex(0xfbd9aa),spill*0.85);
+    }
+    col=mix(col,pc,pm);
+  }
+#endif
   o=vec4(clamp(col,0.0,1.0),1.0);
 }`;
 
@@ -545,11 +751,11 @@ export const STAR_VERT = /* glsl */`
 precision highp float;
 in vec3 aSrc; in vec3 aDir; in vec4 aSeed;
 uniform mat4 viewMatrix, projectionMatrix;
-uniform vec3 uCam; uniform float uL,uPx; uniform int uView; uniform sampler2D tA; uniform vec2 uRes; uniform float uTime;
+uniform vec3 uCam; uniform float uL,uPx; uniform int uView; uniform sampler2D tA; uniform vec2 uRes; uniform float uTime; uniform float uStarFar;
 out float vF; out float vRot; out float vTw; out float vLang; out float vSz;
 #define sat(x) clamp(x,0.0,1.0)
 void main(){
-  vec3 far=uCam+aDir*400.0;
+  vec3 far=uCam+aDir*uStarFar;   // 400 m in the proof; beyond the new mountains in the cinematic world
   vec4 cf=projectionMatrix*viewMatrix*vec4(far,1.0);
   float xs=(cf.x/cf.w)*0.5+0.5;
   float L=uL;

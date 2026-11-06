@@ -1,0 +1,7 @@
+{
+ "name": "slot test (CC0 stand-ins only)",
+ "slots": {
+  "sparring": { "url": "./assets/characters/test/mixamo_named.glb", "boneMap": "mixamo", "render": "anime" },
+  "lead": { "url": "./assets/characters/test/standin.fbx", "format": "fbx", "render": "manga" }
+ }
+}

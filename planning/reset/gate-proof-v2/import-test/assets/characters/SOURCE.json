@@ -1,0 +1,31 @@
+{
+ "file": "standin.glb",
+ "sha256": "38e02605bf1fd8f320588bf9a0c9f96a48cd08b498bc5d9d0be554529e7ddd64",
+ "bytes": 688504,
+ "purpose": "Neutral technical stand-in for character slots. No design, no lore.",
+ "built": "2026-11-06 with ~/portfolio-assets/work/characters/make_standin.py (Blender 5.2) and gltfpack -cc -kn -km -ac",
+ "sources": [
+  {
+   "name": "Universal Animation Library [Standard]",
+   "creator": "Quaternius",
+   "licence": "CC0 1.0 (License.txt in the pack)",
+   "file": "~/portfolio-assets/source/Q2-universal-animation-library"
+  }
+ ],
+ "clips": [
+  "Crouch_Idle_Loop",
+  "Fixing_Kneeling",
+  "Hit_Chest",
+  "Idle_Loop",
+  "Idle_Talking_Loop",
+  "Interact",
+  "Jog_Fwd_Loop",
+  "PickUp_Table",
+  "Push_Loop",
+  "Sitting_Idle_Loop",
+  "Sitting_Talking_Loop",
+  "Sword_Attack",
+  "Sword_Idle",
+  "Walk_Loop"
+ ]
+}

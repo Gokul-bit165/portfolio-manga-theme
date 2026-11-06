@@ -1,0 +1,114 @@
+{
+ "mid-l0-anchor0": {
+  "figure": {
+   "pixels": 88749,
+   "step": 17.591,
+   "flicker": 11.736,
+   "ratio": 0.667
+  },
+  "stone (reference)": {
+   "pixels": 1244265,
+   "step": 0.001,
+   "flicker": 0.001,
+   "ratio": 0.674
+  }
+ },
+ "mid-l0-anchor1": {
+  "figure": {
+   "pixels": 88947,
+   "step": 20.678,
+   "flicker": 14.857,
+   "ratio": 0.718
+  },
+  "stone (reference)": {
+   "pixels": 1244091,
+   "step": 0.001,
+   "flicker": 0.001,
+   "ratio": 0.676
+  }
+ },
+ "mid-l2-anchor0": {
+  "figure": {
+   "pixels": 88887,
+   "step": 3.22,
+   "flicker": 2.133,
+   "ratio": 0.662
+  },
+  "stone (reference)": {
+   "pixels": 1271612,
+   "step": 0.203,
+   "flicker": 0.213,
+   "ratio": 1.045
+  }
+ },
+ "mid-l2-anchor1": {
+  "figure": {
+   "pixels": 88889,
+   "step": 3.273,
+   "flicker": 2.166,
+   "ratio": 0.662
+  },
+  "stone (reference)": {
+   "pixels": 1271611,
+   "step": 0.203,
+   "flicker": 0.213,
+   "ratio": 1.045
+  }
+ },
+ "near-l0-anchor0": {
+  "figure": {
+   "pixels": 285426,
+   "step": 21.596,
+   "flicker": 17.005,
+   "ratio": 0.787
+  },
+  "stone (reference)": {
+   "pixels": 1139786,
+   "step": 0.002,
+   "flicker": 0.002,
+   "ratio": 0.748
+  }
+ },
+ "near-l0-anchor1": {
+  "figure": {
+   "pixels": 286447,
+   "step": 23.571,
+   "flicker": 18.959,
+   "ratio": 0.804
+  },
+  "stone (reference)": {
+   "pixels": 1138851,
+   "step": 0.002,
+   "flicker": 0.001,
+   "ratio": 0.732
+  }
+ },
+ "near-l2-anchor0": {
+  "figure": {
+   "pixels": 286765,
+   "step": 3.531,
+   "flicker": 2.763,
+   "ratio": 0.782
+  },
+  "stone (reference)": {
+   "pixels": 1171415,
+   "step": 0.203,
+   "flicker": 0.212,
+   "ratio": 1.044
+  }
+ },
+ "near-l2-anchor1": {
+  "figure": {
+   "pixels": 286946,
+   "step": 3.593,
+   "flicker": 2.825,
+   "ratio": 0.786
+  },
+  "stone (reference)": {
+   "pixels": 1171380,
+   "step": 0.203,
+   "flicker": 0.212,
+   "ratio": 1.044
+  }
+ }
+}

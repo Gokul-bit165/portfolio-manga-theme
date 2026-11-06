@@ -1,0 +1,78 @@
+{
+ "forecourt-moving": {
+  "branches": {
+   "pixels": 30403,
+   "step": 21.731,
+   "flicker": 13.276,
+   "ratio": 0.611
+  },
+  "figure": {
+   "pixels": 31368,
+   "step": 8.878,
+   "flicker": 4.945,
+   "ratio": 0.557
+  },
+  "grass": {
+   "pixels": 55898,
+   "step": 39.192,
+   "flicker": 32.607,
+   "ratio": 0.832
+  },
+  "plants": {
+   "pixels": 52667,
+   "step": 23.214,
+   "flicker": 17.888,
+   "ratio": 0.771
+  },
+  "statue": {
+   "pixels": 97516,
+   "step": 28.679,
+   "flicker": 21.514,
+   "ratio": 0.75
+  },
+  "stone (reference)": {
+   "pixels": 1068327,
+   "step": 13.768,
+   "flicker": 8.425,
+   "ratio": 0.612
+  }
+ },
+ "forecourt-moving-anime": {
+  "branches": {
+   "pixels": 31678,
+   "step": 6.096,
+   "flicker": 3.161,
+   "ratio": 0.519
+  },
+  "figure": {
+   "pixels": 31231,
+   "step": 2.051,
+   "flicker": 0.997,
+   "ratio": 0.486
+  },
+  "grass": {
+   "pixels": 56280,
+   "step": 10.898,
+   "flicker": 8.336,
+   "ratio": 0.765
+  },
+  "plants": {
+   "pixels": 65986,
+   "step": 8.447,
+   "flicker": 5.931,
+   "ratio": 0.702
+  },
+  "statue": {
+   "pixels": 97656,
+   "step": 7.211,
+   "flicker": 4.59,
+   "ratio": 0.636
+  },
+  "stone (reference)": {
+   "pixels": 1088043,
+   "step": 4.072,
+   "flicker": 2.011,
+   "ratio": 0.494
+  }
+ }
+}

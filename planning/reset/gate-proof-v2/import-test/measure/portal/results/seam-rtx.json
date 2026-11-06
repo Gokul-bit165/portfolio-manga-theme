@@ -1,0 +1,847 @@
+{
+ "cross": 0.7449739085510372,
+ "res": [
+  1600,
+  900
+ ],
+ "step": 0.0002,
+ "swap": {
+  "before": "plain",
+  "after": "vael",
+  "camStepM": 1.4335210222633252e-9,
+  "anyPct": 0.001,
+  "over8Pct": 0,
+  "over32Pct": 0,
+  "meanDiff": 0,
+  "max": 1
+ },
+ "straddle": {
+  "camStepM": 0.0262,
+  "anyPct": 26.058,
+  "over8Pct": 2.945,
+  "over32Pct": 1.645,
+  "meanDiff": 1.731,
+  "max": 200
+ },
+ "controlVael": {
+  "camStepM": 0.0329,
+  "anyPct": 30.243,
+  "over8Pct": 3.856,
+  "over32Pct": 2.073,
+  "meanDiff": 2.175,
+  "max": 199
+ },
+ "controlPlain": {
+  "camStepM": 0.0228,
+  "anyPct": 21.655,
+  "over8Pct": 2.082,
+  "over32Pct": 1.19,
+  "meanDiff": 1.269,
+  "max": 198
+ },
+ "reverse": [
+  {
+   "p": 0.02,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.2,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.34,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.45,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.5,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.54,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.58,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.63,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.68,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.72,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.74447,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.74547,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.76,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.8,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.86,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 0.93,
+   "any": 0,
+   "max": 0
+  },
+  {
+   "p": 1,
+   "any": 0,
+   "max": 0
+  }
+ ],
+ "path": [
+  {
+   "p": 0,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.01,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.02,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.03,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.04,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.05,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.06,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.07,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.08,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.09,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.1,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.11,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.12,
+   "where": "plain",
+   "shot": "establish",
+   "pos": null
+  },
+  {
+   "p": 0.13,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.14,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.15,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.16,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.17,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.18,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.19,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.2,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.21,
+   "where": "plain",
+   "shot": "track",
+   "pos": null
+  },
+  {
+   "p": 0.22,
+   "where": "plain",
+   "shot": "crane",
+   "pos": null
+  },
+  {
+   "p": 0.23,
+   "where": "plain",
+   "shot": "crane",
+   "pos": null
+  },
+  {
+   "p": 0.24,
+   "where": "plain",
+   "shot": "crane",
+   "pos": null
+  },
+  {
+   "p": 0.25,
+   "where": "plain",
+   "shot": "crane",
+   "pos": null
+  },
+  {
+   "p": 0.26,
+   "where": "plain",
+   "shot": "crane",
+   "pos": null
+  },
+  {
+   "p": 0.27,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.28,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.29,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.3,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.31,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.32,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.33,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.34,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.35,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.36,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.37,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.38,
+   "where": "plain",
+   "shot": "descend",
+   "pos": null
+  },
+  {
+   "p": 0.39,
+   "where": "plain",
+   "shot": "frame",
+   "pos": null
+  },
+  {
+   "p": 0.4,
+   "where": "plain",
+   "shot": "frame",
+   "pos": null
+  },
+  {
+   "p": 0.41,
+   "where": "plain",
+   "shot": "frame",
+   "pos": null
+  },
+  {
+   "p": 0.42,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.43,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.44,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.45,
+   "where": "plain",
+   "shot": "hold",
+   "pos": null
+  },
+  {
+   "p": 0.46,
+   "where": "plain",
+   "shot": "dolly",
+   "pos": null
+  },
+  {
+   "p": 0.47,
+   "where": "plain",
+   "shot": "dolly",
+   "pos": null
+  },
+  {
+   "p": 0.48,
+   "where": "plain",
+   "shot": "dolly",
+   "pos": null
+  },
+  {
+   "p": 0.49,
+   "where": "plain",
+   "shot": "tilt",
+   "pos": null
+  },
+  {
+   "p": 0.5,
+   "where": "plain",
+   "shot": "tilt",
+   "pos": null
+  },
+  {
+   "p": 0.51,
+   "where": "plain",
+   "shot": "tilt",
+   "pos": null
+  },
+  {
+   "p": 0.52,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.53,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.54,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.55,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.56,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.57,
+   "where": "plain",
+   "shot": "through",
+   "pos": null
+  },
+  {
+   "p": 0.58,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.59,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.6,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.61,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.62,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.63,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.64,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.65,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.66,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.67,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.68,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.69,
+   "where": "plain",
+   "shot": "passage",
+   "pos": null
+  },
+  {
+   "p": 0.7,
+   "where": "plain",
+   "shot": "approach-inner",
+   "pos": null
+  },
+  {
+   "p": 0.71,
+   "where": "plain",
+   "shot": "approach-inner",
+   "pos": null
+  },
+  {
+   "p": 0.72,
+   "where": "plain",
+   "shot": "approach-inner",
+   "pos": null
+  },
+  {
+   "p": 0.73,
+   "where": "plain",
+   "shot": "enter",
+   "pos": null
+  },
+  {
+   "p": 0.74,
+   "where": "plain",
+   "shot": "enter",
+   "pos": null
+  },
+  {
+   "p": 0.75,
+   "where": "vael",
+   "shot": "through",
+   "pos": [
+    -0.06,
+    1.27,
+    -0.85
+   ]
+  },
+  {
+   "p": 0.76,
+   "where": "vael",
+   "shot": "through",
+   "pos": [
+    -0.13,
+    1.33,
+    -3.41
+   ]
+  },
+  {
+   "p": 0.77,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -0.25,
+    1.4,
+    -6.47
+   ]
+  },
+  {
+   "p": 0.78,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -0.44,
+    1.41,
+    -10.06
+   ]
+  },
+  {
+   "p": 0.79,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -0.67,
+    1.41,
+    -14.14
+   ]
+  },
+  {
+   "p": 0.8,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -0.92,
+    1.44,
+    -18.48
+   ]
+  },
+  {
+   "p": 0.81,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.16,
+    1.57,
+    -22.86
+   ]
+  },
+  {
+   "p": 0.82,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.37,
+    1.85,
+    -27.03
+   ]
+  },
+  {
+   "p": 0.83,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.53,
+    2.31,
+    -30.76
+   ]
+  },
+  {
+   "p": 0.84,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.57,
+    2.8,
+    -34.33
+   ]
+  },
+  {
+   "p": 0.85,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.55,
+    3.32,
+    -37.86
+   ]
+  },
+  {
+   "p": 0.86,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.51,
+    3.93,
+    -41.25
+   ]
+  },
+  {
+   "p": 0.87,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.52,
+    4.72,
+    -44.43
+   ]
+  },
+  {
+   "p": 0.88,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.64,
+    5.77,
+    -47.28
+   ]
+  },
+  {
+   "p": 0.89,
+   "where": "vael",
+   "shot": "road",
+   "pos": [
+    -1.91,
+    7.16,
+    -49.6
+   ]
+  },
+  {
+   "p": 0.9,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -2.41,
+    8.97,
+    -51.2
+   ]
+  },
+  {
+   "p": 0.91,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -3.04,
+    11.09,
+    -52.19
+   ]
+  },
+  {
+   "p": 0.92,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -3.7,
+    13.23,
+    -52.81
+   ]
+  },
+  {
+   "p": 0.93,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -4.33,
+    15.22,
+    -53.22
+   ]
+  },
+  {
+   "p": 0.94,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -4.88,
+    16.98,
+    -53.54
+   ]
+  },
+  {
+   "p": 0.95,
+   "where": "vael",
+   "shot": "rise",
+   "pos": [
+    -5.33,
+    18.42,
+    -53.84
+   ]
+  },
+  {
+   "p": 0.96,
+   "where": "vael",
+   "shot": "reveal",
+   "pos": [
+    -5.64,
+    19.48,
+    -54.15
+   ]
+  },
+  {
+   "p": 0.97,
+   "where": "vael",
+   "shot": "reveal",
+   "pos": [
+    -5.89,
+    20.33,
+    -54.4
+   ]
+  },
+  {
+   "p": 0.98,
+   "where": "vael",
+   "shot": "reveal",
+   "pos": [
+    -6.09,
+    21.07,
+    -54.61
+   ]
+  },
+  {
+   "p": 0.99,
+   "where": "vael",
+   "shot": "reveal",
+   "pos": [
+    -6.29,
+    21.76,
+    -54.8
+   ]
+  },
+  {
+   "p": 1,
+   "where": "vael",
+   "shot": "hold",
+   "pos": [
+    -6.5,
+    22.5,
+    -55
+   ]
+  }
+ ],
+ "crossAtVaelLocal": [
+  0,
+  1.25,
+  0.002
+ ],
+ "errors": []
+}

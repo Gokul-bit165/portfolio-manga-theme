@@ -10,3 +10,7 @@ next-env.d.ts
 # Private study material. Licensing unverified: never commit or publish (see References/berserk/README.md).
 References/*
 !References/berserk/
+
+# Local copies of a third-party character model: never commit or publish.
+guts_-_berserk.glb
+guts-berserk/

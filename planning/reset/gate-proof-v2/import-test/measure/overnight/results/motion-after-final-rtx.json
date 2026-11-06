@@ -1,0 +1,116 @@
+{
+ "forecourt-moving": {
+  "branches": {
+   "pixels": 30395,
+   "step": 21.948,
+   "flicker": 13.412,
+   "ratio": 0.611
+  },
+  "figure": {
+   "pixels": 31368,
+   "step": 8.881,
+   "flicker": 4.949,
+   "ratio": 0.557
+  },
+  "grass": {
+   "pixels": 55898,
+   "step": 39.18,
+   "flicker": 32.581,
+   "ratio": 0.832
+  },
+  "plants": {
+   "pixels": 97303,
+   "step": 25.497,
+   "flicker": 20.199,
+   "ratio": 0.792
+  },
+  "statue": {
+   "pixels": 97517,
+   "step": 28.671,
+   "flicker": 21.526,
+   "ratio": 0.751
+  },
+  "stone (reference)": {
+   "pixels": 1031363,
+   "step": 13.488,
+   "flicker": 8.123,
+   "ratio": 0.602
+  }
+ },
+ "forecourt-moving-anime": {
+  "branches": {
+   "pixels": 31669,
+   "step": 6.076,
+   "flicker": 3.157,
+   "ratio": 0.52
+  },
+  "figure": {
+   "pixels": 31231,
+   "step": 2.054,
+   "flicker": 1.0,
+   "ratio": 0.487
+  },
+  "grass": {
+   "pixels": 56280,
+   "step": 10.907,
+   "flicker": 8.353,
+   "ratio": 0.766
+  },
+  "plants": {
+   "pixels": 99470,
+   "step": 8.411,
+   "flicker": 5.977,
+   "ratio": 0.711
+  },
+  "statue": {
+   "pixels": 97655,
+   "step": 7.216,
+   "flicker": 4.595,
+   "ratio": 0.637
+  },
+  "stone (reference)": {
+   "pixels": 1060160,
+   "step": 3.973,
+   "flicker": 1.926,
+   "ratio": 0.485
+  }
+ },
+ "forecourt-still-wind": {
+  "branches": {
+   "pixels": 8279,
+   "step": 0.019,
+   "flicker": 0.013,
+   "ratio": 0.702
+  },
+  "figure": {
+   "pixels": 27614,
+   "step": 1.775,
+   "flicker": 1.33,
+   "ratio": 0.749
+  },
+  "grass": {
+   "pixels": 25553,
+   "step": 8.716,
+   "flicker": 4.787,
+   "ratio": 0.549
+  },
+  "plants": {
+   "pixels": 12850,
+   "step": 0.039,
+   "flicker": 0.038,
+   "ratio": 0.96
+  },
+  "statue": {
+   "pixels": 63928,
+   "step": 0.0,
+   "flicker": 0.0,
+   "ratio": 1.024
+  },
+  "stone (reference)": {
+   "pixels": 1178134,
+   "step": 0.009,
+   "flicker": 0.004,
+   "ratio": 0.46
+  }
+ }
+}

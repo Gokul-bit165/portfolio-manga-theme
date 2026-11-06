@@ -1,0 +1,17 @@
+{
+ "frames": {
+  "early": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "forecourt": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "late": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  }
+ },
+ "total_differing_pixels": 0
+}

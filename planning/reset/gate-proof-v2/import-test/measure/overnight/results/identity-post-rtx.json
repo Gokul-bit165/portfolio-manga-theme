@@ -1,0 +1,69 @@
+{
+ "frames": {
+  "approach_0": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "approach_1": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "approach_2": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "approach_3": {
+   "differing_pixels": 2,
+   "max_channel_diff": 1
+  },
+  "arch_0": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "arch_1": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "arch_2": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "arch_3": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "forecourt_0": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "forecourt_1": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "forecourt_2": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "forecourt_3": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "passage_0": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "passage_1": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "passage_2": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  },
+  "passage_3": {
+   "differing_pixels": 0,
+   "max_channel_diff": 0
+  }
+ },
+ "total_differing_pixels": 2
+}

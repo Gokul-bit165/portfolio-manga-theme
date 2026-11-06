@@ -1,0 +1,9 @@
+{
+ "what": "?assets=0 (legacy path) against a scratch copy of the original baseline whose only change is ignoring the pointer in capture mode (shaders byte-identical). RTX 4050, 1920x1080, 4 views x 4 languages. Loads: baseline cold (warm_), test cold (test_), baseline warm (base_), test warm (test2_).",
+ "test vs base": [0, {}],
+ "test2 vs base": [0, {}],
+ "test vs test2": [0, {}],
+ "test vs warm": [618, {"arch_0": [618, 1]}],
+ "warm vs base": [618, {"arch_0": [618, 1]}],
+ "reading": "Legacy is pixel-identical to the baseline in every frame and both loads. The 618-pixel, 1/255 difference appears between the baseline's own cold and warm loads too: a property of cold-compiled programs, not of the changes."
+}

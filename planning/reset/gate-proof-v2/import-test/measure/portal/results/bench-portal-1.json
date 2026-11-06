@@ -1,0 +1,536 @@
+{
+ "when": "2026-11-06T06:54:20.292Z",
+ "rtx": {
+  "auto": {
+   "cold": {
+    "navToFullReadyMs": 3041,
+    "firstFrameMs": 2065,
+    "fullReadyMs": 3021,
+    "compile": {
+     "clouds": 174,
+     "stars": 44,
+     "gbuffer": 55,
+     "first": 730,
+     "vael-gbuffer": 23,
+     "vael": 363
+    },
+    "vael": {
+     "geometry": 575,
+     "meshes": 575,
+     "programs": 939,
+     "bakeBlockMs": 5,
+     "baked": 944
+    },
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.9 ms per frame at high quality",
+     "frameMsAtHigh": 2.9,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 548.7
+   },
+   "warm": {
+    "navToFullReadyMs": 1107,
+    "firstFrameMs": 598,
+    "fullReadyMs": 1093,
+    "compile": {
+     "clouds": 12,
+     "gbuffer": 11,
+     "stars": 11,
+     "first": 10,
+     "vael-gbuffer": 13,
+     "vael": 12
+    },
+    "vael": {
+     "geometry": 476,
+     "meshes": 476,
+     "programs": 489,
+     "bakeBlockMs": 5,
+     "baked": 494
+    },
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.9 ms per frame at high quality",
+     "frameMsAtHigh": 2.9,
+     "fromCache": true,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 41.7
+   },
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "memory": {
+    "res": [
+     1920,
+     1080
+    ],
+    "geometryMB": 3.8,
+    "portalTextureMB": 7.9,
+    "shadowMB": 16,
+    "skyCardMB": 16
+   },
+   "vaelStats": {
+    "ms": 327,
+    "tris": 98043,
+    "byMesh": {
+     "Vael land": 18056,
+     "Vael far layers": 2560,
+     "Vael town": 14633,
+     "Vael woodland": 52968,
+     "Vael near": 6000,
+     "Vael Red Line": 3250,
+     "Vael banners": 576
+    },
+    "houses": 96,
+    "woods": 230,
+    "tufts": 1500,
+    "skyMs": 133
+   },
+   "scroll": {
+    "frames": 4892,
+    "median": 6.9,
+    "p95": 7.1,
+    "p99": 7.2,
+    "max": 27.9,
+    "over20": 2,
+    "over33": 0,
+    "over50": 0,
+    "over33Pct": 0,
+    "ends": [
+     {
+      "where": "vael",
+      "p": 1,
+      "y": 11880
+     },
+     {
+      "where": "plain",
+      "p": 0,
+      "y": 0
+     }
+    ]
+   },
+   "shots": [
+    {
+     "name": "open plain",
+     "p": 0,
+     "avg": 2.6,
+     "p50": 2.6,
+     "p95": 2.9,
+     "max": 3.2,
+     "where": "plain",
+     "rect": null,
+     "tris": 409428,
+     "draws": 15
+    },
+    {
+     "name": "crest, portal closed",
+     "p": 0.3,
+     "avg": 3.17,
+     "p50": 3.1,
+     "p95": 3.5,
+     "max": 3.5,
+     "where": "plain",
+     "rect": null,
+     "tris": 409428,
+     "draws": 15
+    },
+    {
+     "name": "portal opening",
+     "p": 0.42,
+     "avg": 2.6,
+     "p50": 2.6,
+     "p95": 2.9,
+     "max": 3,
+     "where": "plain",
+     "rect": [
+      769,
+      194,
+      195,
+      438
+     ],
+     "tris": 507471,
+     "draws": 15
+    },
+    {
+     "name": "V7 frame, portal open",
+     "p": 0.5,
+     "avg": 2.29,
+     "p50": 2.3,
+     "p95": 2.6,
+     "max": 2.7,
+     "where": "plain",
+     "rect": [
+      631,
+      21,
+      306,
+      663
+     ],
+     "tris": 507471,
+     "draws": 15
+    },
+    {
+     "name": "half and half",
+     "p": 0.555,
+     "avg": 2.87,
+     "p50": 2.8,
+     "p95": 3.5,
+     "max": 3.6,
+     "where": "plain",
+     "rect": [
+      574,
+      0,
+      585,
+      1080
+     ],
+     "tris": 503271,
+     "draws": 14
+    },
+    {
+     "name": "filling the screen",
+     "p": 0.585,
+     "avg": 3.53,
+     "p50": 3.5,
+     "p95": 3.8,
+     "max": 3.9,
+     "where": "plain",
+     "rect": [
+      0,
+      0,
+      1911,
+      1080
+     ],
+     "tris": 503271,
+     "draws": 14
+    },
+    {
+     "name": "just through",
+     "p": 0.605,
+     "avg": 2.01,
+     "p50": 2,
+     "p95": 2.2,
+     "max": 2.2,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "road",
+     "p": 0.7,
+     "avg": 2.04,
+     "p50": 2,
+     "p95": 2.3,
+     "max": 2.5,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "crane",
+     "p": 0.85,
+     "avg": 1.71,
+     "p50": 1.7,
+     "p95": 1.9,
+     "max": 1.9,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "final hold",
+     "p": 1,
+     "avg": 2.01,
+     "p50": 2,
+     "p95": 2.3,
+     "max": 2.4,
+     "where": "vael",
+     "rect": [
+      882,
+      358,
+      108,
+      243
+     ],
+     "tris": 98043,
+     "draws": 7
+    }
+   ],
+   "errors": []
+  }
+ },
+ "intel": {
+  "auto": {
+   "cold": {
+    "navToFullReadyMs": 4202,
+    "firstFrameMs": 2433,
+    "fullReadyMs": 4188,
+    "compile": {
+     "clouds": 206,
+     "gbuffer": 65,
+     "stars": 64,
+     "first": 767,
+     "vael-gbuffer": 37,
+     "vael": 632
+    },
+    "vael": {
+     "geometry": 1101,
+     "meshes": 1101,
+     "programs": 1734,
+     "bakeBlockMs": 7,
+     "baked": 1741
+    },
+    "tier": {
+     "tier": "reduced",
+     "source": "measured",
+     "why": "14.7 ms per frame at high quality",
+     "frameMsAtHigh": 14.7,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 715.5
+   },
+   "warm": {
+    "navToFullReadyMs": 1891,
+    "firstFrameMs": 775,
+    "fullReadyMs": 1871,
+    "compile": {
+     "clouds": 11,
+     "gbuffer": 13,
+     "stars": 12,
+     "first": 22,
+     "vael-gbuffer": 29,
+     "vael": 28
+    },
+    "vael": {
+     "geometry": 1061,
+     "meshes": 1061,
+     "programs": 1090,
+     "bakeBlockMs": 5,
+     "baked": 1094
+    },
+    "tier": {
+     "tier": "reduced",
+     "source": "measured",
+     "why": "14.7 ms per frame at high quality",
+     "frameMsAtHigh": 14.7,
+     "fromCache": true,
+     "nameGuess": {
+      "tier": "reduced",
+      "why": "Intel integrated graphics"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 187.5
+   },
+   "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x000046A3) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "memory": {
+    "res": [
+     1536,
+     864
+    ],
+    "geometryMB": 3.8,
+    "portalTextureMB": 5.1,
+    "shadowMB": 16,
+    "skyCardMB": 16
+   },
+   "vaelStats": {
+    "ms": 527,
+    "tris": 98043,
+    "byMesh": {
+     "Vael land": 18056,
+     "Vael far layers": 2560,
+     "Vael town": 14633,
+     "Vael woodland": 52968,
+     "Vael near": 6000,
+     "Vael Red Line": 3250,
+     "Vael banners": 576
+    },
+    "houses": 96,
+    "woods": 230,
+    "tufts": 1500,
+    "skyMs": 516
+   },
+   "scroll": {
+    "frames": 3518,
+    "median": 7.1,
+    "p95": 14,
+    "p99": 20.8,
+    "max": 62.5,
+    "over20": 60,
+    "over33": 5,
+    "over50": 1,
+    "over33Pct": 0.14,
+    "ends": [
+     {
+      "where": "vael",
+      "p": 1,
+      "y": 11880
+     },
+     {
+      "where": "plain",
+      "p": 0,
+      "y": 0
+     }
+    ]
+   },
+   "shots": [
+    {
+     "name": "open plain",
+     "p": 0,
+     "avg": 9.3,
+     "p50": 9.3,
+     "p95": 9.6,
+     "max": 9.7,
+     "where": "plain",
+     "rect": null,
+     "tris": 397116,
+     "draws": 15
+    },
+    {
+     "name": "crest, portal closed",
+     "p": 0.3,
+     "avg": 12.11,
+     "p50": 12.1,
+     "p95": 12.4,
+     "max": 12.5,
+     "where": "plain",
+     "rect": null,
+     "tris": 397116,
+     "draws": 15
+    },
+    {
+     "name": "portal opening",
+     "p": 0.42,
+     "avg": 9.61,
+     "p50": 9.6,
+     "p95": 10,
+     "max": 10,
+     "where": "plain",
+     "rect": [
+      615,
+      154,
+      156,
+      352
+     ],
+     "tris": 495159,
+     "draws": 15
+    },
+    {
+     "name": "V7 frame, portal open",
+     "p": 0.5,
+     "avg": 9.86,
+     "p50": 9.9,
+     "p95": 10.7,
+     "max": 10.9,
+     "where": "plain",
+     "rect": [
+      504,
+      16,
+      246,
+      532
+     ],
+     "tris": 495159,
+     "draws": 15
+    },
+    {
+     "name": "half and half",
+     "p": 0.555,
+     "avg": 11.08,
+     "p50": 11.1,
+     "p95": 11.4,
+     "max": 11.8,
+     "where": "plain",
+     "rect": [
+      459,
+      0,
+      468,
+      864
+     ],
+     "tris": 490959,
+     "draws": 14
+    },
+    {
+     "name": "filling the screen",
+     "p": 0.585,
+     "avg": 14.41,
+     "p50": 14.3,
+     "p95": 15.1,
+     "max": 15.2,
+     "where": "plain",
+     "rect": [
+      0,
+      0,
+      1529,
+      864
+     ],
+     "tris": 490959,
+     "draws": 14
+    },
+    {
+     "name": "just through",
+     "p": 0.605,
+     "avg": 8.05,
+     "p50": 8,
+     "p95": 8.4,
+     "max": 8.5,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "road",
+     "p": 0.7,
+     "avg": 8.46,
+     "p50": 8.4,
+     "p95": 8.9,
+     "max": 9.2,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "crane",
+     "p": 0.85,
+     "avg": 9.37,
+     "p50": 9.5,
+     "p95": 10.1,
+     "max": 10.2,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    },
+    {
+     "name": "final hold",
+     "p": 1,
+     "avg": 8.45,
+     "p50": 8.4,
+     "p95": 8.8,
+     "max": 8.9,
+     "where": "vael",
+     "rect": null,
+     "tris": 98043,
+     "draws": 7
+    }
+   ],
+   "errors": []
+  }
+ }
+}
