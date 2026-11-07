@@ -133,9 +133,21 @@ Full journey, real wheel scrolling there and back (`measure/results-forge/bench.
 | Worst frame | 104 ms, entering the Forge | 104 ms, entering the Forge |
 | First frame, cold / warm | 1,957 / 702 ms | 2,528 / 785 ms |
 
-The 104 ms frame on both GPUs, at the Forge's entry, is new to this phase and not yet explained. I have not investigated it.
+**The 104 ms frame (fixed, 2026-11-08):** it fell on the way back through the journey, when Vael reloads behind the camera at the Forge's entry. The marks around it show Vael's meshes being rebuilt, and then the sun's shadow map for about 600,000 triangles drawn in a single frame. That map is now drawn about 120,000 triangles per frame over a few frames (`bakeShadow(true)` in `worlds/runtime.js`). The timing points to the shadow map, but I have not timed it on its own. The probe is `measure/vael/entry-probe.mjs`.
 
-## Decisions for the owner
+| After the fix (`bench-spread.json`) | RTX 4050, high | Intel UHD, reduced |
+|---|---|---|
+| Worst frame (was 104 ms on both) | 55.6 ms | 76.1 ms |
+| Over 33 ms | 3 of 23,214 (0.01%) | 27 of 17,273 (0.16%) |
+| Median / p95 ms | 6.9 / 7.2 | 7.1 / 14.1 |
+
+Reverse route: 57 frames, 0 mismatches; all eight crossings seamless. Behaviour: 19 of 19. The plain and the First Gate are byte-identical. The first behaviour run stopped when the browser failed to open a tab; the rerun passed.
+
+## Decision, 2026-11-08
+
+The owner looked into hand-painted fire assets (`FORGE_FIRE_SOURCING.md`) and chose to keep the current fire: the drawn flames, giving way to the painted close-up for the zoom.
+
+## Decisions for the owner (earlier)
 
 1. Is the Forge approved, including the fireplace transition, or what must change before the Muster Field?
 2. Should the other seven portals keep the opening-in-the-doorway transition, or should any get this zoom-and-fade?

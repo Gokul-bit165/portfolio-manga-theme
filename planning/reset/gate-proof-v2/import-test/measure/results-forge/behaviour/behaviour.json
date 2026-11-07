@@ -17,7 +17,7 @@
  {
   "name": "the page's end carries the camera through all eight portals to the last ridge",
   "ok": true,
-  "detail": "{\"p\":0.9991,\"where\":\"ridge\",\"y\":49428,\"max\":49428}"
+  "detail": "{\"p\":0.9994,\"where\":\"ridge\",\"y\":49428,\"max\":49428}"
  },
  {
   "name": "only the worlds near the camera are held: the ones far behind were freed",
@@ -27,7 +27,7 @@
  {
   "name": "and back to the start on the plain, through every portal in reverse",
   "ok": true,
-  "detail": "{\"p\":0.0004,\"where\":\"plain\",\"y\":0,\"max\":49428}"
+  "detail": "{\"p\":0.0009,\"where\":\"plain\",\"y\":0,\"max\":49428}"
  },
  {
   "name": "#standards: first frame is already in the Field of Standards",
@@ -42,7 +42,7 @@
  {
   "name": "Enter on 'Vael' takes the page and the camera there",
   "ok": true,
-  "detail": "{\"p\":0.2183,\"where\":\"vael\",\"y\":10836,\"max\":49428}"
+  "detail": "{\"p\":0.2185,\"where\":\"vael\",\"y\":10836,\"max\":49428}"
  },
  {
   "name": "reduced motion: every chapter is its one still",
