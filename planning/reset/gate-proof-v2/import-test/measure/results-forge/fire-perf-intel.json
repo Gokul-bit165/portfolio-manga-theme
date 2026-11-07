@@ -1,0 +1,126 @@
+{
+ "gpu": "intel",
+ "quality": "reduced",
+ "res": {
+  "sim": {
+   "out": {
+    "wide": {
+     "median": 6.9,
+     "p95": 7.6
+    },
+    "medium": {
+     "median": 7.4,
+     "p95": 8.1
+    },
+    "close-up": {
+     "median": 8,
+     "p95": 8.7
+    },
+    "final zoom": {
+     "median": 17.1,
+     "p95": 21.2
+    },
+    "portal transition": {
+     "median": 16.5,
+     "p95": 18.3
+    }
+   },
+   "tier": "reduced",
+   "res": [
+    1280,
+    720
+   ],
+   "errors": []
+  },
+  "sprite": {
+   "out": {
+    "wide": {
+     "median": 6.9,
+     "p95": 8
+    },
+    "medium": {
+     "median": 7.5,
+     "p95": 9.1
+    },
+    "close-up": {
+     "median": 7.6,
+     "p95": 8.3
+    },
+    "final zoom": {
+     "median": 16.6,
+     "p95": 18.5
+    },
+    "portal transition": {
+     "median": 16.5,
+     "p95": 19.2
+    }
+   },
+   "tier": "reduced",
+   "res": [
+    1280,
+    720
+   ],
+   "errors": []
+  },
+  "paint": {
+   "out": {
+    "wide": {
+     "median": 7.3,
+     "p95": 9.5
+    },
+    "medium": {
+     "median": 7.3,
+     "p95": 8.1
+    },
+    "close-up": {
+     "median": 7.8,
+     "p95": 9
+    },
+    "final zoom": {
+     "median": 16.5,
+     "p95": 19.8
+    },
+    "portal transition": {
+     "median": 16.1,
+     "p95": 18.8
+    }
+   },
+   "tier": "reduced",
+   "res": [
+    1280,
+    720
+   ],
+   "errors": []
+  },
+  "both": {
+   "out": {
+    "wide": {
+     "median": 7,
+     "p95": 7.3
+    },
+    "medium": {
+     "median": 7.8,
+     "p95": 8.9
+    },
+    "close-up": {
+     "median": 8.1,
+     "p95": 8.9
+    },
+    "final zoom": {
+     "median": 17.1,
+     "p95": 20.3
+    },
+    "portal transition": {
+     "median": 16.6,
+     "p95": 18.6
+    }
+   },
+   "tier": "reduced",
+   "res": [
+    1280,
+    720
+   ],
+   "errors": []
+  }
+ }
+}

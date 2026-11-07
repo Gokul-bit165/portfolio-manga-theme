@@ -67,9 +67,18 @@ void main(){
   vec3 dir=rayDir();
   gFpx=uFpx;
   float pm=0.0;
-  if(uOpen>0.0){ pm=portalMask(A.xyz,A.w<0.0,dir); if(pm>=1.0){ o=vec4(texelFetch(tPortal,fc,0).rgb,1.0); return; } }
+#ifdef FORGE
+  if(uOpen>0.0){ pm=uOpen; if(pm>=1.0){
+#else
+  if(uOpen>0.0){ pm=portalMask(A.xyz,A.w<0.0,dir); if(pm>=1.0){
+#endif
+  o=vec4(texelFetch(tPortal,fc,0).rgb,1.0); return; } }
   vec3 col;
   if(A.w<0.0){
+#ifdef FORGE
+    // Beyond the west windows: late sun, too bright to see into.
+    col=mix(hex(0xf2b467),hex(0xfff2cf),sat(dir.y*1.6+0.45));
+#else
     float e=sat(dir.y);
     col=textureLod(tSky,vec2(atan(dir.x,-dir.z)/3.8397+0.5+uDrift,asin(e)/1.22173),0.0).rgb;
     // The far ranges: three painted bands, far to near, each on its own cylinder so they slide past one another a little as the camera moves.
@@ -85,6 +94,7 @@ void main(){
         col=mix(col,mix(m.rgb,hazeAt(dir),r==2?0.3:(r==1?0.22:0.12)),m.a);
       } else if(v<=0.004) col=mix(col,hazeAt(dir),1.0);
     }
+#endif
   } else {
     vec4 B=texelFetch(tB,fc,0), C=texelFetch(tC,fc,0), D=texelFetch(tD,fc,0);
     vec3 P=A.xyz; float mid=floor(A.w), blk=B.w, ao=C.r;
@@ -102,6 +112,65 @@ void main(){
     } else if(farL){
       col=hazeAt(dir);
     } else {
+#ifdef FORGE
+      // ---- The Undercroft Forge: the stones are geometry, so paint adds grain, wear and soot; the light is the furnace's own, baked with its shadows.
+      vec3 alb; vec4 tx=vec4(0.5); float layer=-1.0, metres=1.0;
+      bool smoothM=(mid>11.5&&mid<13.5)||(mid>15.5&&mid<19.5)||(mid>20.5&&mid<21.5)||(mid>23.5&&mid<24.5);
+      vec3 sn=smoothM?Ns:N;
+      bool glow=mid>14.5&&mid<15.5;
+      float burn=0.0;
+      // The fire breathes: one slow swell, a quicker flutter, never a smooth curve (time already steps on twos).
+      float flick=1.0+0.035*(h1(vec3(floor(uTime*12.0),3.0,7.0))-0.5)+0.02*sin(uTime*2.1);   // subtle: the light breathes with the drawn fire
+      if(mid>19.5&&mid<23.5){
+        tx=mat(0.0,P,N,1.3,dist); layer=0.0; metres=1.3;
+        float g=dot(tx.rgb,vec3(0.3333));
+        vec3 base=mid<20.5?hex(0x8a7c6a):(mid<21.5?hex(0x9a8c78):(mid<22.5?hex(0xa48e74):hex(0xa65c40)));
+        alb=base*mix(0.74,1.2,blk)*(0.8+0.42*g);
+        if(mid<20.5){ vec4 d2=mat(1.0,P,vec3(0.0,1.0,0.0),2.4,dist); alb=mix(alb,d2.rgb*0.78,rmp(fbmF(P,0.22),0.42,0.68)*0.65); }
+      } else if(mid>23.5&&mid<24.5){ layer=blk>0.5?3.0:2.0; metres=1.1; tx=mat(layer,P,sn,metres,dist); alb=tx.rgb*mix(0.75,1.4,blk);
+        // Logs in the fire: charred bark, cracked, glowing in the cracks and underneath (added after lighting, below).
+        if(distance(P,vec3(0.0,2.75,-43.1))<1.6&&P.y<2.5){ alb=mix(hex(0x2c2019),hex(0x4a3226),vn0(P*9.0)); burn=1.0; } }
+      else if(mid>15.5&&mid<16.5){ layer=blk>0.4?5.0:4.0; metres=0.8; tx=mat(layer,P,sn,metres,dist); alb=mix(hex(0x34313a),tx.rgb*0.75,0.5)*mix(0.75,1.3,blk); }
+      else if(mid>12.5&&mid<13.5){ alb=hex(0xb08a3a); }
+      else if(mid>17.5&&mid<18.5){ tx=mat(1.0,P,sn,0.6,dist); alb=mix(hex(0x6e4a32),tx.rgb,0.3)*mix(0.75,1.3,blk); }
+      else if(mid>18.5&&mid<19.5){ alb=hex(0x18262c); }
+      else if(mid>11.5&&mid<12.5){ alb=hex(0xf2dfb4); glow=true; }
+      else alb=mix(hex(0x110c14),hex(0x5a3828),1.0-smoothstep(1.4,2.4,distance(P,vec3(0.0,2.75,-43.1))));   // dark backing seen through the firebox: sooty stone in the fire's light
+      // Soot: the crown of the vault, the hood and the wall about the furnace are smoked black, in drifts and streaks.
+      vec3 FC=vec3(0.0,2.75,-43.1);   // the fireplace's fire (three axes): soot, warm air and the firebox's light gather here
+      // Soot collects above a fire, never under it: the fire's term starts at the flames' middle and rises.
+      float soot=sat(rmp(P.y,3.8,8.6)*0.7+exp(-distance(P,FC)/5.5)*1.1*smoothstep(FC.y-0.2,FC.y+0.8,P.y)-0.12)*rmp(fbmF(vec3(P.x*1.3,P.y*0.5,P.z),0.4),0.22,0.6);
+      if(glow){
+        float hot=mid<12.5?0.9*flick:mix(0.5,1.0,blk)*flick;
+        col=mix(hex(0x8e240a),mix(hex(0xff761a),hex(0xffe28e),smoothstep(0.72,0.95,hot)),smoothstep(0.42,0.68,hot));
+      } else {
+        alb=mix(alb,alb*vec3(0.22,0.19,0.19),sat(soot)*0.88);
+        float fire=sat(C.g*1.18)*flick;   // a wider pool than the bake's own exposure
+        float sd=max(dot(sn,uSun),0.0)*shadowAt(P,sn,dist);
+        float wob=fbmF(P,1.4)-0.5;
+        if(layer>=0.0&&fire>0.02) fire=sat(fire+relief(tx,layer,P,N,metres,dist)*fire*0.5);
+        // Firelight in four flat steps: dark, ember, orange, hot gold; the edges between them broken by the surface.
+        float f1=smoothstep(0.1,0.13,fire+wob*0.03), f2=smoothstep(0.3,0.35,fire+wob*0.05), f3=smoothstep(0.62,0.7,fire+wob*0.05);
+        vec3 lightF=mix(mix(mix(vec3(0.115,0.1,0.16),vec3(0.32,0.19,0.13),f1),vec3(0.92,0.52,0.27),f2),vec3(1.38,0.94,0.56),f3);
+        // Sun from the west windows: one hard pale band, where it lands.
+        vec3 lightS=vec3(1.05,0.82,0.52)*smoothstep(0.1,0.16,sd+wob*0.04)*0.85;
+        col=alb*(lightF+lightS);
+        if(mid>15.5&&mid<16.5) col+=vec3(1.0,0.55,0.25)*smoothstep(0.78,0.95,fire)*0.28;
+        if(mid>18.5&&mid<19.5) col+=vec3(0.95,0.5,0.2)*fire*0.7*step(0.55,vn0(vec3(P.xz*7.0,uTime*0.5)));
+        // Inside the firebox the occlusion bake is near zero everywhere; the fire lights it, so it may not fall to black.
+        float inBox=1.0-smoothstep(1.4,2.4,distance(P,FC));
+        float aok=smoothstep(0.01,0.4,max(ao,inBox*0.5)+wob*0.05);
+        col=mix(col*vec3(0.16,0.12,0.18),col,aok);
+        if(burn>0.0){
+          // Glowing cracks across the char, and the underside lit by the coals: two flat ember tones, no glow halo.
+          float crack=smoothstep(0.62,0.7,vn0(vec3(P.x*14.0,P.y*30.0,P.z*14.0)))*0.8+smoothstep(0.2,-0.4,sn.y)*0.6;
+          col=mix(col,mix(hex(0xb2380e),hex(0xf08a2a),step(0.85,crack)),sat(crack)*flick);
+        }
+      }
+      // Smoky air: warm near the fire, brown-violet dark beyond it.
+      float hz=1.0-exp(-dist/uHazeDist);
+      col=mix(col,mix(vec3(0.075,0.055,0.075),vec3(0.32,0.16,0.08),exp(-distance(P,FC)/13.0)),sat(hz*0.9));
+#else
       vec3 alb; float metres=4.0,layer=0.0; vec4 tx=vec4(0.5);
       vec3 sn=(ground||leaf)?Ns:N;
       if(ground){
@@ -192,6 +261,7 @@ void main(){
       // Air, in soft steps: the nearer planes keep their colour.
       float h=1.0-exp(-dist/uHazeDist);
       col=mix(col,hazeAt(dir),sat(h*1.05));
+#endif
     }
     // ---- Ink line: tinted, broken, heavier in shadow, thinning into the air.
     if(!line_&&!farL){
@@ -219,6 +289,9 @@ void main(){
   col*=1.0-0.13*pow(length(vUv-0.5)*1.25,3.0);
   if(pm>0.0) col=mix(col,texelFetch(tPortal,fc,0).rgb,pm);
   o=vec4(sat(col),1.0);
+#ifdef DBGMID
+  { float id=floor(texelFetch(tA,fc,0).w); o=texelFetch(tA,fc,0).w<0.0?vec4(1.0):vec4(id/32.0,fract(id*0.37),fract(id*0.71),1.0); }
+#endif
 }`;
 
 // Smoke as drawn columns: a billowing ribbon eroded by noise, three flat tones, rising on twos. Each is one camera-facing quad.
@@ -252,4 +325,61 @@ void main(){
   vec3 c=mix(uShade,uLit,step(0.35,lit)*0.6+step(0.7,lit)*0.4);
   o=vec4(c,mask*(0.86-0.5*y));
   o.rgb*=o.a;
+}`;
+
+// The Forge's fire: a flipbook of an original simulation (pipeline/forge/paint_fire.py), cut into three flame tones with a dark rim, played on twos.
+// Camera-facing about the vertical; hidden behind nearer surfaces, and where the portal has opened in front of it.
+export const FIRE_VERT = /* glsl */`
+precision highp float;
+in vec3 position; in vec2 uv; in vec4 aFire; in vec2 aFire2;
+uniform mat4 viewMatrix, projectionMatrix; uniform vec3 uCam;
+out vec2 vQ; out vec3 vW; out float vOff;
+void main(){
+  vec3 base=aFire.xyz; float H=aFire.w, Wd=aFire2.x;
+  vec3 toC=uCam-base; toC.y=0.0; toC=normalize(toC+vec3(1e-4)); vec3 side=normalize(cross(vec3(0.0,1.0,0.0),toC));
+  vec3 w=base+side*(uv.x-0.5)*Wd+vec3(0.0,uv.y*H,0.0)+toC*0.02;
+  vQ=uv; vW=w; vOff=aFire2.y;
+  gl_Position=projectionMatrix*viewMatrix*vec4(w,1.0);
+}`;
+export const FIRE_FRAG = /* glsl */`
+precision highp float; precision highp sampler3D;
+in vec2 vQ; in vec3 vW; in float vOff; out vec4 o;
+uniform sampler2D tA, tFire; uniform sampler3D tN; uniform vec3 uCam; uniform float uT, uStill;
+uniform float uOpen,uPlaneZ; uniform vec4 uOpening; uniform vec2 uFlowFrom;
+void main(){
+  vec4 g=texelFetch(tA,ivec2(gl_FragCoord.xy),0);
+  if(g.w>=0.0&&distance(g.xyz,uCam)<distance(vW,uCam)-0.05) discard;
+  if(uOpen>=1.0) discard;   // the exit fades the whole frame, and the fire with it
+  float f=mod(floor(uStill>0.5?0.0:uT*12.0)+vOff,32.0); float r=floor(f/8.0), c=f-r*8.0;
+  vec3 s=texture(tFire,vec2((c+vQ.x)/8.0,1.0-(r+1.0-vQ.y)/4.0)).rgb;
+  float heat=s.r*(1.0-smoothstep(0.86,1.0,abs(vQ.x-0.5)*2.0));
+  if(heat<0.21) discard;
+  vec3 col=heat<0.26?vec3(0.22,0.05,0.04):heat<0.44?mix(vec3(0.78,0.2,0.06),vec3(0.9,0.3,0.08),s.b):heat<0.7?vec3(1.0,0.55,0.14):vec3(1.0,0.9,0.56);
+  float keep=1.0-smoothstep(0.55,1.0,uOpen);   // the background crosses first; the fire lingers, then fades
+  o=vec4(col*keep,keep);
+}`;
+
+// Sun through the west windows: each window's beam as a prism swept along the light; brightest near the window, dust turning in it.
+export const SHAFT_VERT = /* glsl */`
+precision highp float;
+in vec3 position; in vec3 aWin; in vec2 aSize;
+uniform mat4 viewMatrix, projectionMatrix; uniform vec3 uSun;
+out vec3 vW; out vec3 vL;
+void main(){
+  vec3 ray=-normalize(uSun); float len=(aWin.y+position.y*aSize.x)/max(-ray.y,0.05);
+  vec3 w=aWin+vec3(0.0,position.y*aSize.x,-(position.x-0.5)*aSize.y)+ray*position.z*len;
+  vW=w; vL=position;
+  gl_Position=projectionMatrix*viewMatrix*vec4(w,1.0);
+}`;
+export const SHAFT_FRAG = /* glsl */`
+precision highp float; precision highp sampler3D;
+in vec3 vW; in vec3 vL; out vec4 o;
+uniform sampler2D tA; uniform sampler3D tN; uniform vec3 uCam; uniform float uT, uOpen;
+void main(){
+  vec4 g=texelFetch(tA,ivec2(gl_FragCoord.xy),0);
+  if(g.w>=0.0&&distance(g.xyz,uCam)<distance(vW,uCam)-0.05) discard;
+  float n=textureLod(tN,vec3(vW.x*0.08,vW.y*0.12-uT*0.01,vW.z*0.08),0.0).r;
+  float edge=smoothstep(0.0,0.25,vL.x)*smoothstep(1.0,0.75,vL.x)*smoothstep(0.0,0.2,vL.y)*smoothstep(1.0,0.8,vL.y);
+  float a=0.075*pow(1.0-vL.z,1.6)*(0.55+0.9*n)*mix(0.6,1.0,edge);
+  o=vec4(vec3(1.0,0.82,0.55)*a*(1.0-uOpen),1.0);
 }`;

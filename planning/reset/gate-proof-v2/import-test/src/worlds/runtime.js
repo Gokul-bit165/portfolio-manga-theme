@@ -4,7 +4,7 @@
 import * as THREE from "three";
 import { GB_VERT, GB_FRAG } from "../shaders.js";
 import { PAINT_FRAG, SPRITE_VERT, SPRITE_FRAG } from "../shaders-paint.js";
-import { TEXPAINT_FRAG, SMOKE_VERT, SMOKE_FRAG } from "../shaders-texpaint.js";
+import { TEXPAINT_FRAG } from "../shaders-texpaint.js";
 import { shared, OPTS } from "../assets.js";
 import { palette } from "./defs.js";
 
@@ -14,8 +14,9 @@ import { stepU } from "./runtime-shared.js";
 export { stepU };
 let MATS = null;
 const mats = () => (MATS ??= { static: gbMat({ NOFIG: 1, SMOOTHN: 1 }), flag: gbMat({ NOFIG: 1, FLAG: 1 }, stepU), mover: gbMat({ NOFIG: 1, MOVER: 1 }, stepU) });
-// Worlds with a finished art set (2026-11-06). ?vaelart=0 shows the procedural Vael it replaced.
-const TEXART = new URLSearchParams(location.search).get("vaelart") !== "0";
+// Worlds with a finished art set (2026-11-06). ?<id>art=0 shows the procedural world it replaced, e.g. ?vaelart=0, ?forgeart=0.
+const QS = new URLSearchParams(location.search);
+const ART_MODULES = { vael: () => import("./vael-art.js"), forge: () => import("./forge-art.js") };
 const NOSKY = new URLSearchParams(location.search).get("nosky") === "1";
 // The art pass (2026-11-06): painted brush strokes, ink per material, new skies. ?art=0 shows the earlier treatment.
 const ART = new URLSearchParams(location.search).get("art") !== "0";
@@ -48,10 +49,11 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     uCloudSh: { value: L.cloudShadow ?? 0 },
   };
   let stage = null;
-  const useArt = TEXART && def.texArt === true && INK_WORLD !== def.id;
+  const useArt = !!def.texArt && QS.get(`${def.id}art`) !== "0" && INK_WORLD !== def.id && !!ART_MODULES[def.id];
+  const artDefines = (typeof def.texArt === "string" ? `#define ${def.texArt}\n` : "") + (QS.get("dbgmid") ? "#define DBGMID\n" : "");   // debug: material ids as flat colours
   Object.assign(U, { tMat: { value: BLANK }, tFar: { value: BLANK }, uMatRes: { value: 1024 }, uDrift: { value: 0 } });
   const programScene = useArt
-    ? fsScene(new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: FS_VERT, fragmentShader: TEXPAINT_FRAG, uniforms: U, depthTest: false, depthWrite: false }))
+    ? fsScene(new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: FS_VERT, fragmentShader: artDefines + TEXPAINT_FRAG, uniforms: U, depthTest: false, depthWrite: false }))
     : fsScene(new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: FS_VERT, fragmentShader: (isArt ? "#define ART\n" : "") + (OPTS.anchor ? "" : "#define NOANCHOR\n") + PAINT_FRAG, uniforms: U, depthTest: false, depthWrite: false }));
   // Sprites.
   const spriteU = { uCam: { value: new THREE.Vector3() }, uT: { value: 0 }, uFpx: mainU.uFpx, uPx: { value: 1 }, uRain: { value: 0 }, tA: mainU.tA, uMono: { value: 0 } };
@@ -85,7 +87,9 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     const mat = new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: SPRITE_VERT, fragmentShader: SPRITE_FRAG, uniforms: spriteU, transparent: true, depthTest: false, depthWrite: false });
     const pts = new THREE.Points(g, mat); pts.frustumCulled = false; spriteScene.add(pts);
   }
-  function bakeShadow() {
+  // spread: draw the sun's map a few casters per frame (a world streaming in behind the camera must not cost one long frame: found 2026-11-08,
+  // Vael's 600k-triangle map in one frame on the way back into the Forge). Without spread, one call, as before.
+  async function bakeShadow(spread = false) {
     if (!L.sunOn) return;
     shadowRT ??= new THREE.WebGLRenderTarget(SHADOW_RES, SHADOW_RES, { minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, depthTexture: new THREE.DepthTexture(SHADOW_RES, SHADOW_RES, THREE.UnsignedIntType) });
     const c = new THREE.Vector3(...L.shadow.c), r = L.shadow.r, cam = new THREE.OrthographicCamera(-r, r, r, -r, 1, r * 6);
@@ -96,7 +100,23 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     const hasInst = scene.children.some((m) => m.isInstancedMesh), keep = scene.children.map((m) => m.material);
     if (hasInst) scene.children.forEach((m) => { if (m.material) m.material = m.isInstancedMesh ? artMod.shadowInstanceMaterial() : shadowMat; });
     else scene.overrideMaterial = shadowMat;
-    renderer.setRenderTarget(shadowRT); renderer.clear(); renderer.render(scene, cam);
+    if (!spread) { renderer.setRenderTarget(shadowRT); renderer.clear(); renderer.render(scene, cam); }
+    else {
+      // Batches of about 120k triangles, the map cleared once, each batch in its own frame.
+      const tri = (m) => (m.geometry?.index ? m.geometry.index.count / 3 : 0) * (m.isInstancedMesh ? m.count : 1);
+      const casters = scene.children.filter((m) => m.visible), vis = casters.map(() => true), batches = [[]]; let acc = 0;
+      for (const m of casters) { if (acc > 120000 && batches.at(-1).length) { batches.push([]); acc = 0; } batches.at(-1).push(m); acc += tri(m); }
+      const auto = renderer.autoClear;
+      for (let i = 0; i < batches.length; i++) {
+        casters.forEach((m) => { m.visible = batches[i].includes(m); });
+        renderer.setRenderTarget(shadowRT);
+        if (i === 0) renderer.clear();
+        renderer.autoClear = false; renderer.render(scene, cam); renderer.autoClear = auto;
+        renderer.setRenderTarget(null);
+        if (i < batches.length - 1) { gl.flush(); await new Promise((r) => { const t = setTimeout(r, 60); requestAnimationFrame(() => { clearTimeout(t); r(); }); }); }
+      }
+      casters.forEach((m, i) => { m.visible = vis[i]; });
+    }
     scene.overrideMaterial = null;
     if (hasInst) scene.children.forEach((m, i) => { if (m.material) m.material = keep[i]; });
     scene.children.forEach((m, i) => { m.visible = was[i]; });
@@ -110,11 +130,11 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     status.state = "loading";
     const t0 = performance.now(), mark = (k) => { status.marks[k] = Math.round(performance.now() - t0); performance.mark(`${def.id}:${k}`); };
     performance.mark(`${def.id}:start`);
-    loading = (useArt ? import("./vael-art.js").then(async (mod) => { artMod = mod; artData = await mod.loadVaelArt({ tier, reduced, mark }); }) : Promise.resolve()).then(() => new Promise((resolve, reject) => {
+    loading = (useArt ? ART_MODULES[def.id]().then(async (mod) => { artMod = mod; artData = await mod.load({ tier, reduced, mark }); }) : Promise.resolve()).then(() => new Promise((resolve, reject) => {
       const w = new Worker(new URL("./world-worker.js", import.meta.url), { type: "module" });
       w.onmessage = (e) => { w.terminate(); e.data.error ? reject(new Error(e.data.error)) : resolve(e.data); };
       w.onerror = (e) => { w.terminate(); reject(new Error(e.message || `${def.id} worker failed`)); };
-      w.postMessage({ id: def.builder, sky: NOSKY || useArt ? null : L.sky ?? null, skyScale: skyScale(), flags: artData?.meta.flags });
+      w.postMessage({ id: def.builder, sky: NOSKY || useArt ? null : L.sky ?? null, skyScale: skyScale(), flags: artData?.meta?.flags, art: useArt });
     })).then(async ({ built, sky }) => {
       mark("geometry");
       if (status.state !== "loading") return status;   // disposed while it was building
@@ -127,14 +147,10 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
       for (const m of built.meshes) scene.add(toMesh(m));
       toSprites(built.sprites);
       if (artData) {
-        const placed = artMod.applyVaelArt(artData, scene);
-        U.tMat.value = artData.tMat; U.tFar.value = artData.tFar; U.tSky.value = artData.tSkyArt; U.uCardOn.value = 1; U.uMatRes.value = artData.size;
+        const placed = artMod.apply(artData, scene);
+        artMod.bind(artData, U);
         status.tris += placed.tris; status.art = placed.counts;
-        if (placed.smoke.length && !reduced) {
-          const smokeU = { uCam: spriteU.uCam, tA: mainU.tA, tN: mainU.tN, uLit: { value: new THREE.Vector3(0.97, 0.87, 0.78) }, uShade: { value: new THREE.Vector3(0.62, 0.56, 0.62) }, uT: spriteU.uT };
-          const sm = new THREE.Mesh(artMod.smokeGeometry(placed.smoke), new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: SMOKE_VERT, fragmentShader: SMOKE_FRAG, uniforms: smokeU, transparent: true, depthTest: false, depthWrite: false, blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor, side: THREE.DoubleSide }));
-          sm.frustumCulled = false; spriteScene.add(sm);
-        }
+        for (const m of artMod.extras?.(placed, { data: artData, spriteU, mainU, U, reduced }) ?? []) spriteScene.add(m);
       }
       mark("meshes");
       // A stage (characters, words, memories) loads with its world and is freed with it.
@@ -164,7 +180,7 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
       // A finished art set is too large to reach the GPU in one frame: its images and meshes go up one at a time, with frames drawn between them.
       if (artData) {
         const breathe = () => new Promise((r) => { const t = setTimeout(r, 60); requestAnimationFrame(() => { clearTimeout(t); r(); }); });
-        for (const t of [U.tMat.value, U.tFar.value, U.tSky.value, artData.tLeaf]) { renderer.initTexture(t); gl.finish(); await breathe(); if (status.state !== "loading") return status; }
+        for (const t of artMod.textures(artData)) { renderer.initTexture(t); gl.finish(); await breathe(); if (status.state !== "loading") return status; }
         const rt = new THREE.WebGLRenderTarget(2, 2, { depthBuffer: false }), r2 = new THREE.Vector4(0, 0, 2, 2), kids = [...scene.children], seen = kids.map((m) => m.visible), culled = kids.map((m) => m.frustumCulled);
         for (const k of kids) {
           kids.forEach((m) => { m.visible = m === k; m.frustumCulled = false; });
@@ -175,7 +191,8 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
         rt.dispose();
         status.marks.uploaded = Math.round(performance.now() - t0);
       }
-      const a = performance.now(); bakeShadow(); status.marks.bakeBlockMs = Math.round(performance.now() - a);
+      const a = performance.now(); await bakeShadow(true); status.marks.bakeMs = Math.round(performance.now() - a);
+      if (status.state !== "loading") return status;
       // First use costs far more than use (sky card upload, programs' first draw): pay it now, on two pixels of a scratch target.
       const b = performance.now(), rt = new THREE.WebGLRenderTarget(2, 2, { depthBuffer: false });
       stage?.reveal(true); draw(camera, 0, rt, new THREE.Vector4(0, 0, 2, 2)); stage?.reveal(false); gl.finish(); rt.dispose();
@@ -191,11 +208,10 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     stage?.dispose(); stage = null; U.tS2.value = BLANK;
     for (const m of [...scene.children]) { m.traverse((o) => o.geometry?.dispose()); scene.remove(m); }
     for (const p of [...spriteScene.children]) { p.geometry.dispose(); p.material.dispose(); spriteScene.remove(p); }
-    if (U.tSky.value !== BLANK) U.tSky.value.dispose();
-    U.tSky.value = BLANK; U.uCardOn.value = 0;
-    if (U.tMat.value !== BLANK) { U.tMat.value.dispose(); U.tMat.value = BLANK; }
-    if (U.tFar.value !== BLANK) { U.tFar.value.dispose(); U.tFar.value = BLANK; }
-    artData?.tLeaf.dispose(); artData = null;
+    if (artData) artMod.dispose(artData);
+    else if (U.tSky.value !== BLANK) U.tSky.value.dispose();
+    U.tSky.value = BLANK; U.uCardOn.value = 0; U.tMat.value = BLANK; U.tFar.value = BLANK;
+    artData = null;
     shadowRT?.dispose(); shadowRT = null; U.tS.value = BLANK;
     status.state = "idle"; status.ready = false; status.geometryBytes = 0; status.tris = 0; loading = null;
   }

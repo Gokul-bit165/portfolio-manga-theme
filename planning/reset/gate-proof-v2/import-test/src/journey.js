@@ -44,7 +44,9 @@ export function buildJourneyShots(plainShots, b2t) {
 const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 // The plain's portal blooms as the passage nears the inner gate; each painted world's, in the last stretch before its exit.
 export const plainOpenAt = (p) => sm(2.4, 2.74, p * TOTAL);
-const exitOpenAt = (k, p) => sm(STARTS[k + 1] - 0.32, STARTS[k + 1] - 0.1, p * TOTAL);
+const exitOpenAt = (k, p) => (PAINTED[k].exitStyle === "fade" ? sm(STARTS[k + 1] - 0.05, STARTS[k + 1] - 0.012, p * TOTAL) : sm(STARTS[k + 1] - 0.32, STARTS[k + 1] - 0.1, p * TOTAL));
+// A fade exit: the camera has zoomed into the fire, so the whole frame crosses to the next world, complete before the plane is reached.
+const FULL = new THREE.Vector4();
 
 function exitOf(k) {
   const d = PAINTED[k], e = d.exit; if (!e) return null;
@@ -116,7 +118,7 @@ export function createJourney(ctx) {
     let open = 0, r = null, nxTris = 0;
     if (nx && nx.status.ready && ex) {
       open = exitOpenAt(c - 1, p);
-      if (open > 0) r = screenRect(camera, ex.planeGlobal, ex.openingGlobal, pw, ph);
+      if (open > 0) r = PAINTED[c - 1].exitStyle === "fade" ? FULL.set(0, 0, pw, ph) : screenRect(camera, ex.planeGlobal, ex.openingGlobal, pw, ph);
     }
     if (r) { nx.draw(camera, time, portalRT, r, null, px, p * TOTAL - STARTS[c]); nxTris = nx.lastTris(); }
     lastRect = r ? [r.x, r.y, r.z, r.w] : null;

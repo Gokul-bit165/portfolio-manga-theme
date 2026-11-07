@@ -6,7 +6,12 @@ import { Sprites, KIND, lineToExit, LINE_DX, LINE_DZ } from "./common.js";
 const W = 7, L = 44, SPRING = 4.6, RISE = 4.6, BAYS = 7;
 export const groundAt = () => 0;
 export const FURNACE = { y: 37.4, hw: 1.7, h: 2.9, sill: 0.35 };
-export const EXIT = { x: 0, y: FURNACE.y + 0.3, z: 0, opening: [-FURNACE.hw, FURNACE.hw, -0.6, FURNACE.h + 0.1] };
+const EXIT_OLD = { x: 0, y: FURNACE.y + 0.3, z: 0, opening: [-FURNACE.hw, FURNACE.hw, -0.6, FURNACE.h + 0.1] };
+// With the art set (2026-11-07): the scanned fireplace's fire opening, found by pipeline/forge/build_forge.py (forge_meta.json). z is its hearth.
+export const EXIT_ART = { x: 0, y: 41.869, z: 1.938, opening: [-2.608, 2.608, 1.838, 4.223] };
+export const FIRE_ART = [0.0, 43.069, 1.938];
+export const ART_ON = typeof location === "undefined" || new URLSearchParams(location.search).get("forgeart") !== "0";
+export const EXIT = ART_ON ? EXIT_ART : EXIT_OLD;
 export const FIRES = [[0, FURNACE.y + 1.6, 1.4, 14], [1.7, 23.6, 1.2, 3.2]];   // [x, y, z, radius] in Blender axes: the furnace and the anvil's glow
 
 function vault(m) {
@@ -95,19 +100,20 @@ function stairs(m) {
   for (let i = 0; i < 6; i++) m.box(0, -0.6 - i * 0.55, 2.4, 0.28, -0.2, 0.0 + i * 0.0, 0, 22, 0.3);
   for (const e of [-1, 1]) m.box(e * 4.6, 1.0, 2.4, 0.6, -0.2, SPRING + RISE, 0, 22, 0.55);
 }
-function line() {
+function line(art) {
   const pts = [[LINE_DX + 0.06, -1.2, LINE_DZ], [LINE_DX, 0, LINE_DZ]];
   for (let y = 2; y < 36; y += 2) pts.push([LINE_DX + Math.sin(y * 0.15) * 0.6, y, 0.12 + 0.08 * Math.sin(y)]);
-  return lineToExit(pts, { x: EXIT.x, y: EXIT.y, z: FURNACE.sill - 0.15 }, () => 0);
+  return lineToExit(pts, art ? { x: EXIT_ART.x, y: EXIT_ART.y, z: EXIT_ART.z + 0.05 } : { x: EXIT_OLD.x, y: EXIT_OLD.y, z: FURNACE.sill - 0.15 }, () => 0);
 }
-export function build() {
+export function build({ art = false } = {}) {
   const hall = new Mesh("Forge hall"), work = new Mesh("Forge work"), glow = new Mesh("Forge fire"), ln = new Mesh("Forge Red Line");
-  vault(hall); furnace(hall, glow); workshop(work); stairs(hall);
-  redLine(ln, line(), { stakeEvery: 14 });
+  if (!art) { vault(hall); furnace(hall, glow); workshop(work); stairs(hall); }   // with its art set the hall is pipeline/forge/build_forge.py's
+  redLine(ln, line(art), { stakeEvery: 14 });
   const R = rng(77), s = new Sprites();
+  if (art) return { meshes: [ln].map((m) => pack(m)), sprites: s.pack() };
   s.add(KIND.spark, 0, FURNACE.y + 1.8, 0.8, 0.5, 0xffb24a, R, 40, 2.2);
   s.add(KIND.spark, 1.7, 23.6, 1.0, 0.4, 0xffc860, R, 26, 0.25);
-  s.add(KIND.smoke, 0, FURNACE.y + 3.2, FURNACE.h + 1.5, 1.4, 0x6a5560, R, 10, 1.0);
+  if (!art) s.add(KIND.smoke, 0, FURNACE.y + 3.2, FURNACE.h + 1.5, 1.4, 0x6a5560, R, 10, 1.0);
   for (let b = 0; b < BAYS; b++) s.add(KIND.dust, -W + 2.2, (b + 0.5) * ((L - 2) / BAYS), 2.6, 1.6, 0xffe2b0, R, 18, 2.4);
-  return { meshes: [hall, work, glow, ln].map((m) => pack(m)), sprites: s.pack() };
+  return { meshes: (art ? [ln] : [hall, work, glow, ln]).map((m) => pack(m)), sprites: s.pack() };
 }

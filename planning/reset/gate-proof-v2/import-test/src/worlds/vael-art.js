@@ -7,6 +7,7 @@ import { MeshoptDecoder } from "../../vendor/meshopt_decoder.module.js";
 import { VAEL_ROAD, vaelGroundAt } from "../vael-geometry.js";
 import { GB_VERT, GB_FRAG } from "../shaders.js";
 import { shared, OPTS } from "../assets.js";
+import { SMOKE_VERT, SMOKE_FRAG } from "../shaders-texpaint.js";
 
 const URLS = { town: "./assets/vael/town.glb", townLite: "./assets/vael/town_lite.glb", gate: "./assets/vael/town_gate.glb", nature: "./assets/vael/nature.glb", meta: "./assets/vael/town_meta.json" };
 export const ROAD_HALF = (y) => 2.5 + 0.8 * Math.min(1, Math.max(0, y / 60));
@@ -199,3 +200,17 @@ export function applyVaelArt(art, scene) {
   return { tris, smoke: spots, counts: Object.fromEntries(Object.values(groups).reduce((m, { name, list }) => m.set(name, (m.get(name) ?? 0) + list.length), new Map())) };
 }
 export { smokeGeometry };
+
+// The runtime's art interface (shared with forge-art.js).
+export const load = (ctx) => loadVaelArt(ctx);
+export const apply = (data, scene) => applyVaelArt(data, scene);
+export function bind(d, U) { U.tMat.value = d.tMat; U.tFar.value = d.tFar; U.tSky.value = d.tSkyArt; U.uCardOn.value = 1; U.uMatRes.value = d.size; }
+export const textures = (d) => [d.tMat, d.tFar, d.tSkyArt, d.tLeaf];
+export function dispose(d) { for (const t of textures(d)) t.dispose(); }
+export function extras(placed, { spriteU, mainU, reduced }) {
+  if (!placed.smoke.length || reduced) return [];
+  const smokeU = { uCam: spriteU.uCam, tA: mainU.tA, tN: mainU.tN, uLit: { value: new THREE.Vector3(0.97, 0.87, 0.78) }, uShade: { value: new THREE.Vector3(0.62, 0.56, 0.62) }, uT: spriteU.uT };
+  const sm = new THREE.Mesh(smokeGeometry(placed.smoke), new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, vertexShader: SMOKE_VERT, fragmentShader: SMOKE_FRAG, uniforms: smokeU, transparent: true, depthTest: false, depthWrite: false, blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor, side: THREE.DoubleSide }));
+  sm.frustumCulled = false;
+  return [sm];
+}

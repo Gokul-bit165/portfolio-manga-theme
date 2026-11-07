@@ -1,0 +1,91 @@
+{
+ "gpu": "intel",
+ "out": [
+  {
+   "at": 36093,
+   "ms": 49,
+   "p": 0.2189,
+   "where": "vael",
+   "marks": [
+    [
+     35992,
+     "forge:start"
+    ]
+   ],
+   "long": []
+  },
+  {
+   "at": 53912,
+   "ms": 48,
+   "p": 0.4555,
+   "where": "muster",
+   "marks": [
+    [
+     53863,
+     "muster:programs"
+    ],
+    [
+     53915,
+     "muster:ready"
+    ],
+    [
+     53917,
+     "maphall:start"
+    ]
+   ],
+   "long": [
+    [
+     53863,
+     51
+    ]
+   ]
+  },
+  {
+   "at": 73662,
+   "ms": 42,
+   "p": 0.554,
+   "where": "muster",
+   "marks": [
+    [
+     73573,
+     "forge:start"
+    ],
+    [
+     73573,
+     "highroad:dispose"
+    ]
+   ],
+   "long": []
+  },
+  {
+   "at": 82328,
+   "ms": 42,
+   "p": 0.4255,
+   "where": "forge",
+   "marks": [
+    [
+     82261,
+     "vael:geometry"
+    ],
+    [
+     82276,
+     "vael:meshes"
+    ],
+    [
+     82288,
+     "vael:programs"
+    ]
+   ],
+   "long": []
+  },
+  {
+   "at": 99634,
+   "ms": 42,
+   "p": 0.1658,
+   "where": "plain",
+   "marks": [],
+   "long": []
+  }
+ ],
+ "errors": []
+}

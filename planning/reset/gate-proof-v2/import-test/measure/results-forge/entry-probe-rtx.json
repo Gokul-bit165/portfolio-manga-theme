@@ -1,0 +1,48 @@
+{
+ "gpu": "rtx",
+ "out": [
+  {
+   "at": 74383,
+   "ms": 42,
+   "p": 0.4382,
+   "where": "forge",
+   "marks": [
+    [
+     74321,
+     "vael:start"
+    ],
+    [
+     74321,
+     "standards:dispose"
+    ]
+   ],
+   "long": []
+  },
+  {
+   "at": 75160,
+   "ms": 48,
+   "p": 0.4262,
+   "where": "forge",
+   "marks": [
+    [
+     74734,
+     "vael:artLoaded"
+    ],
+    [
+     75075,
+     "vael:geometry"
+    ],
+    [
+     75101,
+     "vael:meshes"
+    ],
+    [
+     75112,
+     "vael:programs"
+    ]
+   ],
+   "long": []
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,126 @@
+{
+ "gpu": "rtx",
+ "quality": "high",
+ "res": {
+  "sim": {
+   "out": {
+    "wide": {
+     "median": 2,
+     "p95": 2.3
+    },
+    "medium": {
+     "median": 1.7,
+     "p95": 2.2
+    },
+    "close-up": {
+     "median": 1.8,
+     "p95": 2.4
+    },
+    "final zoom": {
+     "median": 3.4,
+     "p95": 4.1
+    },
+    "portal transition": {
+     "median": 3.6,
+     "p95": 4.1
+    }
+   },
+   "tier": "high",
+   "res": [
+    1600,
+    900
+   ],
+   "errors": []
+  },
+  "sprite": {
+   "out": {
+    "wide": {
+     "median": 1.8,
+     "p95": 2.8
+    },
+    "medium": {
+     "median": 1.8,
+     "p95": 2.2
+    },
+    "close-up": {
+     "median": 1.5,
+     "p95": 1.8
+    },
+    "final zoom": {
+     "median": 3.4,
+     "p95": 3.9
+    },
+    "portal transition": {
+     "median": 3.2,
+     "p95": 3.7
+    }
+   },
+   "tier": "high",
+   "res": [
+    1600,
+    900
+   ],
+   "errors": []
+  },
+  "paint": {
+   "out": {
+    "wide": {
+     "median": 1.8,
+     "p95": 2.1
+    },
+    "medium": {
+     "median": 1.6,
+     "p95": 1.9
+    },
+    "close-up": {
+     "median": 1.6,
+     "p95": 2
+    },
+    "final zoom": {
+     "median": 3.3,
+     "p95": 4.3
+    },
+    "portal transition": {
+     "median": 3.6,
+     "p95": 4.2
+    }
+   },
+   "tier": "high",
+   "res": [
+    1600,
+    900
+   ],
+   "errors": []
+  },
+  "both": {
+   "out": {
+    "wide": {
+     "median": 1.7,
+     "p95": 1.9
+    },
+    "medium": {
+     "median": 1.6,
+     "p95": 2.1
+    },
+    "close-up": {
+     "median": 1.6,
+     "p95": 1.9
+    },
+    "final zoom": {
+     "median": 3.4,
+     "p95": 3.9
+    },
+    "portal transition": {
+     "median": 3.4,
+     "p95": 3.9
+    }
+   },
+   "tier": "high",
+   "res": [
+    1600,
+    900
+   ],
+   "errors": []
+  }
+ }
+}

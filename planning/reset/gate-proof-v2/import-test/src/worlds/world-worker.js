@@ -4,7 +4,7 @@ import { buffersOf } from "./kit.js";
 import { spriteBuffers, Sprites, KIND } from "./common.js";
 import { rng } from "./kit.js";
 
-onmessage = async ({ data: { id, sky, skyScale = 1, flags } }) => {
+onmessage = async ({ data: { id, sky, skyScale = 1, flags, art = false } }) => {
   try {
     const t0 = performance.now();
     let built;
@@ -22,7 +22,7 @@ onmessage = async ({ data: { id, sky, skyScale = 1, flags } }) => {
       built.sprites = s.pack();
     } else {
       const mod = await import(`./${id}.js`);
-      built = mod.build();
+      built = mod.build({ art });
     }
     built.stats = { ...(built.stats ?? {}), ms: Math.round(performance.now() - t0), tris: built.meshes.reduce((a, m) => a + m.tris, 0) };
     const t1 = performance.now(), card = sky ? paintSkyCard(sky, skyScale) : null;

@@ -7,10 +7,11 @@ const [gpu = "rtx", OUT = "shots", Q = "high"] = process.argv.slice(2);
 mkdirSync(OUT, { recursive: true });
 const { ctx, page, errors } = await launch(gpu, { width: 1600, height: 900 });
 await open(page, `http://localhost:4186/?portal=1&scale=1&capture=1&quality=${Q}`);
-const pAt = (u) => page.evaluate((u) => { const j = window.__journey; return (j.starts[0] + u) / j.total; }, u);
+const WORLD = Number(process.env.WORLD ?? 0);   // index in the journey: 0 Vael, 1 the Forge
+const pAt = (u) => page.evaluate(([u, k]) => { const j = window.__journey; return (j.starts[k] + u) / j.total; }, [u, WORLD]);
 const SHOTS = [
-  ["1-wide-establishing", 1.1], ["2-medium-composition", 0.588], ["2b-road-foreground", 0.088], ["2c-road-rising", 0.332], ["2d-hamlet", 1.5], ["3-close-gate", 1.72], ["3b-close-gate-near", 1.86],
-  ["4-portal-view-from-first-gate", -0.42], ["4a-portal-view-closer", -0.26], ["4b-portal-view-near", -0.05], ["5-portal-crossing", -0.008], ["5b-just-through", 0.012], ["6-exit-to-forge", 1.97],
+  ...(process.env.SHOTS ? JSON.parse(process.env.SHOTS) : [["1-wide-establishing", 1.1], ["2-medium-composition", 0.588], ["2b-road-foreground", 0.088], ["2c-road-rising", 0.332], ["2d-hamlet", 1.5], ["3-close-gate", 1.72], ["3b-close-gate-near", 1.86],
+  ["4-portal-view-from-first-gate", -0.42], ["4a-portal-view-closer", -0.26], ["4b-portal-view-near", -0.05], ["5-portal-crossing", -0.008], ["5b-just-through", 0.012], ["6-exit-to-forge", 1.97]]),
 ];
 const rows = [];
 for (const [name, u] of SHOTS) {
@@ -27,7 +28,8 @@ await ctx.close();
 // Reduced motion: Vael's still must not change between frames (no wind, no smoke, no banners, no grain).
 const rm = await launch(gpu, { width: 800, height: 450 });
 await rm.page.emulateMedia({ reducedMotion: "reduce" });
-await open(rm.page, `http://localhost:4186/?portal=1&scale=1&capture=1&quality=${Q}#vael`);
+await open(rm.page, `http://localhost:4186/?portal=1&scale=1&capture=1&quality=${Q}#${process.env.HASH ?? "vael"}`);
+await rm.page.evaluate(([w, u]) => { document.body.dataset.w = w; document.body.dataset.u = u; }, [String(WORLD), process.env.STILL_U ?? "1.1"]);
 const diff = await rm.page.evaluate(async () => {
   const gl = document.getElementById("world").getContext("webgl2"), W = gl.drawingBufferWidth, H = gl.drawingBufferHeight, j = window.__journey, p = (j.starts[0] + 1.1) / j.total;
   scrollTo(0, document.documentElement.scrollHeight * p); await new Promise((r) => setTimeout(r, 2500));

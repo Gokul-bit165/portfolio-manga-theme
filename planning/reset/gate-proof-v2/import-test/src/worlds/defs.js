@@ -58,12 +58,22 @@ const VAEL = {
   content: `<h2>Gokul</h2><p>Undergraduate in Computer Science and Engineering (AI &amp; Data Science) at Bannari Amman Institute of Technology, Tamil Nadu, India. Expected to graduate in September 2028.</p><p class="k">Interests</p><ul><li>Agentic AI and multi-agent systems</li><li>Generative AI and LLM applications</li><li>Machine learning and computer vision</li><li>Full-stack development; backend architecture and scalable systems</li><li>3D visualisation and interactive experiences</li><li>AI-powered industrial applications</li></ul><p><a href="https://github.com/Gokul-bit165" rel="noopener">github.com/Gokul-bit165</a></p>`,
 };
 const FORGE = {
-  id: "forge", title: "The Undercroft Forge", chapter: "Philosophy", len: 1.0, eye: 1.25, exit: forge.EXIT, builder: "forge", fires: forge.FIRES,
-  keys() { return [[0, [0, 0, 1.25], [0, 40, 1.6], 20, "through"], [0.2, [0.4, 7, 1.5], [1.2, 30, 1.4], 22, "hall"], [0.45, [-1.8, 15, 1.9], [1.7, 23.6, 0.9], 26, "anvil"], [0.62, [-1.6, 19, 1.9], [1.7, 23.6, 0.9], 27, "hold"], [0.8, [-0.5, 27, 1.5], [0, 40, 1.4], 24, "furnace"], [0.92, [0, 33, 1.3], [0, 45, 1.25], 22, "enter"]]; },
+  id: "forge", title: "The Undercroft Forge", chapter: "Philosophy", len: 1.0, eye: 1.25, exit: forge.EXIT, builder: "forge", fires: forge.FIRES, texArt: "FORGE", exitStyle: forge.ART_ON ? "fade" : "portal",
+  // With the art set the camera walks to the fireplace, rises to the fire and zooms into it until fire and firebox fill the frame; the frame then
+  // fades into the Muster Field and the lens opens again (exitStyle "fade"). Without it, the old route to the furnace mouth.
+  keys() {
+    const H = forge.EXIT_ART.z;
+    if (!forge.ART_ON) return [[0, [0, 0, 1.25], [0, 40, 1.6], 20, "through"], [0.2, [0.4, 7, 1.5], [1.2, 30, 1.4], 22, "hall"], [0.45, [-1.8, 15, 1.9], [1.7, 23.6, 0.9], 26, "anvil"], [0.62, [-1.6, 19, 1.9], [1.7, 23.6, 0.9], 27, "hold"], [0.8, [-0.5, 27, 1.5], [0, 40, 1.4], 24, "furnace"], [0.92, [0, 33, 1.3], [0, 45, 1.25], 22, "enter"]];
+    // Six keys, as many as the old route: the journey is one spline timed by arc length over every key, so a key added here would move the camera
+    // by a fraction of a millimetre everywhere before it, the First Gate included (found 2026-11-07: its still stopped being byte-identical).
+    return [[0, [0, 0, 1.25], [0, 40, 1.6], 20, "through"], [0.45, [-1.8, 15, 1.9], [1.7, 23.6, 0.9], 26, "anvil"], [0.62, [-1.6, 19, 1.9], [1.7, 23.6, 0.9], 27, "hold"],
+      [0.82, [-0.3, 30, 1.9], [0, 43.2, H + 0.5], 28, "fireplace"], [0.955, [0, 39.4, H + 0.5], [0, 43.2, H + 0.42], 58, "into the fire"],
+      [0.99, [0, forge.EXIT_ART.y - 0.6, H + 1.22], [0, 47, H + 1.25], 30, "through"]];
+  },
   hold: [0.42, 0.72], still: 0.55,
   look: look({ sun: [-0.86, 0.36, 0.36], sunOn: 0.9, interior: 1, cirrusOn: 0, skyE: 0x140e12, haze0: 0x3a2622, haze1: 0x5a3828, hazeDist: 70, fireOn: 1, fireC: 0xffa050, line: 0x120a0c, skyLift: [0.02, 0.012, 0.04], bounce: [0.09, 0.04, 0.015], wash: [0.5, 0.42, 0.5], grain: 0.04, shadow: { c: [0, 5, -22], r: 30 }, spill: 0xffd08a }),
   pal: { 22: [0x281c26, 0x34242c, 0x6a4844, 0x7a5448, 0xd09a6a, 0xe8b882], 24: [0x1c1418, 0x1c1418, 0x4a3026, 0x4a3026, 0x8a5c3a, 0x9a6a44], 21: [0x2a2028, 0x2a2028, 0x5a4440, 0x6a4c44, 0xb08060, 0xc09070], 19: [0x10141c, 0x14202a, 0x24384a, 0x2c4a5c, 0x6a8090, 0xb0c0c8], 30: [0x0c080a, 0x0c080a, 0x140c0e, 0x140c0e, 0x1c1214, 0x1c1214] },
-  content: `<h2>How I work</h2><p>AI-assisted development, with Claude Code as my primary development partner. I also use AI for artwork, 3D scenes, motion assets and creative automation.</p><p class="todo">My principles, in my own words: still to be written.</p>`,
+  content: `<h2>How I work</h2><p>AI-assisted development, with Claude Code as my primary development partner. I also use AI for artwork, 3D scenes, motion assets and creative automation.</p><p class="todo">My principles, in my own words: still to be written.</p><p class="credit">Fireplace: <a href="https://sketchfab.com/3d-models/rustic-fireplace-555ad0c9171e4e4191ad7aea96ab44dd" rel="noopener">Rustic Fireplace</a> by Loïc Norgeot, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>; flames and logs removed, scaled, recoloured.</p>`,
 };
 const MUSTER = {
   id: "muster", title: "The Muster Field", chapter: "Selected Works", len: 1.6, eye: 1.25, exit: muster.EXIT, builder: "muster", fires: muster.FIRES,
