@@ -1,0 +1,131 @@
+{
+ "out": [
+  {
+   "mode": "cinematic director",
+   "p": 0,
+   "same": true,
+   "a": 3919772509,
+   "b": 3919772509
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.175,
+   "same": true,
+   "a": 3603506755,
+   "b": 3603506755
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.385,
+   "same": true,
+   "a": 321929193,
+   "b": 321929193
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.455,
+   "same": true,
+   "a": 1323256475,
+   "b": 1323256475
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.52,
+   "same": true,
+   "a": 2069475411,
+   "b": 2069475411
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.65,
+   "same": true,
+   "a": 3828046321,
+   "b": 3828046321
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.8,
+   "same": true,
+   "a": 1165803027,
+   "b": 1165803027
+  },
+  {
+   "mode": "cinematic director",
+   "p": 0.92,
+   "same": true,
+   "a": 1033479150,
+   "b": 1033479150
+  },
+  {
+   "mode": "cinematic director",
+   "p": 1,
+   "same": true,
+   "a": 1079043903,
+   "b": 1079043903
+  },
+  {
+   "mode": "legacy",
+   "p": 0,
+   "same": true,
+   "a": 2740971282,
+   "b": 2740971282
+  },
+  {
+   "mode": "legacy",
+   "p": 0.2,
+   "same": true,
+   "a": 669674509,
+   "b": 669674509
+  },
+  {
+   "mode": "legacy",
+   "p": 0.36,
+   "same": true,
+   "a": 2328779866,
+   "b": 2328779866
+  },
+  {
+   "mode": "legacy",
+   "p": 0.5,
+   "same": true,
+   "a": 2190674313,
+   "b": 2190674313
+  },
+  {
+   "mode": "legacy",
+   "p": 0.7,
+   "same": true,
+   "a": 2200548411,
+   "b": 2200548411
+  },
+  {
+   "mode": "legacy",
+   "p": 1,
+   "same": true,
+   "a": 2845837507,
+   "b": 2845837507
+  },
+  {
+   "mode": "assets off",
+   "p": 0,
+   "same": true,
+   "a": 2733746636,
+   "b": 2733746636
+  },
+  {
+   "mode": "assets off",
+   "p": 0.36,
+   "same": true,
+   "a": 2681379222,
+   "b": 2681379222
+  },
+  {
+   "mode": "assets off",
+   "p": 0.5,
+   "same": true,
+   "a": 2417757060,
+   "b": 2417757060
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,623 @@
+{
+ "when": "2026-11-08T09:52:15.380Z",
+ "rtx": {
+  "auto": {
+   "cold": {
+    "navToFullReadyMs": 17801,
+    "firstFrameMs": 2162,
+    "fullReadyMs": 17760,
+    "compile": {
+     "clouds": 218,
+     "stars": 53,
+     "gbuffer": 93,
+     "first": 709,
+     "sprites": 32,
+     "painted": 1541,
+     "vael-gbuffer": 36,
+     "painted-tex": 587,
+     "stage1": 11767,
+     "stage0": 15511,
+     "flock": 42
+    },
+    "vael": [
+     {
+      "id": "vael",
+      "state": "ready",
+      "tris": 670899,
+      "marks": {
+       "artLoaded": 414,
+       "geometry": 1298,
+       "meshes": 1330,
+       "programs": 3484,
+       "uploaded": 4385,
+       "bakeMs": 21,
+       "prewarmBlockMs": 1
+      },
+      "geometryMB": 0.6
+     },
+     {
+      "id": "forge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "muster",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "maphall",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "standards",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "highroad",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "camp",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "ridge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     }
+    ],
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.8 ms per frame at high quality",
+     "frameMsAtHigh": 2.8,
+     "fromCache": false,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 69.4
+   },
+   "warm": {
+    "navToFullReadyMs": 3075,
+    "firstFrameMs": 1022,
+    "fullReadyMs": 3028,
+    "compile": {
+     "clouds": 11,
+     "gbuffer": 12,
+     "stars": 11,
+     "first": 21,
+     "stage0": 49,
+     "stage1": 49,
+     "painted": 22,
+     "sprites": 12,
+     "vael-gbuffer": 14,
+     "painted-tex": 12,
+     "flock": 11
+    },
+    "vael": [
+     {
+      "id": "vael",
+      "state": "ready",
+      "tris": 670899,
+      "marks": {
+       "artLoaded": 702,
+       "geometry": 1096,
+       "meshes": 1129,
+       "programs": 1185,
+       "uploaded": 2043,
+       "bakeMs": 14,
+       "prewarmBlockMs": 1
+      },
+      "geometryMB": 0.6
+     },
+     {
+      "id": "forge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "muster",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "maphall",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "standards",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "highroad",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "camp",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "ridge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     }
+    ],
+    "tier": {
+     "tier": "high",
+     "source": "measured",
+     "why": "2.8 ms per frame at high quality",
+     "frameMsAtHigh": 2.8,
+     "fromCache": true,
+     "nameGuess": {
+      "tier": "high",
+      "why": "not a known integrated GPU"
+     }
+    },
+    "longTasksAfterFirstFrame": [],
+    "worstFrameWhileStreaming": 48.6
+   },
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "memory": {
+    "res": [
+     1920,
+     1080
+    ],
+    "worlds": [
+     {
+      "id": "vael",
+      "state": "ready",
+      "tris": 670899,
+      "marks": {
+       "artLoaded": 702,
+       "geometry": 1096,
+       "meshes": 1129,
+       "programs": 1185,
+       "uploaded": 2043,
+       "bakeMs": 14,
+       "prewarmBlockMs": 1
+      },
+      "geometryMB": 0.6
+     },
+     {
+      "id": "forge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "muster",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "maphall",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "standards",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "highroad",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "camp",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     },
+     {
+      "id": "ridge",
+      "state": "idle",
+      "tris": 0,
+      "marks": {},
+      "geometryMB": 0
+     }
+    ]
+   },
+   "scroll": {
+    "frames": 23243,
+    "median": 6.9,
+    "p95": 7.2,
+    "p99": 7.3,
+    "max": 62.4,
+    "over20": 14,
+    "over33": 5,
+    "over50": 3,
+    "over33Pct": 0.02,
+    "ends": [
+     {
+      "where": "ridge",
+      "p": 1,
+      "y": 59314
+     },
+     {
+      "where": "plain",
+      "p": 0,
+      "y": 0
+     }
+    ],
+    "slowFrames": [
+     [
+      55.7,
+      0.02,
+      "plain"
+     ],
+     [
+      27.8,
+      0.218,
+      "vael"
+     ],
+     [
+      27.8,
+      0.375,
+      "forge"
+     ],
+     [
+      55.6,
+      0.382,
+      "forge"
+     ],
+     [
+      20.9,
+      0.382,
+      "forge"
+     ],
+     [
+      21,
+      0.561,
+      "maphall"
+     ],
+     [
+      27.7,
+      0.635,
+      "standards"
+     ],
+     [
+      20.8,
+      0.849,
+      "highroad"
+     ],
+     [
+      20.7,
+      0.628,
+      "maphall"
+     ],
+     [
+      34.7,
+      0.62,
+      "maphall"
+     ],
+     [
+      27.7,
+      0.555,
+      "muster"
+     ],
+     [
+      41.7,
+      0.438,
+      "forge"
+     ],
+     [
+      62.4,
+      0.43,
+      "forge"
+     ],
+     [
+      20.9,
+      0.429,
+      "forge"
+     ]
+    ]
+   },
+   "shots": [
+    {
+     "name": "plain",
+     "p": 0,
+     "avg": 4.92,
+     "p50": 5,
+     "p95": 6.8,
+     "max": 7.1,
+     "where": "plain",
+     "rect": null,
+     "tris": 409428,
+     "draws": 15
+    },
+    {
+     "name": "first-gate",
+     "p": 0.1514930808448653,
+     "avg": 3.88,
+     "p50": 3.8,
+     "p95": 5.1,
+     "max": 5.6,
+     "where": "plain",
+     "rect": null,
+     "tris": 405228,
+     "draws": 14
+    },
+    {
+     "name": "passage",
+     "p": 0.20393299344501092,
+     "avg": 5.93,
+     "p50": 6,
+     "p95": 7,
+     "max": 7.5,
+     "where": "plain",
+     "rect": [
+      431,
+      0,
+      952,
+      1080
+     ],
+     "tris": 1044198,
+     "draws": 12
+    },
+    {
+     "name": "vael",
+     "p": 0.2971595047341588,
+     "avg": 3.16,
+     "p50": 3.2,
+     "p95": 3.8,
+     "max": 4.6,
+     "where": "vael",
+     "rect": null,
+     "tris": 636425,
+     "draws": 91
+    },
+    {
+     "name": "forge",
+     "p": 0.4064093226511289,
+     "avg": 3.46,
+     "p50": 3.4,
+     "p95": 4.9,
+     "max": 5,
+     "where": "forge",
+     "rect": null,
+     "tris": 284185,
+     "draws": 2
+    },
+    {
+     "name": "muster",
+     "p": 0.5010924981791697,
+     "avg": 3.8,
+     "p50": 3.8,
+     "p95": 5.3,
+     "max": 5.5,
+     "where": "muster",
+     "rect": null,
+     "tris": 439653,
+     "draws": 127
+    },
+    {
+     "name": "maphall",
+     "p": 0.5957756737072105,
+     "avg": 1.98,
+     "p50": 2,
+     "p95": 2.6,
+     "max": 2.7,
+     "where": "maphall",
+     "rect": null,
+     "tris": 16686,
+     "draws": 4
+    },
+    {
+     "name": "standards",
+     "p": 0.6686088856518573,
+     "avg": 2.47,
+     "p50": 2.4,
+     "p95": 2.8,
+     "max": 2.9,
+     "where": "standards",
+     "rect": null,
+     "tris": 85074,
+     "draws": 7
+    },
+    {
+     "name": "highroad",
+     "p": 0.7851420247632921,
+     "avg": 2.8,
+     "p50": 2.7,
+     "p95": 3.9,
+     "max": 4.3,
+     "where": "highroad",
+     "rect": null,
+     "tris": 64968,
+     "draws": 7
+    },
+    {
+     "name": "camp",
+     "p": 0.8951201747997087,
+     "avg": 2.58,
+     "p50": 2.5,
+     "p95": 3.5,
+     "max": 3.7,
+     "where": "camp",
+     "rect": null,
+     "tris": 91070,
+     "draws": 6
+    },
+    {
+     "name": "ridge",
+     "p": 1,
+     "avg": 2.11,
+     "p50": 2.1,
+     "p95": 2.7,
+     "max": 2.7,
+     "where": "ridge",
+     "rect": null,
+     "tris": 29544,
+     "draws": 6
+    },
+    {
+     "name": "into forge",
+     "p": 0.3605243991260014,
+     "avg": 4.64,
+     "p50": 4.7,
+     "p95": 6.6,
+     "max": 6.8,
+     "where": "vael",
+     "rect": [
+      644,
+      649,
+      730,
+      431
+     ],
+     "tris": 867211,
+     "draws": 61
+    },
+    {
+     "name": "into muster",
+     "p": 0.4333576110706482,
+     "avg": 3.45,
+     "p50": 3.4,
+     "p95": 4.7,
+     "max": 4.9,
+     "where": "forge",
+     "rect": null,
+     "tris": 284185,
+     "draws": 2
+    },
+    {
+     "name": "into maphall",
+     "p": 0.549890750182083,
+     "avg": 3.47,
+     "p50": 3.5,
+     "p95": 3.8,
+     "max": 4.4,
+     "where": "muster",
+     "rect": [
+      442,
+      212,
+      907,
+      868
+     ],
+     "tris": 316921,
+     "draws": 82
+    },
+    {
+     "name": "into standards",
+     "p": 0.6227239621267298,
+     "avg": 3.54,
+     "p50": 3.4,
+     "p95": 4.8,
+     "max": 5,
+     "where": "maphall",
+     "rect": [
+      0,
+      0,
+      1920,
+      1080
+     ],
+     "tris": 101760,
+     "draws": 4
+    },
+    {
+     "name": "into highroad",
+     "p": 0.7392571012381646,
+     "avg": 2.95,
+     "p50": 2.9,
+     "p95": 3.8,
+     "max": 3.9,
+     "where": "standards",
+     "rect": [
+      533,
+      298,
+      854,
+      782
+     ],
+     "tris": 150042,
+     "draws": 7
+    },
+    {
+     "name": "into camp",
+     "p": 0.8485069191551348,
+     "avg": 2.95,
+     "p50": 2.8,
+     "p95": 4,
+     "max": 5.8,
+     "where": "highroad",
+     "rect": [
+      298,
+      215,
+      1275,
+      865
+     ],
+     "tris": 156038,
+     "draws": 7
+    },
+    {
+     "name": "into ridge",
+     "p": 0.9213401310997815,
+     "avg": 2.61,
+     "p50": 2.6,
+     "p95": 3,
+     "max": 3.5,
+     "where": "camp",
+     "rect": [
+      552,
+      142,
+      718,
+      938
+     ],
+     "tris": 120614,
+     "draws": 6
+    }
+   ],
+   "errors": []
+  }
+ }
+}

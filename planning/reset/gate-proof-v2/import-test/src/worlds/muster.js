@@ -99,8 +99,18 @@ function palisade(m) {
     if (e < 0) person(m, tx + 0.6, ty - 0.9, tz + 7.6, { block: 0.25, spear: true });   // a watchman on the west tower
   }
 }
-export function build() {
+export function build({ art = false, flags: flagSpots = null } = {}) {
   const R = rng(5150);
+  if (art) {
+    const land = new Mesh("Muster land"), banners = new Mesh("Muster banners", { flag: true }), ln = new Mesh("Muster Red Line");
+    heightfield(land, groundAt, { xs: geomAxis(-700, 700, 0, 1.6, 1.12), ys: geomAxis(-40, 1000, 14, 1.6, 1.04), roadAt: (x, y) => Math.min(1, (y > -40 ? 1 - smooth(2.6, 4.2, lane(x, y).d) : 0) + (Math.hypot(x - RING.x, y - RING.y) < RING.r + 1 ? 0.85 : 0)) });
+    for (const [x, y, z, w, h, phase, block] of flagSpots ?? []) flag(banners, x, y, z, w, h, phase, block);
+    redLine(ln, lineToExit(lineAlong(LANE, groundAt, { off: 3.2, to: GATE_Y }), EXIT, groundAt), { stakeEvery: 14 });
+    const s = new Sprites();
+    s.add(KIND.bird, -20, 150, 30, 40, 0x1a1a20, R, 14, 18);   // crows over the graves and the field
+    s.add(KIND.bird, 30, 260, 50, 60, 0x1a1a20, R, 8, 30);
+    return { meshes: [land, banners, ln].map((m) => pack(m)), sprites: s.pack() };
+  }
   const land = new Mesh("Muster land"), far = new Mesh("Muster far"), campM = new Mesh("Muster camp"), flags = new Mesh("Muster banners", { flag: true }), mv = new Mesh("Muster horses", { mover: true }), near = new Mesh("Muster near"), wood = new Mesh("Muster trees"), ln = new Mesh("Muster Red Line");
   heightfield(land, groundAt, { xs: geomAxis(-700, 700, 0, 1.6, 1.12), ys: geomAxis(-40, 1000, 14, 1.6, 1.04), roadAt: (x, y) => (y > -40 ? 1 - smooth(2.4, 3.6, lane(x, y).d) : 0) + (Math.abs(Math.hypot(x - RING.x, y - RING.y) - RING.r * 0.55) < 6 ? 0.55 : 0) });
   farLayers(far, { cy: 300, layers: [{ R: 900, lo: 30, hi: 110, seed: 3.3, block: 0.08 }, { R: 1500, lo: 90, hi: 260, seed: 6.1, block: 0.36 }, { R: 2400, lo: 200, hi: 520, seed: 9.7, block: 0.66 }, { R: 3600, lo: 300, hi: 800, seed: 14.1, block: 0.95 }] });

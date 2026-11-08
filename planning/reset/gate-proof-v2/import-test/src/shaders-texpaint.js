@@ -94,6 +94,11 @@ void main(){
         col=mix(col,mix(m.rgb,hazeAt(dir),r==2?0.3:(r==1?0.22:0.12)),m.a);
       } else if(v<=0.004) col=mix(col,hazeAt(dir),1.0);
     }
+#ifdef MUSTER
+    // Overcast: the painted sky's blue is closed over, grey on grey with a paler break near the hidden sun.
+    { float lum=dot(col,vec3(0.3,0.59,0.11)); col=mix(vec3(lum),col,0.22)*vec3(0.86,0.88,0.92);
+      col=mix(col,vec3(0.72,0.72,0.74),0.35*smoothstep(0.1,0.6,dir.y)); }
+#endif
 #endif
   } else {
     vec4 B=texelFetch(tB,fc,0), C=texelFetch(tC,fc,0), D=texelFetch(tD,fc,0);
@@ -236,20 +241,42 @@ void main(){
         alb=mix(hex(0x34533a),mix(hex(0x47673a),hex(0x98a148),smoothstep(0.42,0.86,t)),smoothstep(0.14,0.34,t));
         if(t<0.14) ao=max(ao,0.62);
         if(mid>30.5) alb=mix(hex(0x47683a),mix(hex(0x6c8a42),hex(0xa0a24c),smoothstep(0.55,0.95,t)),smoothstep(0.2,0.55,t));
+#ifdef MUSTER
+        // Fir needles nearly black-green; scrub olive going brown; grass withered to straw.
+        alb=mix(hex(0x1c2620),mix(hex(0x2e3c30),hex(0x55604a),smoothstep(0.42,0.86,t)),smoothstep(0.14,0.34,t));
+        if(mid>30.5) alb=mix(hex(0x3a3c2a),mix(hex(0x5a5a3c),hex(0x7e7652),smoothstep(0.5,0.95,t)),smoothstep(0.2,0.55,t));
+#endif
       } else if(banner){
+#ifdef MUSTER
+        alb=mix(hex(0x6e2422),hex(0x7a6a3a),step(0.6,blk))*mix(0.75,1.05,blk);   // dyes gone dull with weather; mud splashed up the lower edge
+#else
         alb=mix(hex(0xc2382c),hex(0xc08a2c),step(0.75,blk));
+#endif
       } else {
         alb=hex(0x241d38);
+#ifdef MUSTER
+        if(mid>15.5&&mid<16.5) alb=hex(0x4c4e56)*mix(0.7,1.2,blk);                 // iron: spear points, pots
+        else if(mid>12.5&&mid<13.5) alb=hex(0x8a6c34)*mix(0.8,1.15,blk);           // brass: the standards' charges
+        else if(mid>17.5&&mid<18.5) alb=hex(0x5a3a32)*mix(0.7,1.2,blk);           // cloth
+#endif
       }
       if(banner) sn=N;
       float sh=shadowAt(P,sn,dist);
+#ifdef MUSTER
+      sh=mix(1.0,sh,0.3);   // under cloud, the sun's shadows are only a soft thinning of the light
+#endif
       float d=max(dot(sn,uSun),0.0);
       if(layer>0.0||mid>21.5) if(!leaf&&!ground) d=sat(d+relief(tx,layer,P,N,metres,dist)*3.2);
       float wob=fbmF(P,leaf?0.9:1.4)-0.5;
       float l=d*sh+(wob*(leaf?0.32:0.06))*step(0.001,d+0.3);
       // Three chosen lights: cool violet shadow, a warm middle, gold in full sun. Hard, slightly broken edges.
       float b1=smoothstep(0.07,0.1,l), b2=smoothstep(0.26,0.31,l);
+#ifdef MUSTER
+      // Overcast: the light and shadow sides sit close; shadow is a cold grey-blue, light a tired grey-white.
+      vec3 shadowT=vec3(0.56,0.57,0.66), midT=vec3(0.78,0.78,0.8), lightT=vec3(1.0,0.98,0.94);
+#else
       vec3 shadowT=vec3(0.50,0.45,0.58), midT=vec3(0.82,0.74,0.70), lightT=vec3(1.20,1.06,0.84);
+#endif
       vec3 tint=mix(mix(shadowT,midT,b1),lightT,b2);
       col=alb*tint;
       // Baked occlusion: the deep joints and feet of things, as on the First Gate, in a thin dark violet wash.
@@ -260,6 +287,10 @@ void main(){
       col+=vec3(0.2,0.125,0.065)*(1.0-b1)*sat(0.55-sn.y)*aok;   // warm light thrown back by the sunlit ground: a wall in shade stays readable
       // Air, in soft steps: the nearer planes keep their colour.
       float h=1.0-exp(-dist/uHazeDist);
+#ifdef MUSTER
+      // The grim grade: colour drained to two thirds, a cold cast; the air is grey.
+      float lum=dot(col,vec3(0.3,0.59,0.11)); col=mix(vec3(lum),col,0.62)*vec3(0.94,0.96,1.0);
+#endif
       col=mix(col,hazeAt(dir),sat(h*1.05));
 #endif
     }

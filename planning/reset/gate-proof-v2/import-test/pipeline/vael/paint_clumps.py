@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 OUT = sys.argv[1]
-SRC = os.path.expanduser("~/portfolio-assets/work/vael/clumps")
+SRC = os.path.expanduser(os.environ.get("CLUMPS", "~/portfolio-assets/work/vael/clumps"))   # muster: CLUMPS=~/portfolio-assets/work/muster/clumps
 CELL, SS = 512, 2
 COLS, ROWS = 4, 3
 CELLS = [("tree_a0", "clump"), ("tree_a1", "clump"), ("tree_b0", "clump"), ("tree_b1", "clump"), ("tree_c0", "clump"), ("tree_c1", "clump"),

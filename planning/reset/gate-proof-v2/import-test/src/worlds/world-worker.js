@@ -22,7 +22,7 @@ onmessage = async ({ data: { id, sky, skyScale = 1, flags, art = false } }) => {
       built.sprites = s.pack();
     } else {
       const mod = await import(`./${id}.js`);
-      built = mod.build({ art });
+      built = mod.build({ art, flags });
     }
     built.stats = { ...(built.stats ?? {}), ms: Math.round(performance.now() - t0), tris: built.meshes.reduce((a, m) => a + m.tris, 0) };
     const t1 = performance.now(), card = sky ? paintSkyCard(sky, skyScale) : null;

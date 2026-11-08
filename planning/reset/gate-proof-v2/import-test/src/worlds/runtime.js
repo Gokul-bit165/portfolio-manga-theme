@@ -16,7 +16,7 @@ let MATS = null;
 const mats = () => (MATS ??= { static: gbMat({ NOFIG: 1, SMOOTHN: 1 }), flag: gbMat({ NOFIG: 1, FLAG: 1 }, stepU), mover: gbMat({ NOFIG: 1, MOVER: 1 }, stepU) });
 // Worlds with a finished art set (2026-11-06). ?<id>art=0 shows the procedural world it replaced, e.g. ?vaelart=0, ?forgeart=0.
 const QS = new URLSearchParams(location.search);
-const ART_MODULES = { vael: () => import("./vael-art.js"), forge: () => import("./forge-art.js") };
+const ART_MODULES = { vael: () => import("./vael-art.js"), forge: () => import("./forge-art.js"), muster: () => import("./muster-art.js") };
 const NOSKY = new URLSearchParams(location.search).get("nosky") === "1";
 // The art pass (2026-11-06): painted brush strokes, ink per material, new skies. ?art=0 shows the earlier treatment.
 const ART = new URLSearchParams(location.search).get("art") !== "0";
