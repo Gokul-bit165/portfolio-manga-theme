@@ -31,7 +31,7 @@ await rm.page.emulateMedia({ reducedMotion: "reduce" });
 await open(rm.page, `http://localhost:4186/?portal=1&scale=1&capture=1&quality=${Q}#${process.env.HASH ?? "vael"}`);
 await rm.page.evaluate(([w, u]) => { document.body.dataset.w = w; document.body.dataset.u = u; }, [String(WORLD), process.env.STILL_U ?? "1.1"]);
 const diff = await rm.page.evaluate(async () => {
-  const gl = document.getElementById("world").getContext("webgl2"), W = gl.drawingBufferWidth, H = gl.drawingBufferHeight, j = window.__journey, p = (j.starts[0] + 1.1) / j.total;
+  const gl = document.getElementById("world").getContext("webgl2"), W = gl.drawingBufferWidth, H = gl.drawingBufferHeight, j = window.__journey, p = (j.starts[+document.body.dataset.w] + +document.body.dataset.u) / j.total;   // the world and place asked for (was always Vael at 1.1)
   scrollTo(0, document.documentElement.scrollHeight * p); await new Promise((r) => setTimeout(r, 2500));
   // Real frames from the page's own loop, 48 apart, read in the frame they were drawn.
   return await new Promise((res) => { let a = null, n = 0; const g = () => { const px = new Uint8Array(W * H * 4); gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, px); return px; };

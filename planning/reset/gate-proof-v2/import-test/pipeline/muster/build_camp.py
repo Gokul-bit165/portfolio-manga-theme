@@ -1,5 +1,6 @@
 # The Muster Field's camp, the morning after a hard battle (2026-11-08). Original layout and geometry, on the land the renderer draws.
-#   Tents: bell and ridge tents with sagging canvas, scalloped hems, door slits, sewn patches, guy ropes and stakes; two have collapsed.
+#   Tents: real cloth settled in Blender's solver (tents_cloth.py): bell, ridge and wall tents and open flies, in streets along the lane;
+#   panels and sewn patches, rips, three collapsed, two burned. Guy ropes and stakes.
 #   Palisade with gaps and fallen stakes, a timber gate, two watchtowers. The six standards (the projects) with their geometric charges.
 #   Rows of fresh graves with plain timber markers. Weapon racks, carts (one broken), horse-line posts, tripods over the fire pits.
 #   Props: Poly Haven CC0 barrels, crates, buckets, axes, a kite shield, an estoc (MANIFEST-forge.json, MANIFEST-muster.json).
@@ -63,92 +64,38 @@ class Build:
 b = Build()
 
 
-# ---- Tents.
-def bell_tent(x, y, r, h, tone, collapsed=False, seed=0):
-    rr = np.random.default_rng(seed); z0 = ground(x, y) - 0.05; sides = 20; rings = 8; door = rr.uniform(0, 6.28)
-    if collapsed: h *= 0.42
-    lean = rr.normal(0, 0.06, 2) * (4 if collapsed else 1)
-    ids = []
-    for j in range(rings + 1):
-        t = j / rings
-        row = []
-        for k in range(sides):
-            a = k / sides * 6.2832
-            # Canvas hangs between the panel seams; the hem is scalloped where it is pegged; a collapsed tent folds in on itself.
-            seam = 1 - 0.06 * (1 - abs(math.cos(a * sides / 2))) * math.sin(math.pi * t)
-            hem = 1 + (0.05 * abs(math.sin(a * sides / 2)) if j == 0 else 0)
-            fold = 1 + (0.18 * math.sin(a * 3 + seed) * math.sin(math.pi * t) if collapsed else 0)
-            rad = r * (1 - t) ** 1.08 * seam * hem * fold + 0.06
-            sag = -0.12 * math.sin(math.pi * t) * h * 0.18
-            zz = z0 + t * h + sag + (0.0 if j else 0.05 * math.sin(a * sides / 2))
-            row.append(b.v((x + math.cos(a) * rad + lean[0] * t * h, y + math.sin(a) * rad + lean[1] * t * h, zz), CANVAS, tone))
-        ids.append(row)
-    for j in range(rings):
-        for k in range(sides):
-            a = (k + 0.5) / sides * 6.2832
-            if j < 4 and abs(((a - door + math.pi) % 6.2832) - math.pi) < 0.17: continue   # the door slit: open, the dark inside shows
-            b.quad(ids[j][k], ids[j][(k + 1) % sides], ids[j + 1][(k + 1) % sides], ids[j + 1][k])
-    apex = (x + lean[0] * h, y + lean[1] * h, z0 + h)
-    b.log((x, y, z0), (apex[0], apex[1], apex[2] + 0.35), 0.05, WOOD, 0.35)
-    b.lump((x, y, z0), r * 0.55, r * 0.55, h * 0.32, DARK, 0, seed=seed + 1, n=12)   # the dark inside, seen through the door; kept inside the canvas
-    # Sewn patches: small panels stitched over tears, a shade off the canvas.
-    for p in range(rr.integers(1, 4)):
-        t = rr.uniform(0.15, 0.6); a = rr.uniform(0, 6.28); rad = r * (1 - t) ** 1.08 + 0.075; w = rr.uniform(0.25, 0.5); hh = rr.uniform(0.2, 0.4)
-        c = np.array((x + math.cos(a) * rad, y + math.sin(a) * rad, z0 + t * h)); tg = np.array((-math.sin(a), math.cos(a), 0)); up = np.array((-math.cos(a) * 0.4, -math.sin(a) * 0.4, 1.0)); up /= np.linalg.norm(up)
-        q = [b.v(c + tg * sx * w / 2 + up * sy * hh / 2, PATCH, rr.uniform(0.2, 0.9)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]; b.quad(*q)
-    # Guy ropes from the shoulder to stakes.
-    if not collapsed:
-        for k in range(6):
-            a = k / 6 * 6.2832 + 0.3; t = 0.45; rad = r * (1 - t) + 0.06
-            p0 = (x + math.cos(a) * rad, y + math.sin(a) * rad, z0 + t * h); sx, sy = x + math.cos(a) * r * 1.7, y + math.sin(a) * r * 1.7
-            b.beam(p0, (sx, sy, ground(sx, sy) + 0.12), 0.008, 0.008, WOOD, 0.6); b.beam((sx, sy, ground(sx, sy) - 0.1), (sx, sy, ground(sx, sy) + 0.2), 0.02, 0.02, WOOD, 0.4)
-
-
-def ridge_tent(x, y, hx, hy, h, yaw, tone, seed=0):
-    rr = np.random.default_rng(seed); c, s_ = math.cos(yaw), math.sin(yaw); z0 = ground(x, y) - 0.05
-    P = lambda u, v, z: (x + u * c - v * s_, y + u * s_ + v * c, z0 + z)
-    nu, nv = 10, 5
-    for side in (-1, 1):
-        rows = []
-        for i in range(nu + 1):
-            u = -hx + 2 * hx * i / nu; row = []
-            for j in range(nv + 1):
-                t = j / nv; sag = 0.1 * math.sin(math.pi * (i / nu)) * math.sin(math.pi * t) + 0.03 * math.sin(i * 1.7 + seed)
-                v = side * (hy * (1 - t) - sag * 0.5); zz = h * t - sag
-                row.append(b.v(P(u, v, zz), CANVAS, tone))
-            rows.append(row)
-        for i in range(nu):
-            for j in range(nv): b.quad(rows[i][j], rows[i + 1][j], rows[i + 1][j + 1], rows[i][j + 1])
-    for e in (-1, 1):   # end walls: one closed, one a dark door
-        q = [b.v(P(e * hx, -hy, 0), CANVAS if e < 0 else DARK, tone), b.v(P(e * hx, hy, 0), CANVAS if e < 0 else DARK, tone), b.v(P(e * hx, 0, h), CANVAS if e < 0 else DARK, tone)]; b.F.append(tuple(q))
-        b.log(P(e * (hx + 0.05), 0, -0.1), P(e * (hx + 0.05), 0, h + 0.3), 0.045, WOOD, 0.35)
-    b.log(P(-hx - 0.1, 0, h + 0.02), P(hx + 0.1, 0, h + 0.02), 0.035, WOOD, 0.4)
-    for e in (-1, 1):
-        for side in (-1, 1):
-            sx, sy = P(e * (hx + 1.0), side * (hy + 0.6), 0)[:2]; b.beam(P(e * hx, side * hy * 0.3, h * 0.7), (sx, sy, ground(sx, sy) + 0.12), 0.008, 0.008, WOOD, 0.6)
-    if rr.random() < 0.5:
-        u0 = rr.uniform(-hx * 0.6, hx * 0.6); q = [b.v(P(u0 + du, 1.01 * hy * 0.55, h * 0.45 + dz), PATCH, 0.5) for du, dz in ((-0.25, -0.15), (0.25, -0.15), (0.25, 0.15), (-0.25, 0.15))]; b.quad(*q)
-
+# ---- Tents: real cloth (tents_cloth.py), in streets along the lane as a company would pitch them, doors to the lane. Some came down in the night.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import tents_cloth as TC
 
 placed = []
 def free(x, y, r):
     if lane_d(x, y) < r + 4.5: return False
     if math.hypot(x - RING["x"], y - RING["y"]) < RING["r"] + r + 7: return False
-    if 16 < x < 46 and 120 < y < 146: return False   # the graves, where the camera turns east on its way to the gate
+    if 5 < x < 37 and 110 < y < 145: return False    # the burial field, which the camera turns to on its way to the gate
     return all(math.hypot(x - px, y - py) > r + pr + 1.6 for px, py, pr in placed)
 
 
-n = 0
-for t in range(3000):
-    if n >= 38: break
-    y = 14 + R.random() * 160; side = -1 if R.random() < 0.5 else 1; x = side * (8 + R.random() * 46)
-    big = R.random() < 0.55; r = (2.2 + R.random() * 1.1) if big else (2.4 + R.random() * 0.8)
-    if not free(x, y, r): continue
-    tone = float(R.uniform(0.2, 0.95))
-    if big: bell_tent(x, y, r, 3.6 + R.random() * 1.2, tone, collapsed=(n in (7, 19)), seed=n)
-    else: ridge_tent(x, y, r * 0.75, r * 0.55, 2.0 + R.random() * 0.5, math.pi / 2 + R.normal(0, 0.25) + (0 if R.random() < 0.6 else math.pi / 2), tone, seed=n)
-    placed.append((x, y, r)); n += 1
-    if R.random() < 0.2: FLAGS.append([x + r * 0.8, y, ground(x, y) + 4.4, 1.3, 0.55, float(R.uniform(0, 6)), float(R.uniform(0.1, 0.4))])
+n = 0; STATES = {4: "collapsed", 15: "collapsed", 27: "collapsed", 9: "burned", 22: "burned"}
+for street in (12.0, 25.0, 39.0):
+    for side in (-1, 1):
+        y = 16 + R.random() * 6
+        while y < 176:
+            if n >= 42: break
+            if R.random() < 0.3: y += 7 + R.random() * 8; continue   # a gap in the street: a cleared pitch, a horse line, a latrine
+            kind = R.choice(["bell", "bell", "bell", "ridge", "ridge", "wall", "fly"], p=None)
+            r = {"bell": 2.3 + R.random() * 0.9, "ridge": 2.2 + R.random() * 0.6, "wall": 2.8 + R.random() * 0.6, "fly": 2.4}[kind]
+            lx = float(np.interp(y, LANE[:, 1], LANE[:, 0])); x = lx + side * (street + R.normal(0, 1.4)); yy = y + R.normal(0, 0.8)
+            if free(x, yy, r):
+                tone = float(R.uniform(0.2, 0.95)); state = STATES.get(n, "torn" if R.random() < 0.18 else "standing")
+                face = math.atan2(0, -side) + R.normal(0, 0.18)   # the door, the front, towards the lane
+                if kind == "bell": TC.bell(b, ground, x, yy, r, 3.4 + R.random() * 1.2, tone, seed=n, state=state)
+                elif kind == "ridge": TC.ridge(b, ground, x, yy, r * 0.8, r * 0.58, 1.9 + R.random() * 0.5, face, tone, seed=n, state=state)
+                elif kind == "wall": TC.ridge(b, ground, x, yy, r * 0.75, r * 0.55, 2.7 + R.random() * 0.3, face, tone, seed=n, state=state if state != "collapsed" else "torn", wall=1.15)
+                else: TC.fly(b, ground, x, yy, r * 0.9, r * 0.75, 2.3, face + 1.5708, tone, seed=n)
+                placed.append((x, yy, r)); n += 1
+                if R.random() < 0.2 and kind != "fly": FLAGS.append([x + r * 0.8, yy, ground(x, yy) + 4.4, 1.3, 0.55, float(R.uniform(0, 6)), float(R.uniform(0.1, 0.4))])
+            y += 2 * r + 3.5 + R.random() * 5.0
 print("tents", n, flush=True)
 
 # ---- Palisade, gate, watchtowers.
@@ -206,20 +153,81 @@ for i in range(64):
     if lane_d(x, y) < 3.5: continue
     b.lump((x, y, ground(x, y) - 0.15), 1.1, 0.9, 0.42, GROUND, 1.0, seed=700 + i, n=8)
 
-# ---- Graves: two rows of fresh mounds, each with a plain timber marker; some lean, one has a cloth tied to it, one a shield laid against it.
-GRAVES = []
-for row in range(2):
-    for i in range(8):
-        x, y = 22 + i * 2.3 + R.normal(0, 0.15), 127 + row * 6.5 + R.normal(0, 0.2)
-        z = ground(x, y)
-        b.lump((x, y, z - 0.25), 0.62, 1.15, 0.42, GROUND, 1.0, seed=800 + row * 10 + i, n=10)
-        mx, my = x, y - 1.15; lean = R.normal(0, 0.08, 2) + (np.array((0.25, 0.1)) if (row, i) in ((0, 5), (1, 2)) else 0)
-        top = (mx + lean[0], my + lean[1], z + 1.15)
-        b.beam((mx, my, z - 0.4), top, 0.045, 0.035, WOOD, float(R.uniform(0.2, 0.5)))
-        b.beam((top[0] - 0.32, top[1], z + 0.82), (top[0] + 0.32, top[1], z + 0.82), 0.035, 0.03, WOOD, float(R.uniform(0.2, 0.5)))
-        if (row, i) == (0, 2): q = [b.v((top[0] + du, top[1] - 0.05, z + 0.9 + dz), CLOTH, 0.3) for du, dz in ((0.05, 0), (0.18, -0.02), (0.15, -0.42), (0.07, -0.38))]; b.quad(*q)
+# ---- The burial field, beside the lane where it runs on to the gate: three rows of fresh mounds with plain timber markers, a long mound where
+# many were laid together, the spoil heap with the spade and pick still in it. What was theirs is left on the graves: a helmet hung on a marker,
+# a broken shield, an empty saddle, a fallen banner. Absence, not bodies: nothing here shows the dead.
+def lathe(prof, sides, Rm, at, mid, tone):
+    rings = [[b.v(np.array(at) + Rm @ np.array((math.cos(k / sides * 6.2832) * r, math.sin(k / sides * 6.2832) * r, hh)), mid, tone) for k in range(sides)] for r, hh in prof]
+    for r0, r1 in zip(rings, rings[1:]):
+        for k in range(sides): b.quad(r0[k], r0[(k + 1) % sides], r1[(k + 1) % sides], r1[k])
+def rot(yaw=0.0, tilt=0.0, roll=0.0):
+    cy, sy, ct, st, cr, sr = math.cos(yaw), math.sin(yaw), math.cos(tilt), math.sin(tilt), math.cos(roll), math.sin(roll)
+    return np.array(((cy, -sy, 0), (sy, cy, 0), (0, 0, 1.0))) @ np.array(((1, 0, 0), (0, ct, -st), (0, st, ct))) @ np.array(((cr, 0, sr), (0, 1, 0), (-sr, 0, cr)))
+def helmet(at, Rm):   # an open-faced helm: a pointed, rounded crown, a narrow rim, a nasal bar down the front
+    lathe([(0.0, 0.26), (0.03, 0.245), (0.07, 0.2), (0.105, 0.13), (0.122, 0.06), (0.126, 0.0), (0.134, -0.008), (0.122, -0.012)], 14, Rm, at, IRON, 0.55)
+    b.beam(np.array(at) + Rm @ np.array((0.128, 0, 0.01)), np.array(at) + Rm @ np.array((0.136, 0, -0.1)), 0.014, 0.005, IRON, 0.5)
+def round_shield(at, Rm, broken=True):   # planks across a disc, one gone and one split short, an iron boss; the rim lost where it broke
+    for k in range(7):
+        yy = -0.42 + 0.06 + k * 0.12; L = math.sqrt(max(0.0, 0.44 ** 2 - yy ** 2))
+        if broken and k == 4: continue
+        x1 = L if not (broken and k == 5) else L * 0.2
+        p0 = np.array(at) + Rm @ np.array((-L, yy, 0)); p1 = np.array(at) + Rm @ np.array((x1, yy, 0))
+        b.beam(p0, p1, 0.058, 0.014, WOOD, float(R.uniform(0.25, 0.55)))
+    lathe([(0.0, 0.07), (0.05, 0.06), (0.08, 0.03), (0.09, 0.01)], 10, Rm, at, IRON, 0.5)
+def saddle(at, yaw):   # an empty riding saddle on its side in the mud, stirrups trailing
+    x, y, z = at; Rm = rot(yaw, 0.0, 1.1)
+    b.lump((x, y, z + 0.05), 0.24, 0.34, 0.14, CLOTH, 0.45, seed=951, n=10)
+    for d, hgt in ((0.3, 0.2), (-0.3, 0.26)): b.lump((x + d * math.sin(yaw), y + d * math.cos(yaw), z + 0.08), 0.13, 0.08, hgt, CLOTH, 0.4, seed=952 + int(d * 10), n=8)
+    for k in (-1, 1):
+        sx, sy = x + k * 0.55 * math.cos(yaw), y - k * 0.55 * math.sin(yaw)
+        b.beam((x, y, z + 0.12), (sx, sy, z + 0.03), 0.02, 0.006, CLOTH, 0.3)
+        for i in range(8):
+            a0, a1 = i / 8 * 6.2832, (i + 1) / 8 * 6.2832
+            b.beam((sx + math.cos(a0) * 0.07, sy, z + 0.03 + math.sin(a0) * 0.07 * 0.3), (sx + math.cos(a1) * 0.07, sy, z + 0.03 + math.sin(a1) * 0.07 * 0.3), 0.008, 0.008, IRON, 0.5)
+def marker(x, y, z, lean, cross, tone):
+    top = (x + lean[0], y + lean[1], z + 1.1)
+    b.beam((x, y, z - 0.4), top, 0.045, 0.035, WOOD, tone)
+    if cross: b.beam((top[0] - 0.3, top[1], z + 0.8), (top[0] + 0.3, top[1], z + 0.8), 0.035, 0.03, WOOD, tone)
+    return top
+GRAVES, TOPS = [], []
+for r_i, (yy, cnt, x0) in enumerate(((120.5, 8, 10.5), (126.0, 8, 11.0), (131.5, 7, 11.6))):
+    for i in range(cnt):
+        x, y = x0 + i * 2.25 + R.normal(0, 0.15), yy + R.normal(0, 0.25); z = ground(x, y)
+        b.lump((x, y, z - 0.25), 0.62, 1.15, 0.42 + R.uniform(-0.05, 0.08), GROUND, 1.0, seed=800 + r_i * 10 + i, n=10)
+        lean = R.normal(0, 0.07, 2) + (np.array((0.22, 0.1)) if (r_i, i) in ((0, 5), (1, 2), (2, 3)) else 0)
+        TOPS.append(marker(x, y - 1.2, z, lean, R.random() > 0.25, float(R.uniform(0.2, 0.5))))
         GRAVES.append((x, y, z))
+# The long mound behind, where many were laid together; five markers along it.
+for k in range(6):
+    mx = 12.5 + k * 2.6; b.lump((mx, 137.5 + R.normal(0, 0.2), ground(mx, 137.5) - 0.25), 1.6, 1.5, 0.5, GROUND, 1.0, seed=900 + k, n=10)
+for k in range(5):
+    mx = 13.5 + k * 3.0 + R.normal(0, 0.2); marker(mx, 135.6, ground(mx, 135.6), R.normal(0, 0.05, 2), k % 2 == 0, 0.35)
+# The spoil heap at the end of the front row, the spade and pick still in it: the work stopped, or there was no one left to do it.
+sx, sy = 30.5, 120.0; sz = ground(sx, sy)
+b.lump((sx, sy, sz - 0.2), 1.1, 0.9, 0.55, GROUND, 1.0, seed=960, n=10)
+b.log((sx - 0.2, sy + 0.1, sz + 0.1), (sx - 0.45, sy - 0.15, sz + 1.25), 0.02, WOOD, 0.4, sides=5)
+b.beam((sx - 0.12, sy + 0.18, sz - 0.12), (sx - 0.2, sy + 0.1, sz + 0.14), 0.11, 0.008, IRON, 0.5)
+b.log((sx + 0.5, sy - 0.3, sz + 0.05), (sx + 0.9, sy - 0.9, sz + 0.95), 0.022, WOOD, 0.4, sides=5)
+b.beam((sx + 0.62, sy - 0.75, sz + 0.88), (sx + 1.12, sy - 1.0, sz + 0.98), 0.02, 0.02, IRON, 0.5)
+# What was theirs, left on the graves.
+t = TOPS[3]; helmet((t[0], t[1] - 0.05, t[2] - 0.02), rot(0.3, 0.25))                          # hung on a marker, front row
+t = TOPS[11]; b.beam((t[0] + 0.02, t[1] - 0.04, t[2] - 0.1), (t[0] - 0.02, t[1] - 0.06, t[2] - 0.55), 0.03, 0.003, CLOTH, 0.3)   # a strip of cloth tied to a marker
+gx, gy, gz = GRAVES[13]; round_shield((gx + 0.75, gy - 0.6, gz + 0.32), rot(-1.2, 1.15))       # broken, against a mound
+gx, gy, gz = GRAVES[1]; helmet((gx - 0.9, gy - 1.6, gz + 0.02), rot(1.0, 0.35, 0.2))           # another, in the mud at the foot of a grave
+saddle((8.2, 122.5, ground(8.2, 122.5)), 0.7)
+round_shield((7.6, 117.4, ground(7.6, 117.4) + 0.04), rot(0.4, 0.06))                            # another shield, broken, flat in the mud at the field's edge
+helmet((10.4, 119.8, ground(10.4, 119.8) + 0.02), rot(2.2, 0.4, 0.25))                           # a helmet dropped at the field's edge
+b.log((6.4, 119.0, ground(6.4, 119.0) + 0.03), (8.9, 121.2, ground(8.9, 121.2) + 0.05), 0.022, WOOD, 0.4, sides=5)   # a spear shaft, its head gone                                                     # an empty saddle by the lane: the horse did not come back
+COLD = [[6.6, 127.5, ground(6.6, 127.5)]]                                                         # the gravediggers' fire, gone out
+for k in range(5):
+    a = k / 5 * 6.2832 + 0.4; cx, cy, cz = COLD[0]
+    b.log((cx + math.cos(a) * 0.55, cy + math.sin(a) * 0.55, cz + 0.06), (cx - math.cos(a) * 0.1, cy - math.sin(a) * 0.1, cz + 0.14), 0.05, BARK, 0.08, sides=6)
+# A fallen standard: a company banner on a broken staff, come down across the mud by the field (cloth, settled on the ground).
+TC.banner(b, ground, 6.8, 131.0, 2.4, 1.1, 0.35, seed=970)
+TC.banner(b, ground, -7.5, 64.0, 2.0, 0.9, -0.5, seed=971)
 print("graves", len(GRAVES), flush=True)
+TC.simulate()
+print("cloth tris", TC.emit(b), flush=True)
 
 # ---- Racks, carts, horse lines, tripods.
 def rack(x, y, yaw):
@@ -248,8 +256,8 @@ def cart(x, y, yaw, broken=False):
     if broken:   # the lost wheel lies in the mud beside it
         wx, wy = P(0.4, 1.9, 0)[:2]; wz = ground(wx, wy) + 0.04
         for k in range(16): a0, a1 = k / 16 * 6.2832, (k + 1) / 16 * 6.2832; b.beam((wx + math.cos(a0) * 0.55, wy + math.sin(a0) * 0.55, wz), (wx + math.cos(a1) * 0.55, wy + math.sin(a1) * 0.55, wz), 0.04, 0.035, WOOD, 0.35)
-for x, y, yaw in ((-6.8, 30, 1.57), (6.8, 54, 1.57), (-6.9, 104, 1.6), (7.2, 128, 1.5)): rack(x, y, yaw)
-for x, y, yaw, br in ((-11, 66, 0.4, False), (12, 98, -0.3, True), (-14, 150, 0.1, False)): cart(x, y, yaw, br)
+for x, y, yaw in ((-6.8, 30, 1.57), (6.8, 54, 1.57), (-6.9, 104, 1.6), (6.9, 150, 1.5)): rack(x, y, yaw)
+for x, y, yaw, br in ((-11, 66, 0.4, False), (9.5, 112.5, -0.5, True), (-14, 150, 0.1, False)): cart(x, y, yaw, br)   # the broken one by the burial field
 for x0, y0, x1, y1 in ((-34, 120, -34, 156), (-46, 124, -46, 152)):
     for xx, yy in ((x0, y0), (x1, y1), ((x0 + x1) / 2, (y0 + y1) / 2)): b.log((xx, yy, ground(xx, yy) - 0.4), (xx, yy, ground(xx, yy) + 1.6), 0.07, BARK, 0.4)
     b.beam((x0, y0, ground(x0, y0) + 1.45), (x1, y1, ground(x1, y1) + 1.45), 0.012, 0.012, WOOD, 0.6)
@@ -321,7 +329,7 @@ place("wooden_barrels_01", 9.5, 40, yaw=0.4); place("barrel_03", -8.3, 58, yaw=1
 place("wooden_crate_01", 8.8, 74, yaw=0.3); place("wooden_crate_02", 9.6, 75.4, yaw=-0.4); place("wooden_crate_01", 8.9, 74.1, z=ground(8.9, 74.1) + 0.32, yaw=1.1)
 place("wooden_bucket_01", -7.6, 47, yaw=0.5); place("wooden_bucket_01", 6.9, 69.5, yaw=2.0, tilt=((0, 1, 0), 1.45))
 place("wooden_axe_03", -6.2, 105, yaw=0.2, tilt=((1, 0, 0), 0.35)); place("hatchet", 7.4, 92, yaw=1.0, tilt=((0, 1, 0), 1.4))
-gx, gy, gz2 = GRAVES[10]; place("kite_shield", gx + 0.1, gy - 1.6, z=gz2 + 0.02, yaw=0.1, tilt=((1, 0, 0), -0.45))   # laid against a marker
+gx, gy, gz2 = GRAVES[18]; place("kite_shield", gx + 0.1, gy - 1.6, z=gz2 + 0.02, yaw=0.1, tilt=((1, 0, 0), -0.45))   # laid against a marker
 place("kite_shield", 4.5, RING["y"] - 12, yaw=2.4, tilt=((1, 0, 0), 1.52))   # dropped in the mud by the ring
 place("antique_estoc", -3.1, RING["y"] - 15, yaw=0.7, tilt=((0, 1, 0), 1.55))
 print("tris", len(b.F), "verts", b.n, flush=True)
@@ -347,12 +355,12 @@ scene.render.bake.target = "VERTEX_COLORS"; bpy.ops.object.bake(type="AO", targe
 A = np.empty(b.n * 4, np.float32); ao.data.foreach_get("color", A); A = A.reshape(-1, 4)[:, 0]
 print("ao range", float(A.min()), float(np.median(A)), float(A.max()), flush=True)
 nor = np.empty(b.n * 3); me.vertex_normals.foreach_get("vector", nor); nor = nor.reshape(-1, 3)
-C = np.zeros((b.n, 4), np.float32); C[:, 0] = np.clip(A, 0, 1); C[:, 1] = np.clip(0.55 + 0.45 * nor[:, 2], 0, 1); C[:, 2] = (MID + 0.5) / 32; C[:, 3] = BL
+C = np.zeros((b.n, 4), np.float32); C[:, 0] = np.clip(A, 0, 1); C[:, 1] = np.clip((V[:, 2] - np.array([ground(float(x), float(y)) for x, y in V[:, :2]])) / 4.0, 0, 1); C[:, 2] = (MID + 0.5) / 32; C[:, 3] = BL   # G: height above the ground, for the MUSTER program's mud on canvas
 col = me.color_attributes.new("COLOR_0", "FLOAT_COLOR", "POINT"); col.data.foreach_set("color", C.ravel())
 me.color_attributes.active_color = col; me.color_attributes.render_color_index = me.color_attributes.active_color_index
 me.color_attributes.remove(me.color_attributes["AO"]); me.materials.clear()
 bpy.ops.object.select_all(action="DESELECT"); camp.select_set(True)
 bpy.ops.export_scene.gltf(filepath=OUT, export_format="GLB", use_selection=True, export_yup=True, export_materials="NONE", export_normals=True, export_vertex_color="ACTIVE",
                           export_all_vertex_colors=False, export_animations=False, export_skins=False, export_morph=False, export_cameras=False, export_lights=False, export_apply=False)
-with open(META, "w") as f: json.dump({"flags": FLAGS, "smoke": SMOKE, "graves": GRAVES, "tents": placed, "tris": int(len(F)), "verts": int(b.n)}, f)
+with open(META, "w") as f: json.dump({"flags": FLAGS, "smoke": SMOKE, "cold": COLD, "graves": GRAVES, "tents": placed, "tris": int(len(F)), "verts": int(b.n)}, f)
 print("WROTE", OUT, len(F), "tris", flush=True)

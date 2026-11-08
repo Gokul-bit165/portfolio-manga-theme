@@ -1,0 +1,42 @@
+[
+ {
+  "world": "plain",
+  "same": true
+ },
+ {
+  "world": "first-gate",
+  "same": true
+ },
+ {
+  "world": "passage",
+  "same": true
+ },
+ {
+  "world": "vael",
+  "same": true
+ },
+ {
+  "world": "forge",
+  "same": true
+ },
+ {
+  "world": "maphall",
+  "same": true
+ },
+ {
+  "world": "standards",
+  "same": true
+ },
+ {
+  "world": "highroad",
+  "same": true
+ },
+ {
+  "world": "camp",
+  "same": true
+ },
+ {
+  "world": "ridge",
+  "same": true
+ }
+]

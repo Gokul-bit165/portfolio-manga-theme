@@ -99,15 +99,24 @@ function palisade(m) {
     if (e < 0) person(m, tx + 0.6, ty - 0.9, tz + 7.6, { block: 0.25, spear: true });   // a watchman on the west tower
   }
 }
+// The burial field's churned earth: a ragged patch of mud round the graves, trodden out to the lane (the art set only).
+function burialMud(x, y) {
+  const d = Math.max(Math.abs(x - 20.5) - 12.5, Math.abs(y - 128.5) - 11.5) + Math.sin(x * 0.9 + y * 0.4) * 1.1 + Math.sin(x * 0.37 - y * 1.3) * 0.8;
+  return (1 - smooth(-1.5, 1.5, d)) * 0.95;
+}
 export function build({ art = false, flags: flagSpots = null } = {}) {
   const R = rng(5150);
   if (art) {
     const land = new Mesh("Muster land"), banners = new Mesh("Muster banners", { flag: true }), ln = new Mesh("Muster Red Line");
-    heightfield(land, groundAt, { xs: geomAxis(-700, 700, 0, 1.6, 1.12), ys: geomAxis(-40, 1000, 14, 1.6, 1.04), roadAt: (x, y) => Math.min(1, (y > -40 ? 1 - smooth(2.6, 4.2, lane(x, y).d) : 0) + (Math.hypot(x - RING.x, y - RING.y) < RING.r + 1 ? 0.85 : 0)) });
+    heightfield(land, groundAt, { xs: geomAxis(-700, 700, 0, 1.6, 1.12), ys: geomAxis(-40, 1000, 14, 1.6, 1.04), roadAt: (x, y) => Math.min(1, (y > -40 ? 1 - smooth(2.6, 4.2, lane(x, y).d) : 0) + (Math.hypot(x - RING.x, y - RING.y) < RING.r + 1 ? 0.85 : 0) + burialMud(x, y)) });
     for (const [x, y, z, w, h, phase, block] of flagSpots ?? []) flag(banners, x, y, z, w, h, phase, block);
     redLine(ln, lineToExit(lineAlong(LANE, groundAt, { off: 3.2, to: GATE_Y }), EXIT, groundAt), { stakeEvery: 14 });
     const s = new Sprites();
-    s.add(KIND.bird, -20, 150, 30, 40, 0x1a1a20, R, 14, 18);   // crows over the graves and the field
+    s.add(KIND.bird, 20, 128, 24, 26, 0x1a1a20, R, 9, 10);    // crows circling over the burial field
+    s.add(KIND.bird, -20, 150, 30, 40, 0x1a1a20, R, 6, 18);
+    // Crows down on the fresh graves; they lift as the camera comes near and settle again when it backs away.
+    for (const [x, y] of [[13.2, 121.6], [19.9, 126.8], [23.4, 120.2], [26.8, 132.2], [16.4, 131.0], [21.5, 137.8], [11.8, 126.4]]) s.add(7, x, y, groundAt(x, y) + 0.42, 0, 0x16141a, R, 1, 0.5);
+    s.add(KIND.rain, 0, 0, 0, 0.5, 0xc4c8d0, R, 700, 0);       // a thin cold drizzle
     s.add(KIND.bird, 30, 260, 50, 60, 0x1a1a20, R, 8, 30);
     return { meshes: [land, banners, ln].map((m) => pack(m)), sprites: s.pack() };
   }

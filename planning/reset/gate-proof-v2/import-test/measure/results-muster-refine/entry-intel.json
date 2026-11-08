@@ -1,0 +1,19 @@
+{
+ "gpu": "intel",
+ "out": [
+  {
+   "at": 33740,
+   "ms": 42,
+   "p": 0.2188,
+   "where": "vael",
+   "marks": [
+    [
+     33639,
+     "forge:start"
+    ]
+   ],
+   "long": []
+  }
+ ],
+ "errors": []
+}

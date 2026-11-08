@@ -44,8 +44,12 @@ Generated from `~/portfolio-assets/source/MANIFEST-muster.json`, which also hold
 
 | Item | How |
 |---|---|
-| Tents, palisade, gate, watchtowers, standards and their charges, graves and markers, weapon racks, carts, horse-line posts, tripods and pots | Original geometry (`pipeline/muster/build_camp.py`), occlusion baked in Cycles |
-| Land, lane, ring, Red Line, banners, crows, smoke | Original code (`src/worlds/muster.js`, `muster-art.js`, `shaders-texpaint.js`) |
-| Far ranges and sky | Vael's own renders (`assets/vael/`), regraded cold and overcast by the program |
+| Tents (refinement, 2026-11-08) | Real cloth: canvas sheets pinned at ridge, eave and pegs and settled under gravity in Blender's cloth solver (`pipeline/muster/tents_cloth.py`); bell, ridge and wall tents and open flies; three collapsed onto the ground and their broken poles, two burned (char carried per vertex), rips and sewn patches |
+| Palisade, gate, watchtowers, standards and their charges, graves and markers, the long mound, the spoil heap with spade and pick, weapon racks, carts, horse-line posts, tripods and pots | Original geometry (`pipeline/muster/build_camp.py`), occlusion baked in Cycles |
+| Kettle-hat helmets, broken round shields, the empty saddle, the spearshaft, the cold fire's charred logs | Original geometry, modelled in `build_camp.py` (no CC0 saddle exists; the one CC0 helmet found was an unverified 73 MB archive; see `MUSTER_REFINEMENT_SOURCING.md`) |
+| Fallen banners | Cloth settled over a broken staff in the same solver (`tents_cloth.py`, `banner`) |
+| Far ranges and the storm sky (refinement) | The Muster Field's own: an original eroded height field (`pipeline/muster/make_height.py`) and a volumetric storm deck with low cloud in the valleys, rendered in Cycles (`render_backdrop.py`), then painted into cards (`paint_backdrop.py`): flat gouache passes, rain curtains, valley mist |
+| Smoke (refinement) | A painted flipbook, 24 frames, generated from this script's own noise (`pipeline/muster/paint_smoke.py`) |
+| Land, lane, ring, burial-field mud, puddles, Red Line, banners, crows, rain | Original code (`src/worlds/muster.js`, `muster-art.js`, `shaders-texpaint.js`); rain and ground crows reuse the project's own sprite kinds |
 
 No AI-generated imagery, purchased asset, login-gated download or reference frame is used. Nothing here takes any character, crest, symbol, place or scene from an existing work.

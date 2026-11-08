@@ -83,7 +83,7 @@ const MUSTER = {
   keys(G = g(muster.groundAt)) {
     const ring = [0, 92, muster.groundAt(0, 92) + 4];
     return [[0, [0, 0, 1.25], [0, 60, 4], 20, "through"], [0.15, G(-0.5, 14, 1.6), [0, 60, 3.5], 22, "lane"], [0.4, G(-4, 40, 2.6), [4, 75, muster.groundAt(4, 75) + 2], 26, "camp"],
-      [0.66, G(-4.5, 72, 3.6), [0, 98, muster.groundAt(0, 98) + 3.2], 26, "ring"], [0.98, G(-3.2, 78, 3.2), [0, 100, muster.groundAt(0, 100) + 3.0], 27, "hold"], [1.18, G(2, 110, 3.4), [33, 136, muster.groundAt(33, 136) + 1.5], 26, "paddock"], [1.42, G(0.8, 160, 2), [0, 190, muster.groundAt(0, 190) + 3], 22, "gate"]];
+      [0.66, G(-4.5, 72, 3.6), [0, 98, muster.groundAt(0, 98) + 3.2], 26, "ring"], [0.98, G(-3.2, 78, 3.2), [0, 100, muster.groundAt(0, 100) + 3.0], 27, "hold"], [1.18, G(5.2, 114.2, 1.9), [18, 128, muster.groundAt(18, 128) + 0.6], 30, "graves"], [1.42, G(0.8, 160, 2), [0, 190, muster.groundAt(0, 190) + 3], 22, "gate"]];
   },
   hold: [0.62, 1.05], still: 0.85,
   // Late afternoon, clear: a deep blue sky with long cirrus, white masses with blue-grey undersides, warm light across the grass.
@@ -91,7 +91,7 @@ const MUSTER = {
   look: new URLSearchParams(globalThis.location?.search ?? "").get("musterart") === "0" ? look({ cloudShadow: 0.75, sun: [-0.86, 0.32, 0.4], skyA: 0xf3e3c2, skyB: 0xcfdcea, skyC: 0x92b8e2, skyD: 0x4c84d2, skyE: 0x2a5ab8, cirrus: 0xf6f8ff, cirrusOn: 0, haze0: 0xc8d6e6, haze1: 0xf2e4c8, hazeDist: 520, fireOn: 1, fireC: 0xffa860, line: 0x1e1a24, skyLift: [0.03, 0.05, 0.1], bounce: [0.06, 0.04, 0.02], wash: [0.56, 0.56, 0.7], spill: 0xfff0d8, shadow: { c: [0, 30, -110], r: 170 },
     sky: { soft: true, cirrus: [[-70, 30, 70, -0.3, 141, "#ffffff", 40], [-5, 40, 90, -0.24, 142, "#f4f7ff", 46], [60, 28, 70, -0.34, 143, "#ffffff", 36], [25, 54, 80, -0.2, 144, "#eef3ff", 30]],
       far: { pal: { shadow: "#b4bfd8", mid: "#dbe2f0", light: "#fbfbf6" }, list: [[-95, 2.4, 30, 6, 145], [-58, 2.2, 22, 5, 146], [-12, 2.4, 26, 6, 147], [30, 2.2, 24, 5, 148], [78, 2.5, 30, 7, 152]] },
-      mid: { pal: { shadow: "#97a6c8", mid: "#cdd6ec", light: "#ffffff" }, list: [[-75, 6, 34, 14, 149], [52, 7, 30, 13, 150], [5, 5.5, 20, 9, 153]] } } }) : look({ sun: [-0.7, 0.42, 0.58], haze0: 0x8e939c, haze1: 0xb4b2ac, hazeDist: 330, line: 0x16161c, shadow: { c: [0, 60, -140], r: 200 }, cirrusOn: 0, fireOn: 0, spill: 0xd8d4cc }),
+      mid: { pal: { shadow: "#97a6c8", mid: "#cdd6ec", light: "#ffffff" }, list: [[-75, 6, 34, 14, 149], [52, 7, 30, 13, 150], [5, 5.5, 20, 9, 153]] } } }) : look({ sun: [-0.7, 0.42, 0.58], haze0: 0x8e939c, haze1: 0xb4b2ac, hazeDist: 300, line: 0x16161c, shadow: { c: [0, 60, -140], r: 200 }, cirrusOn: 0, fireOn: 0, spill: 0xd8d4cc, rain: () => 0.55 }),
   pal: { 20: [0x22403c, 0x384a36, 0x4a6438, 0x667440, 0x748c4a, 0xa89c5c], 27: [0x6a5e6a, 0x7a6c74, 0xb08e6c, 0xc4a07a, 0xe8c896, 0xf6dcac], 25: [0x1e3e3a, 0x2a4c3e, 0x4c7440, 0x6c8a44, 0xa4b252, 0xd8c662],
     18: [0x5a5a74, 0x6a6276, 0xc4b496, 0xb89a7c, 0xf4e6c6, 0xf0d6ae], 28: [0x5c6c84, 0x7c8494, 0x8494b4, 0xa4a6bc, 0xb4c0dc, 0xd8dcec], 24: [0x2e2630, 0x2e2630, 0x6a4a36, 0x6a4a36, 0xa47a4e, 0xa47a4e], 26: [0x6a2a30, 0x5a3a40, 0xb8382c, 0xb88a2c, 0xe8502c, 0xf0c050] },
   content: `<h2>Selected works</h2><p class="lede">Six standards, one for each project. Only what is verified is written here.</p>

@@ -94,11 +94,6 @@ void main(){
         col=mix(col,mix(m.rgb,hazeAt(dir),r==2?0.3:(r==1?0.22:0.12)),m.a);
       } else if(v<=0.004) col=mix(col,hazeAt(dir),1.0);
     }
-#ifdef MUSTER
-    // Overcast: the painted sky's blue is closed over, grey on grey with a paler break near the hidden sun.
-    { float lum=dot(col,vec3(0.3,0.59,0.11)); col=mix(vec3(lum),col,0.22)*vec3(0.86,0.88,0.92);
-      col=mix(col,vec3(0.72,0.72,0.74),0.35*smoothstep(0.1,0.6,dir.y)); }
-#endif
 #endif
   } else {
     vec4 B=texelFetch(tB,fc,0), C=texelFetch(tC,fc,0), D=texelFetch(tD,fc,0);
@@ -178,6 +173,11 @@ void main(){
 #else
       vec3 alb; float metres=4.0,layer=0.0; vec4 tx=vec4(0.5);
       vec3 sn=(ground||leaf)?Ns:N;
+      float puddle=0.0;
+#ifdef MUSTER
+      float hgt=C.g*4.0;                        // the camp's bake carries height above the ground, in metres
+      if(mid>22.5&&mid<23.5) sn=Ns;             // canvas is lit by the cloth's own curve, not by its facets
+#endif
       if(ground){
         // Grass in two painted materials, one road laid over it with a broken edge: dirt, then gravel in the wheel tracks.
         float big=fbmF(P,0.016), med=fbmF(P,0.07);
@@ -187,6 +187,14 @@ void main(){
         // Wide fields of tone: the eye reads a meadow, not a tile. Deep cool greens in the folds, tired gold on the crowns of the land.
         g.rgb*=mix(vec3(0.62,0.84,0.72),vec3(1.02,1.05,0.84),rmp(big*0.8+med*0.2,0.36,0.64));
         g.rgb=mix(g.rgb,g.rgb*vec3(0.74,0.66,0.46)*1.25,rmp(fbmF(P,0.21),0.56,0.7)*0.7);
+#ifdef MUSTER
+        // Fresh earth: the camp's own mounds (graves, the ring's bank) carry height in G; the land always carries 1 there.
+        float fresh=C.g<0.5?smoothstep(0.0,0.05,hgt):0.0;
+        // A field an army stood on: the grass withered to olive and straw, trodden to bare mud in wide patches.
+        g.rgb=mix(vec3(dot(g.rgb,vec3(0.3,0.59,0.11))),g.rgb,0.55)*vec3(1.08,1.0,0.86);
+        { float tram=smoothstep(0.5,0.66,fbmF(P,0.045)*0.6+fbmF(P,0.33)*0.4);
+          vec4 m0=mat(8.0,P,vec3(0.0,1.0,0.0),6.0,dist); g=mix(g,m0*vec4(0.85,0.82,0.8,1.0),tram*0.85); }
+#endif
         float edge=blk+(fbmF(P,0.55)-0.5)*0.34+(fbmF(P,2.4)-0.5)*0.16;
         float rd=smoothstep(0.44,0.56,edge);
         tx=g; metres=11.0; layer=6.0;
@@ -197,8 +205,22 @@ void main(){
           // Worn verge: the grass thins into dust before the road begins.
           g.rgb=mix(g.rgb,g.rgb*vec3(0.74,0.68,0.62),rd*(1.0-rd)*2.2);
           tx=r; metres=6.0; layer=8.0;
+#ifdef MUSTER
+          // Churned mud: standing water in the ruts and hollows, the mud round each pool wet and dark.
+          float rut=fbmF(vec3(P.x*0.8,0.0,P.z*0.22),1.0)*0.6+fbmF(P,0.16)*0.4;
+          float pw=max(fwidth(rut)*1.5,0.002); puddle=smoothstep(0.655-pw,0.655+pw,rut)*smoothstep(0.6,0.9,rd);   // a crisp waterline, not a smear
+          g.rgb=mix(g.rgb,g.rgb*vec3(0.58,0.56,0.56),smoothstep(0.55,0.64,rut)*rd*0.8);
+#endif
         }
         alb=g.rgb;
+#ifdef MUSTER
+        if(fresh>0.0){
+          // Turned earth, darker and redder than the trodden mud, lumpy with clods, wet on top.
+          float clod=fbmF(P,3.5);
+          alb=mix(alb,alb*vec3(0.66,0.52,0.42)*mix(0.8,1.15,clod),fresh);
+          alb*=mix(1.0,0.82,fresh*smoothstep(0.1,0.3,hgt));
+        }
+#endif
       } else if(mid>21.5&&mid<22.5){
         layer=blk>0.55?1.0:0.0; metres=blk>0.55?3.2:3.6;
         tx=mat(layer,P,N,metres,dist); alb=tx.rgb;
@@ -211,19 +233,38 @@ void main(){
         alb*=mix(vec3(0.9,0.86,0.84),vec3(1.08,1.04,0.96),rmp(fbmF(P,0.05),0.38,0.62));
         float moss=rmp(fbmF(P,0.35),0.5,0.68)*(rmp(N.y,0.2,0.85)*0.85+0.35*(1.0-rmp(ao,0.1,0.55)));
         alb=mix(alb,alb*vec3(0.56,0.72,0.34)*1.05,sat(moss));
+#ifdef MUSTER
+        alb=mix(vec3(dot(alb,vec3(0.3,0.59,0.11))),alb,0.4)*0.7;   // wet, cold, the green gone out of it
+#endif
       } else if(mid>22.5&&mid<23.5){
         layer=blk>0.72?3.0:2.0; metres=2.6;
         tx=mat(layer,P,N,metres,dist);
         // A town's roofs are one family with many hands: each roof its own tone, weathered in patches.
         alb=tx.rgb*mix(vec3(1.06,0.96,0.86),vec3(0.74,0.66,0.62),rmp(fract(blk*7.31),0.1,0.9));
+#ifdef MUSTER
+        // Canvas: mud thrown up the hem and wicked into the cloth, broken into drips; rain-dark in patches.
+        float drip=fbmF(vec3(P.x*3.0,P.y*0.35,P.z*3.0),1.0);
+        alb*=vec3(0.8,0.76,0.7);                                                        // old canvas, smoke- and weather-stained
+        alb=mix(alb,alb*vec3(0.36,0.31,0.27),(1.0-smoothstep(0.15,0.5+0.8*drip,hgt))*0.92);
+        alb*=mix(1.0,0.8,rmp(fbmF(vec3(P.x,P.y*0.5,P.z),0.7),0.5,0.68));
+        // Burnt round a hole: the tone runs down towards 0 there. Black char, a scorched brown margin, broken by noise.
+        float burnt=1.0-smoothstep(0.02,0.1,blk+(fbmF(P,2.2)-0.5)*0.05);
+        alb=mix(alb,mix(alb*vec3(0.42,0.3,0.2),vec3(0.05,0.04,0.035),smoothstep(0.4,0.7,burnt)),smoothstep(0.0,0.3,burnt));
+#else
         alb=mix(alb,alb*vec3(0.62,0.72,0.42),rmp(fbmF(P,0.5),0.52,0.7)*0.7);
+#endif
       } else if(mid>28.5&&mid<29.5){
+#ifdef MUSTER
+        // A patch sewn over a tear: the same canvas from another bolt, darker and browner, its own weave.
+        layer=2.0; metres=1.9; tx=mat(layer,P,N,metres,dist); alb=tx.rgb*vec3(0.6,0.52,0.42)*mix(0.85,1.1,blk);
+#else
         layer=blk>0.32?4.0:5.0; metres=2.6;
         tx=mat(layer,P,N,metres,dist);
         alb=mix(tx.rgb,hex(0xe9d8b4)*(0.55+0.65*dot(tx.rgb,vec3(0.3333))),0.62)*mix(vec3(1.06,1.03,0.96),vec3(0.96,0.9,0.78),fract(blk*3.7));
         // Limewash weathers in patches and dirties from the ground up.
         float dirt=rmp(fbmF(vec3(P.x,P.y*2.2,P.z),0.42),0.4,0.66);
         alb*=mix(1.06,0.74,dirt);
+#endif
       } else if(mid>23.5&&mid<24.5){
         layer=12.0; metres=1.8; tx=mat(layer,P,N,metres,dist);
         alb=tx.rgb*mix(0.9,1.5,blk);
@@ -233,7 +274,11 @@ void main(){
       } else if(mid>20.5&&mid<21.5){
         layer=13.0; metres=2.2; tx=mat(layer,P,N,metres,dist); alb=tx.rgb*mix(0.95,1.2,blk);
         float moss=rmp(fbmF(P,0.8),0.45,0.62)*rmp(N.y,0.25,0.9);
+#ifdef MUSTER
+        alb=mix(vec3(dot(alb,vec3(0.3,0.59,0.11))),alb,0.35)*0.72;   // wet grey stone, no moss
+#else
         alb=mix(alb,alb*vec3(0.62,0.78,0.34)*1.1,moss);
+#endif
       } else if(leaf){
         // Leaves: a limited palette in passes, chosen by mass and by the single leaf. Gold only where the sun lands.
         // The crown's body is dark; single leaves sit on it in two lighter passes.
@@ -244,7 +289,7 @@ void main(){
 #ifdef MUSTER
         // Fir needles nearly black-green; scrub olive going brown; grass withered to straw.
         alb=mix(hex(0x1c2620),mix(hex(0x2e3c30),hex(0x55604a),smoothstep(0.42,0.86,t)),smoothstep(0.14,0.34,t));
-        if(mid>30.5) alb=mix(hex(0x3a3c2a),mix(hex(0x5a5a3c),hex(0x7e7652),smoothstep(0.5,0.95,t)),smoothstep(0.2,0.55,t));
+        if(mid>30.5) alb=mix(hex(0x26241c),mix(hex(0x403c2c),hex(0x5e5640),smoothstep(0.55,0.95,t)),smoothstep(0.25,0.6,t));
 #endif
       } else if(banner){
 #ifdef MUSTER
@@ -257,7 +302,7 @@ void main(){
 #ifdef MUSTER
         if(mid>15.5&&mid<16.5) alb=hex(0x4c4e56)*mix(0.7,1.2,blk);                 // iron: spear points, pots
         else if(mid>12.5&&mid<13.5) alb=hex(0x8a6c34)*mix(0.8,1.15,blk);           // brass: the standards' charges
-        else if(mid>17.5&&mid<18.5) alb=hex(0x5a3a32)*mix(0.7,1.2,blk);           // cloth
+        else if(mid>17.5&&mid<18.5) alb=hex(0x46342a)*mix(0.7,1.2,blk);           // cloth and leather, dark with wet
 #endif
       }
       if(banner) sn=N;
@@ -282,12 +327,32 @@ void main(){
       // Baked occlusion: the deep joints and feet of things, as on the First Gate, in a thin dark violet wash.
       float aok=smoothstep(0.01,0.4,ao+wob*0.05);
       col=mix(col*vec3(0.32,0.28,0.36),col,aok);
+#ifdef MUSTER
+      // Selective hatching, as an inker would lay it: only in shadow, only on the canvas, only near; locked to the surface so it
+      // does not swim; broken by noise so it never covers a whole face. Deep occlusion gets a second, crossing set.
+      if(dist<32.0&&(mid>22.5&&mid<23.5||mid>28.5&&mid<29.5)){   // canvas and its patches: on thin timber it read as stripes
+        float shd=(1.0-b1)*0.8+(1.0-aok)*0.6;
+        float f1=(P.x*0.7+P.y*1.0+P.z*0.55)*11.0, f2=(P.x*-0.6+P.y*1.0-P.z*0.7)*11.0;
+        float h1=1.0-smoothstep(0.1,0.1+fwidth(f1)*1.2,abs(fract(f1)-0.5));
+        float h2=1.0-smoothstep(0.1,0.1+fwidth(f2)*1.2,abs(fract(f2)-0.5));
+        float keep=smoothstep(0.38,0.5,vn0(P*1.3))*smoothstep(32.0,12.0,dist);
+        float hatch=max(h1*smoothstep(0.35,0.6,shd),h2*smoothstep(0.75,0.95,shd))*keep;
+        col=mix(col,col*vec3(0.42,0.38,0.44),hatch*0.75);
+      }
+#endif
       // Skylight in the shadows, warm bounce from the ground beneath.
       col+=vec3(0.05,0.07,0.13)*(1.0-b1)*sat(sn.y*0.6+0.4)*aok;
       col+=vec3(0.2,0.125,0.065)*(1.0-b1)*sat(0.55-sn.y)*aok;   // warm light thrown back by the sunlit ground: a wall in shade stays readable
       // Air, in soft steps: the nearer planes keep their colour.
       float h=1.0-exp(-dist/uHazeDist);
 #ifdef MUSTER
+      // Standing water: the grey sky and its clouds turned over in the pool, a dark rim where the mud meets it.
+      if(puddle>0.0){
+        vec3 rd2=reflect(-V,vec3(0.0,1.0,0.0)); float e2=sat(rd2.y);
+        vec3 sk=textureLod(tSky,vec2(atan(rd2.x,-rd2.z)/3.8397+0.5+uDrift,asin(e2)/1.22173),0.0).rgb*vec3(0.5,0.5,0.53);
+        col=mix(col,sk,puddle*0.8);
+        col*=1.0-0.35*puddle*(1.0-puddle)*4.0;
+      }
       // The grim grade: colour drained to two thirds, a cold cast; the air is grey.
       float lum=dot(col,vec3(0.3,0.59,0.11)); col=mix(vec3(lum),col,0.62)*vec3(0.94,0.96,1.0);
 #endif
@@ -413,4 +478,37 @@ void main(){
   float edge=smoothstep(0.0,0.25,vL.x)*smoothstep(1.0,0.75,vL.x)*smoothstep(0.0,0.2,vL.y)*smoothstep(1.0,0.8,vL.y);
   float a=0.075*pow(1.0-vL.z,1.6)*(0.55+0.9*n)*mix(0.6,1.0,edge);
   o=vec4(vec3(1.0,0.82,0.55)*a*(1.0-uOpen),1.0);
+}`;
+
+// The Muster Field's smoke: a painted flipbook (pipeline/muster/paint_smoke.py, 24 frames on a 6 x 4 atlas) on camera-facing cards, two
+// layers per fire, a thin column and a wider drift above it. Played on twos at 8 fps; leaning east on the wind, swaying with it a little,
+// fading as the camera comes close so it never fills the frame with a blot. R coverage, G light; three flat tones.
+export const SMOKEFLIP_VERT = /* glsl */`
+precision highp float;
+in vec3 position; in vec2 uv; in vec4 aSmoke; in vec4 aLayer;
+uniform mat4 viewMatrix, projectionMatrix; uniform vec3 uCam; uniform float uT;
+out vec2 vUv; out vec3 vW; out float vFrame; out float vA;
+void main(){
+  vec3 base=aSmoke.xyz; float H=aSmoke.w*aLayer.y;
+  vec3 toC=uCam-base; toC.y=0.0; toC=normalize(toC); vec3 side=normalize(cross(vec3(0.0,1.0,0.0),toC));
+  float sway=sin(floor(uT*8.0)/8.0*0.7+aLayer.x)*0.12;
+  vec3 w=base+vec3(0.0,aLayer.z*aSmoke.w,0.0)+side*(uv.x*2.0-1.0)*H*0.42+vec3(H*(0.22+sway),0.0,0.0)*uv.y*uv.y+vec3(0.0,uv.y*H,0.0);
+  vUv=uv; vW=w; vA=aLayer.w;
+  vFrame=mod(floor(uT*8.0)+floor(aLayer.x*3.82),24.0);
+  gl_Position=projectionMatrix*viewMatrix*vec4(w,1.0);
+}`;
+export const SMOKEFLIP_FRAG = /* glsl */`
+precision highp float;
+in vec2 vUv; in vec3 vW; in float vFrame; in float vA; out vec4 o;
+uniform sampler2D tA, tSmoke; uniform vec3 uCam,uLit,uShade;
+void main(){
+  vec4 g=texelFetch(tA,ivec2(gl_FragCoord.xy),0);
+  float d=distance(vW,uCam);
+  if(g.w>=0.0&&distance(g.xyz,uCam)<d-0.1) discard;
+  float c=mod(vFrame,6.0), r=floor(vFrame/6.0);
+  vec2 t=texture(tSmoke,vec2((c+clamp(vUv.x,0.01,0.99))/6.0,(3.0-r+clamp(vUv.y,0.005,0.995))/4.0)).rg;   // cards are decoded flipped: the atlas's top row is at v=1
+  float a=t.r*vA*smoothstep(3.0,8.0,d);
+  if(a<=0.01) discard;
+  vec3 col=mix(uShade,uLit,step(0.45,t.g)*0.55+step(0.7,t.g)*0.45);
+  o=vec4(col*a,a);
 }`;
