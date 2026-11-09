@@ -39,7 +39,7 @@
   {
    "name": "W walks: the Muster Field's walking mode starts and the camera moves",
    "ok": true,
-   "detail": "{\"x\":-0.6974728767261216,\"y\":88.09853756815991}"
+   "detail": "{\"x\":-0.686251317679754,\"y\":88.13959762815418}"
   },
   {
    "name": "walking never scrolls the page",
@@ -144,12 +144,12 @@
   {
    "name": "returning from a standard restores the exact walking position",
    "ok": true,
-   "detail": "{\"a\":[-16.993,46.544,-317.954],\"b\":[-16.993,46.545,-317.954]}"
+   "detail": "{\"a\":[-16.992,46.544,-317.957],\"b\":[-16.992,46.545,-317.958]}"
   },
   {
    "name": "M opens the map, at its own address; the camera pulls back",
    "ok": true,
-   "detail": "[-20.184,62.325,-325.343]"
+   "detail": "[-19.784,62.404,-325.235]"
   },
   {
    "name": "map: a named dialog holding the nine places as a list",
@@ -174,7 +174,7 @@
   {
    "name": "Esc closes the map and restores the exact place",
    "ok": true,
-   "detail": "{\"a\":[-16.493,47.325,-338.848],\"b\":[-16.493,47.325,-338.848],\"hash\":\"\"}"
+   "detail": "{\"a\":[-16.169,47.404,-338.761],\"b\":[-16.179,47.404,-338.763],\"hash\":\"\"}"
   },
   {
    "name": "map: a number key chooses a place",
@@ -184,7 +184,7 @@
   {
    "name": "map: travelling goes straight there",
    "ok": true,
-   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"vael\",\"here\":1,\"walk\":null,\"hash\":\"#vael\",\"y\":14688,\"where\":\"vael\",\"cam\":[-18.798,22.651,-71.525],\"overflow\":\"\"}"
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"vael\",\"here\":1,\"walk\":null,\"hash\":\"#vael\",\"y\":14688,\"where\":\"vael\",\"cam\":[-18.473,22.731,-71.511],\"overflow\":\"\"}"
   },
   {
    "name": "map: the address shows where you went, and the map has lifted",
@@ -194,7 +194,7 @@
   {
    "name": "browser Back returns to where you travelled from",
    "ok": true,
-   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"\",\"y\":25387,\"where\":\"muster\",\"cam\":[-14.311,44.953,-268.062],\"overflow\":\"\"}"
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"\",\"y\":25387,\"where\":\"muster\",\"cam\":[-14.258,44.962,-267.979],\"overflow\":\"\"}"
   },
   {
    "name": "map run: no console errors",
@@ -219,7 +219,7 @@
   {
    "name": "Esc with no history behind it still leaves cleanly, to the Muster Field",
    "ok": true,
-   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":true,\"off\":true,\"locked\":true,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"#muster\",\"y\":24768,\"where\":\"muster\",\"cam\":[-22.136,47.173,-351.407],\"overflow\":\"hidden\"}"
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":true,\"off\":true,\"locked\":true,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"#muster\",\"y\":24768,\"where\":\"muster\",\"cam\":[-22.136,47.173,-351.408],\"overflow\":\"hidden\"}"
   },
   {
    "name": "direct link to a folio",
