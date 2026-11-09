@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicle prototype: the journey map</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="chronicle.css">
+<style>
+  /* The map opens over the world the visitor is in (here: the Muster Field), as a sheet laid on the scene. */
+  .world { background-image: url("assets/worlds/muster.png"); --dim: rgb(18 16 14 / .58); }
+  .map-sheet { position: fixed; inset: 96px 48px 52px; max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 330px; z-index: 20;
+    animation: lay var(--t-open) var(--ease-page) both; }
+  @keyframes lay { from { opacity: 0; transform: translateY(14px) rotate(-.4deg); } to { opacity: 1; transform: none; } }
+  .chart { position: relative; padding: 28px 18px 24px 30px; min-height: 0; }
+  .chart svg { width: 100%; height: 100%; display: block; }
+  .itinerary { position: relative; padding: 34px 34px 26px 26px; display: flex; flex-direction: column; min-height: 0; }
+  .itinerary::before { content: ""; position: absolute; left: 0; top: 34px; bottom: 30px; border-left: 1px solid var(--ink); box-shadow: -4px 0 0 -3px var(--ink); opacity: .8; }
+  .itinerary header { padding-bottom: var(--s3); }
+  .itinerary header p { margin: 6px 0 0; font-style: italic; color: var(--ink-faded); font-size: var(--t-small); line-height: 1.4; }
+  ol.stops { list-style: none; margin: var(--s3) 0 0; padding: 0; overflow: auto; flex: 1; scrollbar-width: thin; }
+  .stop button { width: 100%; display: grid; grid-template-columns: 36px 1fr auto; align-items: baseline; gap: 0 8px; padding: 5px 4px 5px 0; border: 0; background: none; text-align: left; cursor: pointer; color: var(--ink); min-height: 44px; }
+  .stop .num { font: 500 15px/1 var(--f-title); color: var(--rubric); text-align: right; }
+  .stop .nm { font: 700 17px/1.2 var(--f-title); }
+  .stop .st { font: italic 400 13px/1.2 var(--f-read); color: var(--ink-faded); }
+  .stop .ch { grid-column: 2 / 4; font: italic 400 14px/1.3 var(--f-read); color: var(--ink-faded); }
+  .stop.here .st { color: var(--rubric); }
+  .stop button:hover .nm { color: var(--rubric); }
+  .stop[aria-current="true"] button { background: linear-gradient(90deg, rgb(156 46 30 / .09), transparent 80%); }
+  .stop .more { grid-column: 2 / 4; display: none; padding: 6px 0 4px; }
+  .stop[aria-current="true"] .more { display: block; }
+  .stop .more p { margin: 0 0 8px; font-size: 15px; line-height: 1.45; }
+  .itinerary footer { padding-top: var(--s3); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgb(42 33 26 / .35); }
+  .kbd { font: italic 13px/1 var(--f-read); color: var(--ink-faded); }
+
+  /* Map lettering and marks */
+  .lbl { font-family: var(--f-map); font-size: 17px; fill: var(--ink); letter-spacing: .05em; }
+  .lbl-ahead { fill: var(--ink-faded); }
+  .roman { font: 500 14px var(--f-title); fill: var(--rubric); }
+  .stop-hit { cursor: pointer; }
+  .stop-hit:focus-visible { outline: none; }
+  .stop-hit:focus-visible .ring-sel, .stop-hit.sel .ring-sel { stroke: var(--rubric); stroke-width: 2.5; opacity: 1; }
+  .cartouche-t { font: 700 22px var(--f-title); fill: var(--ink); }
+  .cartouche-s { font: italic 400 14px var(--f-read); fill: var(--ink-faded); }
+  .here-t { font: italic 600 15px var(--f-read); fill: var(--rubric); }
+
+  .stop .thumb { display: none; }
+  /* Portrait screens: the chart turns into a strip itinerary (the route runs down the page, each place a small roundel on the line). */
+  @media (max-width: 760px) {
+    .map-sheet { inset: 0; grid-template-columns: 1fr; }
+    .chart { display: none; }
+    .itinerary { padding: 70px 18px 18px 18px; }
+    .itinerary::before { display: none; }
+    ol.stops { position: relative; }
+    ol.stops::before { content: ""; position: absolute; left: 31px; top: 20px; bottom: 20px; border-left: 2px solid var(--cord); }
+    .stop button { grid-template-columns: 64px 1fr auto; align-items: center; }
+    .stop .nm { font-size: 16px; } .stop .ch { grid-column: 2 / 3; }
+    .stop .num { display: none; }
+    .stop .thumb { display: block; width: 52px; height: 52px; border-radius: 50%; grid-row: 1 / 3; border: 1.5px solid var(--ink); background: var(--vellum) center / cover; position: relative; z-index: 1; }
+    .stop.here .thumb { border: 3px solid var(--leaf); box-shadow: 0 0 0 1.5px var(--ink); }
+  }
+</style>
+</head>
+<body>
+<div class="world" aria-hidden="true"></div>
+
+<div class="hud hud-chapter on-night"><span class="n">Chapter IV, Selected works</span><span class="t">The Muster Field</span></div>
+
+<section class="map-sheet sheet-shadow" role="dialog" aria-modal="true" aria-labelledby="map-title">
+  <div class="vellum framed chart" id="chart-sheet"><svg id="chart" viewBox="0 0 1000 660" role="img" aria-labelledby="chart-desc"><desc id="chart-desc">An illustrated map of the nine places on the journey, joined by the Red Line. The list beside it holds the same places.</desc></svg></div>
+  <nav class="vellum itinerary" aria-label="The journey" id="itin-sheet">
+    <header>
+      <h1 class="title" id="map-title">The journey</h1>
+      <p>Nine places on one line. Choose a place to read about it, or travel there.</p>
+    </header>
+    <ol class="stops" id="stops"></ol>
+    <footer><button class="link-btn" type="button" id="close">Close the map</button><span class="kbd">Esc closes</span></footer>
+  </nav>
+</section>
+
+<div class="hud hud-thread" id="thread"></div>
+
+<script type="module">
+import { PLACES, deckle, thread } from "./chronicle.js";
+const HERE = 3;   // the Muster Field
+// Where each place sits on the chart: a road that climbs from the plain at the foot to the ridge at the head of the sheet.
+const AT = [[118, 585], [305, 522], [205, 392], [385, 300], [575, 372], [668, 238], [508, 128], [772, 86], [905, 176]];
+const R = 44;
+const TOP = [2, 5, 6];
+const SHORT = { forge: "The Forge", standards: "Standards" };   // map lettering may be shorter than the itinerary's names   // places whose name is lettered above the roundel, clear of the road
+let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const ink = "#2a211a", faded = "#5a5448", cord = "#d94527";
+
+// Terrain in pen strokes: a range along the head, hills, woods, a river from the heights to the foot, a bridge where the road crosses it.
+function peak(x, y, w, h) {
+  const l = `M${x - w / 2} ${y} L${x - w * 0.08} ${y - h} L${x} ${y - h * 0.86} L${x + w * 0.1} ${y - h * 1.04} L${x + w / 2} ${y}`;
+  let hatch = "";
+  for (let i = 1; i < 6; i++) { const t = i / 6; const sx = x + w * 0.1 + (w * 0.4) * t, sy = y - h * 1.04 + h * 1.04 * t; hatch += `M${sx} ${sy + 2} L${sx - w * 0.07} ${y - 1} `; }
+  return `<path d="${l}" fill="none" stroke="${ink}" stroke-width="1.3" stroke-linejoin="round"/><path d="${hatch}" stroke="${ink}" stroke-width=".8" opacity=".75"/>`;
+}
+function hill(x, y, w) { let h = `<path d="M${x - w / 2} ${y} Q${x} ${y - w * 0.42} ${x + w / 2} ${y}" fill="none" stroke="${ink}" stroke-width="1.1"/>`;
+  for (let i = 0; i < 4; i++) { const sx = x + w * (0.05 + i * 0.09); h += `<path d="M${sx} ${y - w * 0.2 + i * 2.5} l${-3} ${w * 0.12}" stroke="${ink}" stroke-width=".7" opacity=".7"/>`; } return h; }
+function tree(x, y, s) { return `<path d="M${x} ${y} v${-s * 0.5}" stroke="${ink}" stroke-width="1"/><path d="M${x - s * 0.36} ${y - s * 0.45} L${x} ${y - s * 1.35} L${x + s * 0.36} ${y - s * 0.45} Z" fill="rgb(42 33 26 / .12)" stroke="${ink}" stroke-width="1"/>`; }
+function wood(cx, cy, n, spread) { let g = ""; for (let i = 0; i < n; i++) { const x = cx + (rnd() - 0.5) * spread * 2, y = cy + (rnd() - 0.5) * spread; g += tree(x, y, 12 + rnd() * 7); } return g; }
+function grass(cx, cy, n, spread) { let g = ""; for (let i = 0; i < n; i++) { const x = cx + (rnd() - 0.5) * spread * 2, y = cy + (rnd() - 0.5) * spread * 0.5; g += `<path d="M${x} ${y} l-2 -6 M${x} ${y} l0 -7 M${x} ${y} l3 -5" stroke="${ink}" stroke-width=".7" opacity=".6"/>`; } return g; }
+
+// The road: a smooth line through every place; travelled solid, ahead dotted. Stakes stand along the travelled part, as on the real line.
+function roadPath(pts) { let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+    d += ` Q${x0 + (mx - x0) * 0.9 + (y1 - y0) * 0.18} ${y0 + (my - y0) * 0.9 - (x1 - x0) * 0.18} ${mx} ${my} T${x1} ${y1}`; }
+  return d; }
+
+const svg = document.getElementById("chart");
+let s = `<defs>${PLACES.map((p, i) => `<clipPath id="c${i}"><circle cx="${AT[i][0]}" cy="${AT[i][1]}" r="${R - 3}"/></clipPath>
+  ${TOP.includes(i) ? `<path id="arc${i}" d="M${AT[i][0] - 62} ${AT[i][1] - 6} A62 62 0 0 1 ${AT[i][0] + 62} ${AT[i][1] - 6}"/>` : `<path id="arc${i}" d="M${AT[i][0] - 72} ${AT[i][1] + 8} A72 72 0 0 0 ${AT[i][0] + 72} ${AT[i][1] + 8}"/>`}`).join("")}</defs>`;
+// terrain
+s += `<g aria-hidden="true">`;
+[[300, 66, 120, 44], [395, 74, 90, 34], [600, 70, 130, 52], [690, 60, 100, 40], [860, 82, 150, 60], [960, 92, 90, 40], [810, 64, 80, 30]].forEach(([x, y, w, h]) => s += peak(x, y, w, h));
+[[70, 470, 70], [160, 505, 60], [430, 420, 80], [480, 470, 60], [760, 420, 70], [700, 500, 60], [330, 410, 50]].forEach(([x, y, w]) => s += hill(x, y, w));
+s += wood(840, 300, 12, 46) + wood(450, 610, 7, 34) + wood(300, 175, 6, 26) + wood(95, 340, 6, 30) + wood(935, 470, 8, 36);
+s += grass(250, 640, 14, 120) + grass(560, 560, 12, 120) + grass(800, 590, 10, 100);
+// river: from the heights down between the Standards and the High Road, under a bridge, out at the foot
+s += `<path d="M560 0 C 590 60, 560 120, 600 170 S 640 250, 620 300 S 700 420, 660 480 S 720 600, 690 660" fill="none" stroke="${ink}" stroke-width="1.2"/>
+      <path d="M572 0 C 602 60, 572 120, 612 170 S 652 250, 632 300 S 712 420, 672 480 S 732 600, 702 660" fill="none" stroke="${ink}" stroke-width=".8" opacity=".7"/>`;
+for (let i = 0; i < 26; i++) { const y = 20 + i * 24; s += `<path d="M${590 + Math.sin(i * 0.9) * 20 + (i > 7 ? 30 : 0) + (i > 17 ? 30 : 0)} ${y} q4 -2 8 0" stroke="${ink}" stroke-width=".6" fill="none" opacity=".55"/>`; }
+s += `</g>`;
+// the road
+const road = roadPath(AT);
+s += `<path id="road" d="${road}" fill="none" stroke="${cord}" stroke-width="2.6" stroke-linecap="round"/>`;
+// the cartouche: the sheet's title and a scale of stakes
+s += `<g aria-hidden="true"><rect x="20" y="20" width="236" height="74" fill="rgb(229 215 187 / .82)" stroke="${ink}" stroke-width="1.2"/><rect x="25" y="25" width="226" height="64" fill="none" stroke="${ink}" stroke-width=".6"/>
+  <text class="cartouche-t" x="138" y="54" text-anchor="middle">The Red Line</text><text class="cartouche-s" x="138" y="76" text-anchor="middle">Its road through nine places</text></g>`;
+// places
+PLACES.forEach((p, i) => {
+  const [x, y] = AT[i], state = i < HERE ? "seen" : i === HERE ? "here" : "ahead";
+  const img = state === "ahead" ? `assets/roundels/${p.id}-ink.png` : `assets/roundels/${p.id}-paint.jpg`;
+  s += `<g class="stop-hit" tabindex="0" role="button" data-i="${i}" aria-label="${p.n}. ${p.name}, ${p.chapter}. ${state === "here" ? "You are here" : state === "seen" ? "Visited" : "Ahead"}">
+    <circle cx="${x}" cy="${y}" r="${R + 1}" fill="#e5d7bb"/>
+    <image href="${img}" x="${x - R}" y="${y - R}" width="${R * 2}" height="${R * 2}" clip-path="url(#c${i})" preserveAspectRatio="xMidYMid slice" ${state === "ahead" ? 'opacity=".95"' : ""}/>
+    <circle cx="${x}" cy="${y}" r="${R - 3}" fill="none" stroke="${ink}" stroke-width="1.6"/>
+    <circle cx="${x}" cy="${y}" r="${R + 2}" fill="none" stroke="${state === "here" ? "#c9b27e" : ink}" stroke-width="${state === "here" ? 5 : 0.8}"/>
+    ${state === "here" ? `<circle cx="${x}" cy="${y}" r="${R + 5.5}" fill="none" stroke="${ink}" stroke-width=".8"/>` : ""}
+    <circle class="ring-sel" cx="${x}" cy="${y}" r="${R + 9}" fill="none" stroke="transparent" stroke-dasharray="3 4" opacity="0"/>
+    <g transform="translate(${x - R * 0.78} ${y - R * 0.86})"><circle r="13" fill="#e5d7bb" stroke="${ink}" stroke-width="1"/><text class="roman" text-anchor="middle" y="5">${p.n}</text></g>
+    <text class="lbl ${state === "ahead" ? "lbl-ahead" : ""}"><textPath href="#arc${i}" startOffset="50%" text-anchor="middle">${(SHORT[p.id] ?? p.name).replace("The ", "")}</textPath></text>
+  </g>`;
+});
+// The key: what the marks mean, so colour is never the only signal.
+s += `<g aria-hidden="true" transform="translate(770 560)"><rect width="210" height="82" fill="rgb(229 215 187 / .85)" stroke="${ink}" stroke-width="1"/>
+  <line x1="14" y1="22" x2="58" y2="22" stroke="${cord}" stroke-width="2.8"/><text x="68" y="27" class="cartouche-s" style="fill:#2a211a">Walked</text>
+  <line x1="14" y1="44" x2="58" y2="44" stroke="${cord}" stroke-width="2" stroke-dasharray="6 6"/><text x="68" y="49" class="cartouche-s" style="fill:#2a211a">Still ahead</text>
+  <circle cx="36" cy="66" r="9" fill="#8a6e52" stroke="${ink}"/><circle cx="58" cy="66" r="9" fill="none" stroke="${ink}"/><text x="76" y="71" class="cartouche-s" style="fill:#2a211a">Painted once visited</text></g>`;
+// "here": a pennant on a stake beside the current place
+const [hx, hy] = AT[HERE];
+s += `<g aria-hidden="true"><line x1="${hx + R + 14}" y1="${hy - 4}" x2="${hx + R + 14}" y2="${hy - 46}" stroke="${ink}" stroke-width="1.4"/>
+  <path d="M${hx + R + 15} ${hy - 46} l26 5 l-26 6 z" fill="${cord}"/><text class="here-t" x="${hx + R + 46}" y="${hy - 36}">You are here</text></g>`;
+svg.innerHTML = s;
+// stakes along the travelled road
+const roadEl = svg.querySelector("#road"), Lr = roadEl.getTotalLength();
+const toHere = (() => { let best = 0, bd = 1e9; for (let d = 0; d <= Lr; d += 2) { const p = roadEl.getPointAtLength(d), q = Math.hypot(p.x - hx, p.y - hy); if (q < bd) { bd = q; best = d; } } return best; })();
+let marks = "";
+for (let d = 0; d < Lr; d += 26) {
+  const p = roadEl.getPointAtLength(d); if (AT.some(([x, y]) => Math.hypot(p.x - x, p.y - y) < R + 6)) continue;
+  const q = roadEl.getPointAtLength(Math.min(Lr, d + 1)), nx = -(q.y - p.y), ny = q.x - p.x, nl = Math.hypot(nx, ny) || 1;
+  marks += d <= toHere ? `<line x1="${p.x}" y1="${p.y}" x2="${p.x + nx / nl * 7}" y2="${p.y + ny / nl * 7}" stroke="${ink}" stroke-width="1.2"/>` : "";
+}
+// Travelled: the line drawn solid. Ahead: the same road dotted, still to be walked.
+const done = roadEl.cloneNode(); done.removeAttribute("id"); done.setAttribute("stroke-dasharray", `${toHere} ${Lr}`); done.setAttribute("stroke-width", "2.8");
+roadEl.setAttribute("stroke-dasharray", "6 6"); roadEl.setAttribute("stroke-width", "2"); roadEl.setAttribute("opacity", ".85");
+roadEl.insertAdjacentElement("afterend", done);
+svg.querySelector("g.stop-hit").insertAdjacentHTML("beforebegin", `<g aria-hidden="true">${marks}</g>`);
+
+// The itinerary: the same nine places, in order, as the accessible list; one expands at a time.
+const list = document.getElementById("stops");
+list.innerHTML = PLACES.map((p, i) => { const st = i < HERE ? "Visited" : i === HERE ? "You are here" : "Ahead";
+  return `<li class="stop ${i === HERE ? "here" : ""}" data-i="${i}"><button type="button" aria-expanded="false">
+    <span class="thumb" style="background-image:url(assets/roundels/${p.id}-${i <= HERE ? "paint.jpg" : "ink.png"})"></span>
+    <span class="num">${p.n}</span><span class="nm">${p.name}</span><span class="st">${st}</span><span class="ch">${p.chapter}</span>
+    <span class="more"><p>${p.seen}</p>${i === HERE ? "" : `<span class="seal-btn"><span class="wax">${p.n}</span>Travel to ${p.name.replace("The ", "the ")}</span>`}</span>
+  </button></li>`; }).join("");
+function select(i) {
+  list.querySelectorAll(".stop").forEach((li) => { const on = +li.dataset.i === i; li.setAttribute("aria-current", on); li.querySelector("button").setAttribute("aria-expanded", on); });
+  svg.querySelectorAll(".stop-hit").forEach((g) => g.classList.toggle("sel", +g.dataset.i === i));
+}
+list.addEventListener("click", (e) => { const li = e.target.closest(".stop"); if (li) select(+li.dataset.i); });
+svg.addEventListener("click", (e) => { const g = e.target.closest(".stop-hit"); if (g) select(+g.dataset.i); });
+svg.addEventListener("keydown", (e) => { const g = e.target.closest(".stop-hit"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(+g.dataset.i); } });
+addEventListener("keydown", (e) => { if (e.key === "Escape") document.querySelector(".map-sheet").hidden = true; });
+document.getElementById("close").onclick = () => (document.querySelector(".map-sheet").hidden = true);
+select(+(new URLSearchParams(location.search).get("sel") ?? 1));
+deckle(document.getElementById("chart-sheet"), 3, 5); deckle(document.getElementById("itin-sheet"), 3, 9);
+thread(document.getElementById("thread"), HERE);
+</script>
+</body>
+</html>

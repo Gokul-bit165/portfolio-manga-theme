@@ -52,4 +52,6 @@ Generated from `~/portfolio-assets/source/MANIFEST-muster.json`, which also hold
 | Smoke (refinement) | A painted flipbook, 24 frames, generated from this script's own noise (`pipeline/muster/paint_smoke.py`) |
 | Land, lane, ring, burial-field mud, puddles, Red Line, banners, crows, rain | Original code (`src/worlds/muster.js`, `muster-art.js`, `shaders-texpaint.js`); rain and ground crows reuse the project's own sprite kinds |
 
+| Project standards' name boards (Chronicle integration, 2026-11-09) | Original geometry in `build_camp.py`: framed plank facing the ring, brass charge plaque above, the project's name extruded in Blender from **Alegreya SC ExtraBold** (The Alegreya Project Authors, SIL Open Font Licence 1.1, licence text in `chronicle/fonts/OFL-AlegreyaSC.txt`); the font's outlines are geometry here, the font file is not redistributed in the world |
+
 No AI-generated imagery, purchased asset, login-gated download or reference frame is used. Nothing here takes any character, crest, symbol, place or scene from an existing work.

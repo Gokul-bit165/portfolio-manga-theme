@@ -265,5 +265,10 @@ export function createWorld(def, { renderer, gl, fsScene, fsCam, FS_VERT, shadow
     if (px4[3] < 0) return null;
     return stage.pick(new THREE.Vector3(px4[0], px4[1], px4[2]), screen);
   }
-  return { def, load, dispose, status, scene, draw, origin, camB, U, pick, stage: () => stage, lastTris: () => lastTris + (stage ? stage.info().tris : 0), lastDraws: () => lastDraws };
+  // Where in this world (its own axes) the visitor clicked, from the G-buffer: for markers that are not part of a stage (the project standards).
+  function pickPos(x, y) {
+    renderer.readRenderTargetPixels(gbufTarget, x, y, 1, 1, px4);
+    return px4[3] < 0 ? null : new THREE.Vector3(px4[0], px4[1], px4[2]);
+  }
+  return { def, load, dispose, status, scene, draw, origin, camB, U, pick, pickPos, stage: () => stage, lastTris: () => lastTris + (stage ? stage.info().tris : 0), lastDraws: () => lastDraws };
 }

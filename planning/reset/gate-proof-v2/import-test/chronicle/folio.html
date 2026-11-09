@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicle prototype: the project folio</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="chronicle.css">
+<style>
+  /* The Muster Field: the six standards stand in the world as physical markers with their names carved in relief. Choosing one takes the
+     camera off the route on a short branch to stand before it; the folio leaf opens beside it. Returning walks the branch back. */
+  .world { background-image: url("assets/worlds/muster.png"); }
+  canvas#stage { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 5; }
+
+  /* The standards as a list: the keyboard and screen-reader way to the same six markers, a quiet row along the foot. */
+  .roll { position: fixed; z-index: 25; left: 50%; transform: translateX(-50%); bottom: 48px; display: flex; gap: 4px; padding: 6px; background: rgb(24 23 21 / .88); max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none; }
+  .roll::-webkit-scrollbar { display: none; }
+  .roll button { display: flex; align-items: baseline; gap: 6px; min-height: 44px; padding: 0 12px; border: 0; background: none; color: var(--on-night); cursor: pointer; font: 700 15px/1 var(--f-title); white-space: nowrap; }
+  .roll button .n { font: 500 13px/1 var(--f-title); color: var(--leaf); }
+  .roll button:hover, .roll button[aria-pressed="true"] { background: rgb(232 221 197 / .1); box-shadow: inset 0 -2px 0 var(--cord); }
+  body.open .roll { display: none; }
+
+  /* The folio: one tall leaf at the right, as if pinned beside the standard. */
+  .leaf { position: fixed; z-index: 26; right: 28px; top: 92px; bottom: 48px; width: 440px; display: flex; flex-direction: column; padding: 26px 30px 20px;
+    transform: translateX(calc(100% + 40px)); transition: transform var(--t-open) var(--ease-page); }
+  body.open .leaf { transform: none; }
+  .leaf .head { display: flex; justify-content: space-between; font: 500 14px/1 var(--f-title); color: var(--ink-faded); padding-bottom: 10px; border-bottom: 1px solid rgb(42 33 26 / .5); margin-bottom: 14px; }
+  .leaf .body { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; padding-right: 6px; margin-right: -6px; }
+  .branch { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
+  .branch svg { flex: none; }
+  .branch p { margin: 0; font: italic 14px/1.35 var(--f-read); color: var(--ink-faded); }
+  .leaf h1 { margin: 0 0 8px; }
+  .lede { font: italic 400 17px/1.5 var(--f-read); margin: 0 0 14px; }
+  .ledger { margin: 0 0 14px; display: grid; grid-template-columns: max-content 1fr; column-gap: 14px; }
+  .ledger dt { font: 700 15px/1.45 var(--f-title); padding: 6px 0; border-bottom: 1px solid rgb(42 33 26 / .28); }
+  .ledger dd { margin: 0; padding: 6px 0; font-size: 16px; line-height: 1.45; border-bottom: 1px solid rgb(42 33 26 / .28); }
+  .ledger ul { list-style: none; margin: 0; padding: 0; }
+  .ledger li { padding: 1px 0; }
+  .review { font: italic 400 14px/1.35 var(--f-read); color: #4f4d48; background: rgb(255 255 255 / .28); border: 1px dashed rgb(79 77 72 / .7); padding: 6px 10px; margin: 0 0 12px; }
+  .review b { font: 700 13px/1 var(--f-title); color: #4f4d48; margin-right: 6px; }
+  .actions { border-top: 1px solid rgb(42 33 26 / .5); padding-top: 12px; display: grid; gap: 6px; }
+  .actions .row { display: flex; justify-content: space-between; align-items: center; }
+  .seal-btn[aria-disabled="true"] { cursor: default; }
+  .seal-btn[aria-disabled="true"] .wax { filter: saturate(.45) brightness(.9); }
+  .hint { font: italic 13px/1.3 var(--f-read); color: var(--ink-faded); margin: -2px 0 4px 52px; }
+
+  @media (max-width: 760px) {
+    .leaf { left: 0; right: 0; top: auto; bottom: 0; width: auto; height: 62vh; transform: translateY(105%); padding: 18px 18px 14px; }
+    body.open .leaf { transform: none; }
+    .roll { bottom: 40px; left: 8px; right: 8px; transform: none; justify-content: flex-start; }
+    body.open .roll { display: none; }
+  }
+</style>
+<script type="importmap">{ "imports": { "three": "../vendor/three.module.js" } }</script>
+</head>
+<body>
+<div class="world" aria-hidden="true"></div>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div class="hud hud-chapter on-night"><span class="n">Chapter IV, Selected works</span><span class="t">The Muster Field</span></div>
+<div class="hud hud-map on-night"><button class="seal-btn" type="button"><span class="wax">✦</span>Map</button></div>
+
+<nav class="roll on-night" aria-label="The six standards" id="roll"></nav>
+
+<aside class="leaf vellum" id="leaf" aria-labelledby="ptitle" tabindex="-1">
+  <div class="head" aria-hidden="true"><span>Selected works</span><span id="pcount"></span></div>
+  <div class="branch" id="branch"></div>
+  <div class="body" id="pbody"></div>
+  <div class="actions">
+    <button class="seal-btn" type="button" aria-disabled="true" aria-describedby="hint"><span class="wax">⟶</span>Enter the project</button>
+    <p class="hint" id="hint">Its room in the camp is not built yet.</p>
+    <div class="row"><button class="link-btn" type="button" id="prev">Previous standard</button><button class="link-btn" type="button" id="next">Next standard</button></div>
+    <div class="row"><button class="link-btn" type="button" id="back">Return to the route</button><span style="font:italic 13px var(--f-read);color:var(--ink-faded)">Esc returns</span></div>
+  </div>
+</aside>
+<div class="hud hud-thread" id="thread"></div>
+<script type="module" src="folio.js"></script>
+</body>
+</html>

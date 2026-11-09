@@ -9,6 +9,7 @@ import { buildShots, createRig, CHAPTERS, LANGUAGE, curve1 } from "./camera-rig.
 import { createEvents } from "./events.js";
 import { createJourney, buildJourneyShots, LANGUAGE as J_LANGUAGE, CHAPTERS as J_CHAPTERS, TOTAL as J_TOTAL, UNIT_VH } from "./journey.js";
 import { FS_VERT, SHADOW_VERT, SHADOW_FRAG, CLOUD_FRAG, COMPOSITE_FRAG, STAR_VERT, STAR_FRAG } from "./shaders.js";
+import { initChronicle, chapterForHash } from "./chronicle/ui.js";
 
 const q = new URLSearchParams(location.search);
 const CAPTURE = q.has("capture");
@@ -383,7 +384,7 @@ async function boot() {
     journey.resize(U.uRes.value.x, U.uRes.value.y);
     window.__journey = journey;
     // A direct link into a painted world has nothing to show until that world exists: that one case waits behind the loading page.
-    const c = J_CHAPTERS.find((c) => "#" + c.id === location.hash);
+    const c = J_CHAPTERS.find((c) => "#" + c.id === chapterForHash(location.hash));   // a project link opens in the Muster Field
     if (c) { state.p = state.smooth = c.from; state.scrolled = true; }
     applyCamera(state.smooth);
     const w = journey.worldAt(state.smooth, camera);
@@ -434,6 +435,8 @@ async function boot() {
   window.__ready = true;
   buildHud();
   if (DIRECTOR) setupScroll();
+  // The Chronicle Interface: the HUD, the map, the project standards (src/chronicle/). Not in capture mode, which the regression tests use.
+  if (PORTAL && !CAPTURE) chronicle = initChronicle({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth });
   if (!CAPTURE) requestAnimationFrame(loop);
 
   // 4. The full language programs, in the background.
@@ -459,6 +462,7 @@ addEventListener("resize", () => { if (U) resize(); });
 
 const _clear = new THREE.Vector4(), _tgt = new THREE.Vector3();
 let camDt = 0;
+let chronicle = null;
 // Test-only close-up camera (window.__cam), for judging assets nearer than the walk ever goes. Positions in three's axes.
 let camOverride = null;
 window.__cam = (c) => { camOverride = c ? { pos: new THREE.Vector3(...c.pos), tgt: new THREE.Vector3(...c.tgt), lens: c.lens ?? 35 } : null; };
@@ -568,6 +572,7 @@ async function prewarmPortalRoute() {
 // portal texture, scissored to the inner gate, then the plain's ink program, which shows that texture through the arch.
 function renderPortalFrame(time) {
   applyCamera(state.smooth);
+  chronicle?.camera(camera);   // a branch off the route (a project standard) moves the camera from here
   uFig.value.set(0, -50, 0);
   shared.uTime.value = time; lastT = time;
   U.uGrainT.value = REDUCED_MOTION ? 0 : Math.floor(time * 12);   // reduced motion: the film grain holds still too
@@ -628,6 +633,7 @@ function loop(now) {
   let target = q.has("p") && !state.scrolled ? state.p : (DIRECTOR && scrollProgress !== null ? scrollProgress : scrollY / total);
   if (DIRECTOR && REDUCED_MOTION) target = stillFor(target);
   // A world still on its way keeps its gate shut: the camera waits short of it. Nothing stalls, and it moves on as soon as it is ready.
+  if (chronicle?.holding()) target = state.smooth;   // off the route at a project standard: the walk holds its place
   if (PORTAL) target = journey.clamp(target, state.smooth, camera);
   // Critically damped follow of the scroll target, about 350 ms. Reduced motion: no follow, the frame cuts.
   if (DIRECTOR && REDUCED_MOTION) state.smooth = target;
@@ -708,6 +714,7 @@ addEventListener("click", (e) => { if (!CAPTURE && e.target === document.documen
 function doPick([cx, cy]) {
   const c = window.__world; if (!(c >= 1)) return null;
   const x = Math.floor(cx * SCALE), y = Math.floor((innerHeight - cy) * SCALE);
+  if (chronicle) { const w = journey.worlds[c - 1]; if (chronicle.picked(w.def.id, w.pickPos(x, y))) return null; }
   const r = journey.worlds[c - 1].pick(x, y, [cx / innerWidth, 1 - cy / innerHeight]);
   window.__lastPick = r;
   return r;
@@ -728,11 +735,14 @@ function updateDiscover() {
 
 // ---- Scroll architecture (director). Native vertical scroll only: ScrollTrigger reads the scroll position, never moves it.
 // The page is six real sections, one per chapter, sized in proportion to the story; the story maps linearly onto the scroll.
-let scrollProgress = null, chapterIndex = -1, chapterTimer = 0;
+let scrollProgress = null, chapterIndex = -1, chapterTimer = 0, scrollSpan = 0;
+// The page position for journey progress p: what the map and a project link use to walk the page somewhere.
+function scrollToP(p) { const story = document.getElementById("story"); scrollTo(0, story.offsetTop + p * (scrollSpan / 100) * innerHeight); }
 function setupScroll() {
   const story = document.getElementById("story");
   if (!story) return;
   const SPAN = PORTAL ? Math.round(J_TOTAL * UNIT_VH) : 1500;   // vh of scrolling for the whole walk
+  scrollSpan = SPAN;
   if (PORTAL) { story.setAttribute("aria-label", "The journey of an engineer, in nine worlds"); document.title = "The journey of an engineer"; }
   for (const c of STORY) {
     const sec = document.createElement("section");
@@ -743,7 +753,7 @@ function setupScroll() {
     if (c.content) {
       const a = c.hold ? (c.hold[0] - c.from) / (c.to - c.from) : 0.1, b = c.hold ? (c.hold[1] - c.from) / (c.to - c.from) : 0.9;
       const wrap = document.createElement("div"); wrap.className = c.diegetic ? "plate-wrap sr" : "plate-wrap"; wrap.style.top = `${(a * 100).toFixed(2)}%`; wrap.style.height = `${((b - a) * 100).toFixed(2)}%`;
-      wrap.innerHTML = `<article class="plate"><p class="n">${c.chapter}</p>${c.content.replace(/<(\/?)h2>/g, "<$1h3>")}</article>`;
+      wrap.innerHTML = `<article class="plate plate-${c.id}"><p class="n">${c.chapter}</p>${c.content.replace(/<(\/?)h2>/g, "<$1h3>")}</article>`;
       sec.append(wrap);
     }
     story.append(sec);
@@ -762,9 +772,10 @@ function setupScroll() {
   }
   window.__chapters = STORY;
   // A deep link (#gate) arrives before the sections exist: jump there now, and cut the camera to it rather than fly through.
-  if (location.hash && document.querySelector(location.hash)?.classList.contains("chapter")) {
-    document.querySelector(location.hash).scrollIntoView();
-    const c = STORY.find((c) => "#" + c.id === location.hash);
+  const deep = chapterForHash(location.hash);   // #project/<id> is not a selector: it means the Muster Field
+  if (/^#[\w-]+$/.test(deep) && document.querySelector(deep)?.classList.contains("chapter")) {
+    document.querySelector(deep).scrollIntoView();
+    const c = STORY.find((c) => "#" + c.id === deep);
     state.p = state.smooth = c.from; scrollProgress = c.from; state.scrolled = true;
   }
 }
@@ -775,8 +786,9 @@ function updateChapter(p) {
   const i = Math.max(0, STORY.findIndex((c) => p >= c.from && p < c.to + (c === STORY.at(-1) ? 1 : 0)));
   if (i === chapterIndex) return;
   chapterIndex = i;
+  if (chronicle) chronicle.chapter(i);
   const cap = document.getElementById("caption");
-  if (cap) {
+  if (cap && !chronicle) {
     cap.querySelector(".n").textContent = `${i + 1} / ${STORY.length}`;
     cap.querySelector(".t").textContent = STORY[i].title;
     cap.classList.add("on"); clearTimeout(chapterTimer);

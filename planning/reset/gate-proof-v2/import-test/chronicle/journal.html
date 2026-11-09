@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicle prototype: the field journal</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="chronicle.css">
+<style>
+  /* The journal opens in Vael (Identity) as a field book laid open at the left; the town stays in view on the right. */
+  .world { background-image: url("assets/worlds/vael.png"); background-position: 70% center; --dim: linear-gradient(90deg, rgb(18 16 14 / .72) 0 52%, rgb(18 16 14 / .12) 78%, transparent); }
+  .book { position: fixed; z-index: 20; left: 48px; top: 96px; bottom: 54px; width: min(940px, calc(100vw - 420px)); display: grid; grid-template-columns: 1fr 1fr;
+    animation: open var(--t-open) var(--ease-page) both; }
+  @keyframes open { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+  .page { position: relative; overflow: auto; scrollbar-width: none; padding: 30px 40px 46px 36px; }
+  .page::-webkit-scrollbar { display: none; }
+  .verso { padding: 30px 34px 46px 44px; }
+  /* the gutter: each page darkens towards the spine */
+  .verso::after, .recto::after { content: ""; position: absolute; top: 0; bottom: 0; width: 46px; pointer-events: none; }
+  .verso::after { right: 0; background: linear-gradient(90deg, transparent, rgb(80 55 30 / .2)); }
+  .recto::after { left: 0; background: linear-gradient(270deg, transparent, rgb(80 55 30 / .24)); }
+  .head { display: flex; justify-content: space-between; font: 500 14px/1 var(--f-title); color: var(--ink-faded); padding-bottom: 10px; border-bottom: 1px solid rgb(42 33 26 / .5); margin-bottom: 18px; }
+  .folio { position: absolute; bottom: 16px; font: italic 14px/1 var(--f-read); color: var(--ink-faded); }
+  .verso .folio { left: 44px; } .recto .folio { right: 40px; }
+
+  .plate { margin: 0 0 6px; position: relative; aspect-ratio: 880 / 360; background: url("assets/plate-vael-ink.png") center / cover; border: 1px solid var(--ink); outline: .6px solid var(--ink); outline-offset: 3px; }
+  .plate-cap { font: italic 14px/1.4 var(--f-read); color: var(--ink-faded); margin: 8px 0 14px; }
+
+  .entry h1 { margin: 0 0 14px; }
+  .entry .who { font: italic 400 17px/1.4 var(--f-read); color: var(--ink-faded); margin: 4px 0 14px; }
+  .read p { font-size: 17px; line-height: 1.58; }
+  /* The opening initial: drawn, in the rubric red, framed, with a pen-flourish running down the margin. */
+  .initial { float: left; width: 66px; height: 66px; margin: 5px 12px 2px 0; position: relative; }
+  .initial svg { position: absolute; left: 0; top: 0; overflow: visible; }
+
+  /* Glosses: notes in red in the outer margin, tied to the line they explain. Review notes are pencil, for the owner only. */
+  .gloss { position: relative; }
+  .gloss .g { display: block; margin: 6px 0 12px; padding-left: 14px; border-left: 2px solid var(--cord); }
+  .review { font: italic 400 14px/1.35 var(--f-read); color: #4f4d48; background: rgb(255 255 255 / .28); border: 1px dashed rgb(79 77 72 / .7); padding: 6px 10px; margin: 0 0 12px; }
+  .review b { font: 700 13px/1 var(--f-title); color: #4f4d48; margin-right: 6px; }
+  body.no-review .review { display: none; }
+
+  .ledger { margin: 0 0 18px; display: grid; grid-template-columns: max-content 1fr; column-gap: 12px; }
+  .ledger dt { font: 700 15px/1.45 var(--f-title); padding: 5px 0; color: var(--ink); white-space: nowrap; display: flex; }
+  .ledger dd { margin: 0; padding: 5px 0; font-size: 16px; line-height: 1.45; border-bottom: 1px solid rgb(42 33 26 / .28); }
+  .ledger dt { border-bottom: 1px solid rgb(42 33 26 / .28); }
+  .ledger a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--cord); text-underline-offset: 3px; }
+  .ledger a:hover { color: var(--rubric); }
+  h2.sub { margin: 4px 0 8px; font-size: 19px; }
+  ul.drawn { list-style: none; margin: 0 0 18px; padding: 0; columns: 1; }
+  ul.drawn li { font-size: 16px; line-height: 1.4; padding: 2px 0; }
+  .turn { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgb(42 33 26 / .5); }
+  /* the right page keeps its way onward in view: the page above it scrolls, the turn stays at the foot */
+  .recto { display: flex; flex-direction: column; overflow: hidden; }
+  .recto .scroll { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; padding-right: 6px; margin-right: -6px; }
+  .toggle { position: fixed; right: 20px; bottom: 54px; z-index: 31; }
+  .toggle .link-btn { color: var(--on-night); background: rgb(24 23 21 / .88); padding: 0 14px; }
+
+  @media (max-width: 1100px) { .book { width: calc(100vw - 96px); } }
+  /* Phones: one page at a time, the town as a band above it. */
+  @media (max-width: 760px) {
+    .world { position: absolute; height: 240px; inset: 0 0 auto 0; background-position: 60% 40%; --dim: linear-gradient(180deg, transparent 50%, rgb(18 16 14 / .6)); }
+    .book { position: relative; left: auto; top: 240px; bottom: auto; width: auto; grid-template-columns: 1fr; margin: 0 0 260px; }
+    .page { overflow: visible; padding: 22px 20px 40px; }
+    .recto .scroll { overflow: visible; }
+    .verso::after, .recto::after { display: none; }
+    .toggle { position: static; display: flex; justify-content: center; margin: 0 0 56px; }
+    .initial svg path { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="world" aria-hidden="true"></div>
+<div class="hud hud-chapter on-night"><span class="n">Chapter II, Identity</span><span class="t">Vael</span></div>
+<div class="hud hud-map on-night"><button class="seal-btn" type="button"><span class="wax">✦</span>Map</button></div>
+
+<main class="book sheet-shadow" aria-labelledby="who">
+  <article class="page verso vellum entry" id="verso">
+    <div class="head" aria-hidden="true"><span>Field journal</span><span>Identity</span></div>
+    <h1 class="title" id="who">Gokul</h1>
+    <figure style="margin:0">
+      <div class="plate" role="img" aria-label="Pen drawing of Vael, a walled hill town, from the road below its gate"></div>
+      <figcaption class="plate-cap">Vael from the road below the gate, drawn on the way in.</figcaption>
+    </figure>
+    <div class="read">
+      <p><span class="initial" aria-hidden="true"><svg width="66" height="140" viewBox="0 0 66 140" style="overflow:visible">
+        <rect x="1" y="1" width="64" height="64" fill="rgb(229 215 187 / .6)" stroke="#2a211a" stroke-width="1.4"/><rect x="5" y="5" width="56" height="56" fill="none" stroke="#2a211a" stroke-width=".6"/>
+        <text x="33" y="50" text-anchor="middle" font-family="Alegreya SC" font-weight="800" font-size="50" fill="#9c2e1e">G</text>
+        <path d="M1 60 C -14 70, -6 84, -18 96 S -10 118, -22 134" fill="none" stroke="#9c2e1e" stroke-width="1.1"/>
+        <path d="M-12 78 q-9 -4 -12 4 q7 2 12 -4z M-17 99 q9 -3 11 5 q-7 1 -11 -5z M-16 118 q-9 -3 -11 5 q7 1 11 -5z" fill="#9c2e1e" opacity=".85"/>
+      </svg></span>okul studies Computer Science and Engineering, specialising in AI and Data Science, at Bannari Amman Institute of Technology in Tamil Nadu, India, with graduation expected in September 2028.</p>
+      <p class="review"><b>To confirm</b>Exact degree title (B.E. or B.Tech), and whether to show the current year.</p>
+      <p class="gloss">Most of the work is built with AI as a partner. Claude Code is the main development partner; AI also helps with artwork, 3D scenes, motion and creative automation.
+        <span class="g note">This journey itself was built that way.</span></p>
+    </div>
+    <span class="folio" aria-hidden="true">ii</span>
+  </article>
+
+  <article class="page recto vellum" id="recto">
+    <div class="head" aria-hidden="true"><span>Vael</span><span>In brief</span></div>
+    <div class="scroll">
+    <dl class="ledger">
+      <dt>Studies</dt><dd>Computer Science and Engineering (AI and Data Science)</dd>
+      <dt>Where</dt><dd>Bannari Amman Institute of Technology, Tamil Nadu</dd>
+      <dt>Graduates</dt><dd>September 2028, expected</dd>
+      <dt>Leads</dt><dd>Vice Chairman and Digital Lead, IEEE BIT Student Branch</dd>
+      <dt>Builds with</dt><dd>Claude Code, as the main development partner</dd>
+      <dt>Code</dt><dd><a href="https://github.com/Gokul-bit165">github.com/Gokul-bit165</a></dd>
+    </dl>
+    <p class="review"><b>To confirm</b>IEEE BIT: the term, the exact wording of the title, and what the role covers.</p>
+    <h2 class="sub">Drawn to</h2>
+    <ul class="drawn">
+      <li><span class="stake" aria-hidden="true"></span>Agentic AI and multi-agent systems</li>
+      <li><span class="stake" aria-hidden="true"></span>Generative AI and applications built on language models</li>
+      <li><span class="stake" aria-hidden="true"></span>Machine learning and computer vision</li>
+      <li><span class="stake" aria-hidden="true"></span>Full-stack development</li>
+      <li><span class="stake" aria-hidden="true"></span>Backend architecture and systems that scale</li>
+      <li><span class="stake" aria-hidden="true"></span>3D visualisation and interactive experiences</li>
+      <li><span class="stake" aria-hidden="true"></span>AI for industry</li>
+    </ul>
+    <p class="review"><b>To decide</b>A portrait: an illustrated likeness, a photograph, or none.</p>
+    </div>
+    <div class="turn">
+      <button class="seal-btn" type="button"><span class="wax">III</span>Go on to the Forge</button>
+      <button class="link-btn" type="button">Open the map</button>
+    </div>
+    <span class="folio" aria-hidden="true">iii</span>
+  </article>
+</main>
+
+<div class="toggle"><button class="link-btn" type="button" id="rev" aria-pressed="true">Hide review notes</button></div>
+<div class="hud hud-thread" id="thread"></div>
+
+<script type="module">
+import { deckle, thread } from "./chronicle.js";
+if (innerWidth > 760) { deckle(document.getElementById("verso"), 2.5, 3); deckle(document.getElementById("recto"), 2.5, 13); }
+thread(document.getElementById("thread"), 1);
+const rev = document.getElementById("rev");
+if (new URLSearchParams(location.search).get("review") === "0") { document.body.classList.add("no-review"); rev.setAttribute("aria-pressed", "false"); rev.textContent = "Show review notes"; }
+rev.onclick = () => { const off = document.body.classList.toggle("no-review"); rev.setAttribute("aria-pressed", String(!off)); rev.textContent = off ? "Show review notes" : "Hide review notes"; };
+</script>
+</body>
+</html>

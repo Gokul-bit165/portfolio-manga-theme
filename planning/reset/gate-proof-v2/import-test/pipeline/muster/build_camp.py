@@ -123,28 +123,89 @@ for e in (-1, 1):
     FLAGS.append([tx, ty, tz + 11.8, 2.2, 0.9, float(e), 0.15])
     b.log((tx, ty, tz + 9.4), (tx, ty, tz + 12.0), 0.04, WOOD, 0.4)
 
-# ---- The six standards: tall poles, a crossbar for the banner, a board with the project's plain charge in brass.
-def charge(x, y, z, k):
-    P = lambda u, v: (x + u, y - 0.09, z + v)
-    def poly(pts):
-        ids = [b.v(P(u, v), BRASS, 0.6) for u, v in pts]
+# ---- The six standards (the projects), as approved in the Chronicle folio (2026-11-09): tall poles with their banners (FLAGS, moving cloth),
+# and under each banner a framed name board facing the ring, the project's name raised in gilt letters cut from Alegreya SC ExtraBold's own
+# outlines (SIL OFL 1.1, import-test/chronicle/fonts/), with the project's plain brass charge on a small plaque above it.
+FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "chronicle", "fonts", "AlegreyaSC-ExtraBold.ttf")
+NAMES = [["Aira"], ["Weaving", "Intelligence"], ["LearnQuest"], ["RescueCore"], ["CAD", "3D Heart"], ["InaippuAI"]]
+_font = None
+def lettering(lines, size):
+    """Each line as a Blender text object, extruded, converted to a mesh: (verts in metres, u right / v up / w out of the board, tris)."""
+    global _font
+    if _font is None: _font = bpy.data.fonts.load(FONT)
+    V, F, off = [], [], 0
+    for i, t in enumerate(lines):
+        cu = bpy.data.curves.new(f"name{i}", "FONT"); cu.body = t; cu.font = _font; cu.size = size; cu.extrude = 0.012; cu.align_x = "CENTER"
+        cu.bevel_depth = 0.0; cu.resolution_u = 2; cu.fill_mode = "BOTH"   # no bevel: it tripled the count for a detail too small to see
+        ob = bpy.data.objects.new(f"name{i}", cu); bpy.context.scene.collection.objects.link(ob)
+        dg = bpy.context.evaluated_depsgraph_get(); me = ob.evaluated_get(dg).to_mesh(); me.calc_loop_triangles()
+        co = np.empty(len(me.vertices) * 3); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+        tri = np.empty(len(me.loop_triangles) * 3, np.int32); me.loop_triangles.foreach_get("vertices", tri)
+        co[:, 1] -= i * size * 1.12; co[:, 2] += 0.012   # lines stacked; the letters stand proud of the board's face
+        V.append(co); F.append(tri.reshape(-1, 3) + off); off += len(co)
+        ob.evaluated_get(dg).to_mesh_clear(); bpy.data.objects.remove(ob); bpy.data.curves.remove(cu)
+    V = np.concatenate(V); F = np.concatenate(F)
+    lo, hi = V[:, :2].min(0), V[:, :2].max(0); V[:, 0] -= (lo[0] + hi[0]) / 2; V[:, 1] -= (lo[1] + hi[1]) / 2
+    return V, F, hi - lo
+
+
+def frame_at(cx, cy, cz, yaw):
+    """Board axes: u along the board (the viewer's right), v up, w out of the face towards the ring."""
+    w = np.array((math.cos(yaw), math.sin(yaw), 0.0)); u = np.array((-w[1], w[0], 0.0)); v = np.array((0, 0, 1.0))   # u: the right hand of someone facing the board
+    return lambda a, b_, c=0.0: np.array((cx, cy, cz)) + u * a + v * b_ + w * c
+
+
+def charge(P, k):
+    def poly(pts, lift=0.012):
+        ids = [b.v(P(u, v_, lift), BRASS, 0.6) for u, v_ in pts]
         for i in range(1, len(ids) - 1): b.F.append((ids[0], ids[i], ids[i + 1]))
     disc = lambda cx, rad: poly([(cx + math.cos(i / 14 * 6.2832) * rad, math.sin(i / 14 * 6.2832) * rad) for i in range(14)])
-    if k == 0: disc(0, 0.36)
-    if k == 1: poly([(-0.5, -0.12), (0.5, -0.12), (0.5, 0.12), (-0.5, 0.12)])
-    if k == 2: poly([(-0.5, -0.25), (0, 0.25), (0, 0.45), (-0.5, -0.05)]); poly([(0, 0.25), (0.5, -0.25), (0.5, -0.05), (0, 0.45)])
-    if k == 3: poly([(0, -0.5), (0.36, 0), (0, 0.5), (-0.36, 0)])
-    if k == 4: disc(-0.24, 0.2); disc(0.24, 0.2)
-    if k == 5: poly([(-0.1, -0.5), (0.1, -0.5), (0.1, 0.5), (-0.1, 0.5)]); poly([(-0.45, -0.1), (0.45, -0.1), (0.45, 0.1), (-0.45, 0.1)])
+    sc = 0.42
+    if k == 0: disc(0, 0.36 * sc)
+    if k == 1: poly([(-0.5 * sc, -0.12 * sc), (0.5 * sc, -0.12 * sc), (0.5 * sc, 0.12 * sc), (-0.5 * sc, 0.12 * sc)])
+    if k == 2: poly([(x * sc, y_ * sc) for x, y_ in ((-0.5, -0.25), (0, 0.25), (0, 0.45), (-0.5, -0.05))]); poly([(x * sc, y_ * sc) for x, y_ in ((0, 0.25), (0.5, -0.25), (0.5, -0.05), (0, 0.45))])
+    if k == 3: poly([(0, -0.5 * sc), (0.36 * sc, 0), (0, 0.5 * sc), (-0.36 * sc, 0)])
+    if k == 4: disc(-0.24 * sc, 0.2 * sc); disc(0.24 * sc, 0.2 * sc)
+    if k == 5: poly([(-0.1 * sc, -0.5 * sc), (0.1 * sc, -0.5 * sc), (0.1 * sc, 0.5 * sc), (-0.1 * sc, 0.5 * sc)]); poly([(-0.45 * sc, -0.1 * sc), (0.45 * sc, -0.1 * sc), (0.45 * sc, 0.1 * sc), (-0.45 * sc, 0.1 * sc)])
+
+
+def box(P, u0, u1, v0, v1, w0, w1, mid, tone):
+    c = [P(u, v_, w) for u in (u0, u1) for v_ in (v0, v1) for w in (w0, w1)]
+    # Each face its own corners: shared corners averaged the normals diagonally and the occlusion bake shot half its rays into the box.
+    for f in ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)): b.quad(*[b.v(c[i], mid, tone) for i in f])
+
+
+BOARD_Z = 2.35   # the board's centre above the foot: src/chronicle/ui.js BOARD_H must match
 for k, st in enumerate(hdr["standards"]):
     x, y = st["x"], st["y"]; z = ground(x, y); lean = (0.25 if k == 3 else 0.04) * (1 if k % 2 else -1)   # one leans hard, struck in the fighting
     top = (x + lean, y, z + 7.3)
     b.log((x, y, z - 0.6), top, 0.09, WOOD, 0.4)
     b.beam((top[0] - 0.05, y - 1.7, z + 7.1), (top[0] - 0.05, y + 1.7, z + 7.1), 0.03, 0.03, WOOD, 0.4)
-    bz = z + 3.6; b.beam((x - 0.62, y - 0.02, bz), (x + 0.62, y - 0.02, bz), 0.04, 0.72, WOOD, 0.15 + k * 0.12); charge(x, y, bz, k)
     FLAGS.append([top[0], y - 1.6, z + 7.0, 3.2, 1.7, k * 1.3, k / 5])
+    # The name board, turned to face the ring's centre, hung on two irons from an arm through the pole.
+    yaw = math.atan2(RING["y"] - y, RING["x"] - x)
+    L, F_, ext = lettering(NAMES[k], 0.26)
+    bw, bh = max(1.45, ext[0] + 0.42), max(0.5, ext[1] + 0.34)
+    P = frame_at(x + lean * (BOARD_Z / 7.3), y, z + BOARD_Z, yaw)
+    P = (lambda P0: (lambda a, b_, c=0.0: P0(a, b_, c + 0.12)))(P)   # the board hangs just in front of the pole
+    box(P, -bw / 2, bw / 2, -bh / 2, bh / 2, -0.035, 0.03, WOOD, 0.5)                      # the plank
+    # Its face as a grid: four corner vertices sit inside the frame, where the occlusion bake reads black, and would darken the whole face.
+    nu_, nv_ = 10, 4; G = [[b.v(P(-bw / 2 + bw * i / nu_, -bh / 2 + bh * j / nv_, 0.035), WOOD, 0.5) for j in range(nv_ + 1)] for i in range(nu_ + 1)]
+    for i in range(nu_):
+        for j in range(nv_): b.quad(G[i][j], G[i + 1][j], G[i + 1][j + 1], G[i][j + 1])
+    for u0, u1, v0, v1 in ((-bw / 2 - 0.04, bw / 2 + 0.04, bh / 2, bh / 2 + 0.06), (-bw / 2 - 0.04, bw / 2 + 0.04, -bh / 2 - 0.06, -bh / 2),
+                           (-bw / 2 - 0.04, -bw / 2 + 0.02, -bh / 2, bh / 2), (bw / 2 - 0.02, bw / 2 + 0.04, -bh / 2, bh / 2)):
+        box(P, u0, u1, v0, v1, -0.04, 0.05, DARK, 0.3)                                     # its frame
+    ids = [b.v(P(q[0], q[1], 0.035 + q[2]), BRASS, 0.75) for q in L]                        # the name, raised in gilt
+    for f in F_: b.F.append(tuple(ids[i] for i in f))
+    for su in (-bw * 0.32, bw * 0.32): box(P, su - 0.012, su + 0.012, bh / 2 + 0.06, bh / 2 + 0.42, -0.012, 0.012, IRON, 0.4)
+    box(P, -bw * 0.42, bw * 0.42, bh / 2 + 0.42, bh / 2 + 0.48, -0.06, 0.0, WOOD, 0.35)     # the arm
+    # The charge on its plaque above, as on the folio's cloth.
+    Pc = (lambda P0, dv: (lambda a, b_, c=0.0: P0(a, b_ + dv, c)))(P, bh / 2 + 0.85)
+    box(Pc, -0.28, 0.28, -0.28, 0.28, -0.03, 0.03, WOOD, 0.45); charge((lambda P0: (lambda a, b_, c=0.0: P0(a, b_, c + 0.03)))(Pc), k)
     # Stones heaped round each pole's foot.
     for i in range(6): a = i / 6 * 6.28 + k; b.lump((x + math.cos(a) * 0.45, y + math.sin(a) * 0.45, z - 0.05), 0.22, 0.18, 0.16, ROCK, 0.5, seed=600 + k * 7 + i, n=7)
+print("standards with name boards", len(hdr["standards"]), flush=True)
 # The ring: a low earth bank round the beaten circle, broken where the lane passes.
 for i in range(64):
     a = i / 64 * 6.2832

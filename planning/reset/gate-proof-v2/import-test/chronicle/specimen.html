@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicle prototype: type comparison</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="chronicle.css">
+<style>
+  @font-face { font-family: "EB Garamond"; src: url("fonts/EBGaramond-VF.ttf") format("truetype"); font-weight: 400 800; }
+  @font-face { font-family: "Cormorant SC"; src: url("fonts/CormorantSC-Medium.ttf") format("truetype"); font-weight: 500; }
+  body { background: var(--night); padding: 32px; }
+  .sheet { max-width: 1360px; margin: 0 auto; padding: 34px 40px 30px; }
+  .sheet > h1 { margin: 0 0 4px; }
+  .sheet > p { margin: 0 0 22px; font-style: italic; color: var(--ink-faded); max-width: 60em; }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .opt { border-top: 2px solid var(--ink); padding-top: 12px; }
+  .opt .tag { font: italic 15px/1.3 var(--f-read); color: var(--rubric); margin: 0 0 12px; }
+  .opt .h { font-size: 30px; line-height: 1.15; margin: 0 0 6px; }
+  .opt .place { font-size: 19px; letter-spacing: .05em; margin: 0 0 12px; color: var(--ink-faded); }
+  .opt p.body { font-size: 17px; line-height: 1.6; margin: 0 0 10px; }
+  .opt .lab { font-size: 15px; margin: 0 0 4px; }
+  .opt .why { font: italic 14px/1.45 var(--f-read); color: var(--ink-faded); border-top: 1px solid rgb(42 33 26 / .3); padding-top: 8px; margin-top: 12px; }
+  .a .h, .a .lab { font-family: "Alegreya SC"; font-weight: 700; } .a .place { font-family: "IM Fell English SC"; } .a p.body { font-family: "Alegreya"; }
+  .b .h, .b .lab { font-family: "IM Fell English SC"; } .b .place { font-family: "IM Fell English SC"; } .b p.body { font-family: "EB Garamond"; }
+  .c .h, .c .lab { font-family: "Cormorant SC"; font-weight: 500; } .c .place { font-family: "Cormorant SC"; } .c p.body { font-family: "Alegreya Sans", "IBM Plex Sans", system-ui, sans-serif; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } body { padding: 12px; } .sheet { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<main class="sheet vellum">
+  <h1 class="title">Type for the Chronicle</h1>
+  <p>The same three lines in three pairings, at the sizes the prototypes use. The first is what the prototypes are set in. Titles stay small (30 px in a panel); size is never the way a title gets its weight.</p>
+  <div class="cols">
+    <section class="opt a"><p class="tag">A. Alegreya small capitals with Alegreya, IM Fell for map lettering (used)</p>
+      <h2 class="h">The Muster Field</h2><p class="place">The Last Ridge</p>
+      <p class="lab">Built with</p>
+      <p class="body">An industrial intelligence dashboard for textile weaving, meant to run on real machine data.</p>
+      <p class="why">One family with a calligraphic, written feel: reads easily at 16 to 18 px, and its small capitals carve well in 3D. The rougher Fell type is kept for the map, where historical lettering belongs.</p></section>
+    <section class="opt b"><p class="tag">B. IM Fell small capitals with EB Garamond</p>
+      <h2 class="h">The Muster Field</h2><p class="place">The Last Ridge</p>
+      <p class="lab">Built with</p>
+      <p class="body">An industrial intelligence dashboard for textile weaving, meant to run on real machine data.</p>
+      <p class="why">More antique and more print-like; the Fell titles are uneven by design, which reads as old but tires at panel sizes, and Garamond is the expected choice.</p></section>
+    <section class="opt c"><p class="tag">C. Cormorant small capitals with a sans (the earlier milestone's pairing)</p>
+      <h2 class="h">The Muster Field</h2><p class="place">The Last Ridge</p>
+      <p class="lab">Built with</p>
+      <p class="body">An industrial intelligence dashboard for textile weaving, meant to run on real machine data.</p>
+      <p class="why">Elegant but thin: its hairlines vanish over a painted world at small sizes and look like a fashion site, and a sans body loses the journal's hand.</p></section>
+  </div>
+</main>
+</body>
+</html>

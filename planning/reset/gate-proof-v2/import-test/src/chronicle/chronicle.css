@@ -1,0 +1,247 @@
+/* The Chronicle Interface, in the journey. Approved design (chronicle/ prototypes, 2026-11-09): one book over the worlds.
+   One vellum, iron-gall ink, the Red Line's red, Alegreya for everything read, its small capitals for titles, IM Fell for map names.
+   Fonts self-hosted, SIL Open Font Licence 1.1 (assets/chronicle/fonts/OFL-*.txt). */
+
+@font-face { font-family: "Alegreya"; src: url("../../assets/chronicle/fonts/Alegreya.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("../../assets/chronicle/fonts/Alegreya-Italic.woff2") format("woff2"); font-weight: 400 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "Alegreya SC"; src: url("../../assets/chronicle/fonts/AlegreyaSC-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Alegreya SC"; src: url("../../assets/chronicle/fonts/AlegreyaSC-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "IM Fell English SC"; src: url("../../assets/chronicle/fonts/IMFellEnglishSC.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  --vellum: #e5d7bb; --ink: #2a211a; --ink-faded: #5a5448; --rubric: #9c2e1e; --cord: #d94527; --leaf: #c9b27e;
+  --night: #181715; --on-night: #e8ddc5; --muted-on-night: #a59d8e;
+  --f-read: "Alegreya", "Iowan Old Style", Georgia, serif; --f-title: "Alegreya SC", "Alegreya", Georgia, serif; --f-map: "IM Fell English SC", "Alegreya SC", Georgia, serif;
+  --ease-page: cubic-bezier(.22, .7, .2, 1); --t-open: 480ms;
+  scrollbar-gutter: stable;
+}
+@media (prefers-reduced-motion: reduce) { :root { --t-open: 0ms; } }
+
+/* ---- Shared parts */
+.cx-vellum { background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; color: var(--ink); position: relative; }
+.cx-vellum::before { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 50px rgb(90 60 30 / .18); }
+.cx-shadow { filter: drop-shadow(0 16px 26px rgb(0 0 0 / .42)) drop-shadow(0 2px 3px rgb(0 0 0 / .3)); }
+.cx-title { font: 700 30px/1.15 var(--f-title); margin: 0; color: var(--ink); letter-spacing: .01em; }
+.cx-seal { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 14px 0 0; border: 0; background: none; cursor: pointer; font: 700 16px/1.1 var(--f-title); color: var(--ink); text-decoration: none; }
+.cx-seal .wax { width: 40px; height: 40px; flex: none; border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%; background: radial-gradient(circle at 38% 34%, #c2523a, #8f2a1b 62%, #6d1f13);
+  box-shadow: inset 0 0 0 3px rgb(0 0 0 / .14), 0 1px 2px rgb(0 0 0 / .4); display: grid; place-items: center; color: #f3dcc8; font: 700 14px/1 var(--f-title); }
+.cx-seal:hover .wax { filter: brightness(1.08); }
+.cx-seal[aria-disabled="true"] { cursor: default; } .cx-seal[aria-disabled="true"] .wax { filter: saturate(.4) brightness(.9); }
+.cx-link { min-height: 44px; display: inline-flex; align-items: center; padding: 0 6px; border: 0; background: none; cursor: pointer; font: italic 500 16px/1.2 var(--f-read); color: var(--ink);
+  text-decoration: underline; text-decoration-color: var(--cord); text-underline-offset: 4px; }
+.cx-link:hover { color: var(--rubric); }
+.cx-stake { display: inline-block; width: 7px; height: 13px; margin-right: .55em; vertical-align: -1px; position: relative; flex: none; }
+.cx-stake::before { content: ""; position: absolute; left: 3px; top: 0; bottom: 0; width: 1.5px; background: var(--ink); }
+.cx-stake::after { content: ""; position: absolute; left: 0; right: 0; top: 3px; height: 2px; background: var(--cord); }
+.cx-vellum :focus-visible { outline: 2px solid var(--rubric); outline-offset: 3px; }
+.cx-night :focus-visible { outline: 2px solid var(--leaf); outline-offset: 3px; }
+/* Owner-only notes: what a fact is waiting for. Shown only with ?review=1; never in a visitor's page or its accessibility tree. */
+.review { display: none !important; }
+body.cx-review .review { display: block !important; font: italic 400 14px/1.35 var(--f-read); color: #4f4d48; background: rgb(255 255 255 / .28); border: 1px dashed rgb(79 77 72 / .7); padding: 6px 10px; margin: 0 0 12px; }
+body.cx-review .review b { font: 700 13px/1 var(--f-title); margin-right: 6px; }
+
+/* ---- HUD: three quiet marks. The chapter at top left (the old caption, restyled and kept), the map at top right, the thread along the foot. */
+body.cx #caption { position: fixed; left: 24px; top: 20px; bottom: auto; z-index: 30; display: grid; gap: 2px; padding: 10px 14px 11px; background: rgb(24 23 21 / .9); border-left: 3px solid var(--cord);
+  color: var(--on-night); opacity: 1; transform: none; transition: none; }
+body.cx #caption .n { font: italic 400 14px/1.2 var(--f-read); color: var(--muted-on-night); letter-spacing: 0; }
+body.cx #caption .t { font: 700 19px/1.2 var(--f-title); margin: 0; }
+body.cx .cx-hudmap { position: fixed; right: 20px; top: 16px; z-index: 30; }
+body.cx .cx-hudmap .cx-seal { color: var(--on-night); background: rgb(24 23 21 / .9); padding: 0 16px 0 4px; border-radius: 26px; }
+body.cx .cx-thread { position: fixed; left: 24px; right: 24px; bottom: 16px; height: 22px; z-index: 29; pointer-events: none; }
+body.cx .cx-thread svg { width: 100%; height: 100%; overflow: visible; display: block; }
+body.cx #discover { bottom: 52px; }
+body.capture .cx-hudmap, body.capture .cx-thread { display: none; }
+@media (max-width: 640px) {
+  body.cx #caption { left: 10px; top: 10px; padding: 7px 10px 8px; }
+  body.cx #caption .t { font-size: 16px; }
+  body.cx .cx-hudmap { right: 8px; top: 8px; }
+  body.cx .cx-thread { left: 0; right: 0; bottom: 0; height: 28px; padding: 3px 12px; background: rgb(24 23 21 / .94); }
+}
+
+/* ---- The chapter plates become pages of the book. */
+body.cx .plate { background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; color: var(--ink); border-left: 0; border-radius: 0;
+  font: 400 17px/1.58 var(--f-read); padding: 26px 30px 24px; max-width: 420px; box-shadow: 0 16px 30px rgb(0 0 0 / .4), inset 0 0 50px rgb(90 60 30 / .16); }
+body.cx .plate::after { content: ""; position: absolute; inset: 8px; pointer-events: none; border: 1px solid rgb(42 33 26 / .55); }
+body.cx .plate .n { font: 500 14px/1.2 var(--f-title); letter-spacing: 0; text-transform: none; color: var(--ink-faded); padding-bottom: 8px; border-bottom: 1px solid rgb(42 33 26 / .45); margin: 0 0 12px; }
+body.cx .plate h3 { font: 700 28px/1.15 var(--f-title); color: var(--ink); margin: 0 0 10px; }
+body.cx .plate p { margin: 0 0 12px; }
+body.cx .plate .lede { font-style: italic; color: var(--ink); }
+body.cx .plate a { color: var(--ink); text-decoration-color: var(--cord); text-underline-offset: 3px; }
+body.cx .plate a:hover { color: var(--rubric); }
+body.cx .plate ul { list-style: none; padding: 0; margin: 0 0 12px; }
+body.cx .plate li { margin: 0 0 4px; display: flex; align-items: baseline; }
+body.cx .plate .k { font: 700 15px/1.3 var(--f-title); letter-spacing: 0; text-transform: none; color: var(--ink); margin: 12px 0 6px; }
+body.cx .plate .credit { font: italic 13px/1.4 var(--f-read); color: var(--ink-faded); }
+body.cx .plate .faded { color: var(--ink-faded); font-style: italic; }
+body.cx .plate :focus-visible { outline: 2px solid var(--rubric); outline-offset: 3px; }
+body.cx .plate .turn { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgb(42 33 26 / .5); }
+
+/* Vael: the field journal, a two-page spread at the left of the town. */
+body.cx .plate-vael { max-width: min(920px, calc(100vw - 440px)); margin: 0 auto 0 4vw; padding: 0; background: none; box-shadow: none; overflow: visible; max-height: 76vh; }
+body.cx .plate-vael::after { display: none; }
+body.cx .plate-vael > .n { display: none; }
+body.cx .spread { display: grid; grid-template-columns: 1fr 1fr; filter: drop-shadow(0 16px 26px rgb(0 0 0 / .42)); }
+body.cx .spread .page { background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; padding: 24px 32px 28px; position: relative; max-height: 76vh; overflow: auto; scrollbar-width: thin; }
+body.cx .spread .verso { box-shadow: inset -36px 0 40px -30px rgb(80 55 30 / .35); }
+body.cx .spread .recto { box-shadow: inset 36px 0 40px -30px rgb(80 55 30 / .35); }
+body.cx .runhead { display: flex; justify-content: space-between; font: 500 14px/1 var(--f-title); color: var(--ink-faded); padding-bottom: 9px; border-bottom: 1px solid rgb(42 33 26 / .5); margin-bottom: 14px; }
+body.cx .sketch { margin: 0 0 12px; }
+body.cx .sketch .art { aspect-ratio: 880 / 360; background: url("../../assets/chronicle/plate-vael-ink.png") center / cover; border: 1px solid var(--ink); outline: .6px solid var(--ink); outline-offset: 3px; }
+body.cx .sketch figcaption { font: italic 14px/1.4 var(--f-read); color: var(--ink-faded); margin-top: 8px; }
+/* The opening letter is the paragraph's own first letter, drawn as an initial: the text stays whole for every reader. */
+body.cx .opening::first-letter { float: left; font: 700 46px/1 var(--f-title); color: var(--rubric); padding: 8px 10px 4px; margin: 3px 10px 0 0; border: 1px solid var(--ink); outline: .6px solid var(--ink); outline-offset: -5px; background: rgb(229 215 187 / .6); }
+body.cx .gloss { display: block; margin: 6px 0 0; padding-left: 12px; border-left: 2px solid var(--cord); font: italic 14px/1.4 var(--f-read); color: var(--rubric); }
+body.cx .ledger { margin: 0 0 14px; display: grid; grid-template-columns: max-content 1fr; column-gap: 12px; }
+body.cx .ledger dt { font: 700 15px/1.45 var(--f-title); padding: 5px 0; border-bottom: 1px solid rgb(42 33 26 / .28); }
+body.cx .ledger dd { margin: 0; padding: 5px 0; font-size: 16px; line-height: 1.45; border-bottom: 1px solid rgb(42 33 26 / .28); }
+
+/* Muster: the index of the six standards; each opens its project. */
+body.cx .stds { list-style: none; padding: 0; margin: 4px 0 8px; }
+body.cx .stds li { display: block; margin: 0; border-bottom: 1px solid rgb(42 33 26 / .25); }
+body.cx .stds a { display: grid; grid-template-columns: 34px 1fr; gap: 0 8px; padding: 8px 0; text-decoration: none; min-height: 44px; }
+body.cx .stds .num { font: 500 15px/1.4 var(--f-title); color: var(--rubric); text-align: right; }
+body.cx .stds .nm { font: 700 17px/1.3 var(--f-title); }
+body.cx .stds .ln { grid-column: 2; font: italic 15px/1.35 var(--f-read); color: var(--ink-faded); }
+body.cx .stds a:hover .nm { color: var(--rubric); }
+
+/* Map Hall: the engineering blueprint, a technical sheet with a drawn figure. */
+body.cx .plate-maphall { max-width: 560px; }
+body.cx .fig { margin: 4px 0 12px; border: 1px solid var(--ink); padding: 8px 8px 4px; background: rgb(229 215 187 / .5); }
+body.cx .fig svg { width: 100%; height: auto; display: block; }
+body.cx .fig figcaption { font: italic 13px/1.35 var(--f-read); color: var(--ink-faded); padding: 6px 2px 2px; }
+body.cx .tools { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 10px; }
+body.cx .tools span { display: inline-flex; align-items: baseline; font-size: 16px; }
+
+/* Field of Standards: the record of what was won. */
+body.cx .record { list-style: none; padding: 0; margin: 0 0 10px; }
+body.cx .record li { display: grid; grid-template-columns: 30px 1fr; gap: 0 12px; padding: 10px 0; border-bottom: 1px solid rgb(42 33 26 / .3); align-items: start; }
+body.cx .record svg { grid-row: span 3; margin-top: 2px; }
+body.cx .record .rank { font: 700 14px/1.3 var(--f-title); color: var(--rubric); }
+body.cx .record .what { font: 700 17px/1.3 var(--f-title); }
+body.cx .record .note { font: italic 15px/1.4 var(--f-read); color: var(--ink-faded); }
+
+/* Last Ridge: the sealed letter. Folded with the seal on it; breaking the seal opens it. */
+body.cx .plate-ridge { max-width: 440px; }
+body.cx .letter .sealed { display: grid; justify-items: center; gap: 10px; padding: 14px 0 6px; text-align: center; }
+body.cx .letter .fold { width: 100%; aspect-ratio: 16 / 9; position: relative; border: 1px solid rgb(42 33 26 / .5);
+  background: linear-gradient(155deg, transparent 49.6%, rgb(42 33 26 / .35) 50%, transparent 50.4%), linear-gradient(25deg, transparent 49.6%, rgb(42 33 26 / .35) 50%, transparent 50.4%), rgb(214 196 160 / .45); }
+body.cx .letter .fold .to { position: absolute; left: 0; right: 0; top: 18%; font: italic 18px/1.3 var(--f-read); }
+body.cx .letter .fold .cx-seal { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); flex-direction: column; gap: 4px; padding: 0; font: 700 14px/1 var(--f-title); }
+body.cx .letter .fold .cx-seal .wax { width: 58px; height: 58px; font-size: 18px; }
+body.cx .letter .opened { display: none; }
+body.cx .letter.open .sealed { display: none; }
+body.cx .letter.open .opened { display: block; animation: cx-unfold var(--t-open) var(--ease-page) both; }
+@keyframes cx-unfold { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+body.cx .letter .sign { font: italic 600 20px/1 var(--f-read); margin: 14px 0 4px; }
+
+/* ---- The map: a sheet laid over the world. */
+.cx-map { position: fixed; inset: 92px 44px 50px; z-index: 40; max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 330px; }
+.cx-map[hidden] { display: none; }
+.cx-map-veil { position: fixed; inset: 0; z-index: 39; background: rgb(18 16 14 / .58); }
+.cx-map-veil[hidden] { display: none; }
+.cx-map.open { animation: cx-lay var(--t-open) var(--ease-page) both; }
+@keyframes cx-lay { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.cx-chart { padding: 26px 18px 22px 28px; min-height: 0; }
+.cx-chart::after { content: ""; position: absolute; inset: 14px; pointer-events: none; border: 1.5px solid var(--ink); outline: .75px solid var(--ink); outline-offset: 3px; box-shadow: inset 0 0 0 5px #e2d4b7, inset 0 0 0 6px rgb(217 69 39 / .85); opacity: .9; }
+.cx-chart svg { width: 100%; height: 100%; display: block; }
+.cx-itin { padding: 30px 30px 22px 24px; display: flex; flex-direction: column; min-height: 0; }
+.cx-itin header p { margin: 6px 0 0; font: italic 15px/1.4 var(--f-read); color: var(--ink-faded); }
+.cx-stops { list-style: none; margin: 12px 0 0; padding: 0; overflow: auto; flex: 1; scrollbar-width: thin; }
+.cx-stop > button { width: 100%; display: grid; grid-template-columns: 36px 1fr auto; align-items: baseline; gap: 0 8px; padding: 5px 4px 5px 0; border: 0; background: none; text-align: left; cursor: pointer; color: var(--ink); min-height: 44px; }
+.cx-stop .num { font: 500 15px/1 var(--f-title); color: var(--rubric); text-align: right; }
+.cx-stop .nm { font: 700 17px/1.2 var(--f-title); }
+.cx-stop .st { font: italic 13px/1.2 var(--f-read); color: var(--ink-faded); }
+.cx-stop .ch { grid-column: 2 / 4; font: italic 14px/1.3 var(--f-read); color: var(--ink-faded); }
+.cx-stop.here .st { color: var(--rubric); }
+.cx-stop .thumb { display: none; }
+.cx-stop[aria-current="true"] > button { background: linear-gradient(90deg, rgb(156 46 30 / .09), transparent 80%); }
+.cx-stop .more { display: none; padding: 2px 0 8px 44px; }
+.cx-stop[aria-current="true"] .more { display: block; }
+.cx-stop .more p { margin: 0 0 6px; font-size: 15px; line-height: 1.45; }
+.cx-itin footer { padding-top: 10px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgb(42 33 26 / .35); font: italic 13px/1 var(--f-read); color: var(--ink-faded); }
+.cx-lbl { font-family: var(--f-map); font-size: 17px; fill: var(--ink); letter-spacing: .05em; }
+.cx-lbl.ahead { fill: var(--ink-faded); }
+.cx-roman { font: 500 14px var(--f-title); fill: var(--rubric); }
+.cx-hit { cursor: pointer; } .cx-hit:focus { outline: none; }
+.cx-hit:focus-visible .ring-sel, .cx-hit.sel .ring-sel { stroke: var(--rubric); stroke-width: 2.5; opacity: 1; }
+.cx-cart-t { font: 700 22px var(--f-title); fill: var(--ink); } .cx-cart-s { font: italic 400 14px var(--f-read); fill: var(--ink-faded); } .cx-key { font: italic 400 14px var(--f-read); fill: var(--ink); }
+.cx-here-t { font: italic 600 15px var(--f-read); fill: var(--rubric); }
+@media (max-width: 760px) {
+  .cx-map { inset: 0; grid-template-columns: 1fr; }
+  .cx-chart { display: none; }
+  .cx-itin { padding: 64px 16px 40px; }
+  .cx-stops { position: relative; }
+  .cx-stops::before { content: ""; position: absolute; left: 31px; top: 20px; bottom: 20px; border-left: 2px solid var(--cord); }
+  .cx-stop > button { grid-template-columns: 64px 1fr auto; align-items: center; }
+  .cx-stop .num { display: none; }
+  .cx-stop .nm { font-size: 16px; } .cx-stop .ch { grid-column: 2 / 3; }
+  .cx-stop .thumb { display: block; width: 52px; height: 52px; border-radius: 50%; grid-row: 1 / 3; border: 1.5px solid var(--ink); background: var(--vellum) center / cover; position: relative; z-index: 1; }
+  .cx-stop.here .thumb { border: 3px solid var(--leaf); box-shadow: 0 0 0 1.5px var(--ink); }
+  .cx-stop .more { padding-left: 72px; }
+}
+
+/* ---- The project: a small card beside the standard (the world stays in view), and its folio, a full page to read. */
+.cx-card { position: fixed; z-index: 35; right: 24px; bottom: 54px; width: 360px; max-height: calc(100vh - 160px); overflow: auto; padding: 20px 24px 14px;
+  transform: translateX(calc(100% + 40px)); transition: transform var(--t-open) var(--ease-page); visibility: hidden; }
+.cx-card.open { transform: none; visibility: visible; }
+.cx-card .head { display: flex; justify-content: space-between; font: 500 13px/1 var(--f-title); color: var(--ink-faded); padding-bottom: 8px; border-bottom: 1px solid rgb(42 33 26 / .5); margin-bottom: 10px; }
+.cx-card .branch { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font: italic 13px/1.3 var(--f-read); color: var(--ink-faded); }
+.cx-card h2 { font: 700 23px/1.2 var(--f-title); margin: 0 0 6px; }
+.cx-card .ov { font: italic 16px/1.45 var(--f-read); margin: 0 0 10px; }
+.cx-card .tech { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 10px; font-size: 15px; }
+.cx-card .tech span { display: inline-flex; align-items: baseline; }
+.cx-card .row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgb(42 33 26 / .3); margin-top: 4px; padding-top: 4px; }
+/* The folio takes the right of the screen, so the standard it belongs to stays in view at the left. */
+.cx-folio { position: fixed; z-index: 41; top: 80px; bottom: 48px; right: 24px; width: min(820px, calc(100vw - 48px)); display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+.cx-folio[hidden] { display: none; }
+.cx-folio.open { animation: cx-lay var(--t-open) var(--ease-page) both; }
+.cx-folio nav { padding: 28px 12px 20px 24px; border-right: 1px solid rgb(42 33 26 / .4); }
+.cx-folio nav p { font: 500 14px/1.3 var(--f-title); color: var(--ink-faded); margin: 0 0 10px; }
+.cx-folio nav ol { list-style: none; margin: 0; padding: 0; }
+.cx-folio nav a { display: flex; align-items: center; min-height: 36px; font: 700 15px/1.2 var(--f-title); color: var(--ink); text-decoration: none; }
+.cx-folio nav a:hover, .cx-folio nav a[aria-current="true"] { color: var(--rubric); }
+.cx-folio .body { padding: 28px 34px 22px; overflow: auto; scrollbar-width: thin; min-height: 0; }
+.cx-folio .body h2 { margin: 0 0 4px; }
+.cx-folio .body .ov { font: italic 18px/1.5 var(--f-read); margin: 0 0 16px; max-width: 36em; }
+.cx-folio section { padding: 12px 0 10px; border-top: 1px solid rgb(42 33 26 / .3); max-width: 38em; }
+.cx-folio section h3 { font: 700 18px/1.3 var(--f-title); margin: 0 0 6px; }
+.cx-folio section p { margin: 0 0 8px; font-size: 17px; line-height: 1.6; }
+.cx-folio section ul { list-style: none; padding: 0; margin: 0 0 6px; }
+.cx-folio section li { display: flex; align-items: baseline; font-size: 17px; line-height: 1.55; }
+.cx-folio .foot { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgb(42 33 26 / .5); margin-top: 8px; }
+@media (max-width: 760px) {
+  .cx-card { left: 0; right: 0; bottom: 28px; width: auto; max-height: 52vh; transform: translateY(110%); }
+  .cx-card.open { transform: none; }
+  .cx-folio { inset: 0; width: auto; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .cx-folio nav { border-right: 0; border-bottom: 1px solid rgb(42 33 26 / .4); padding: 54px 16px 8px; }
+  .cx-folio nav ol { display: flex; flex-wrap: wrap; gap: 0 14px; }
+  .cx-folio .body { padding: 16px 16px 40px; }
+}
+
+/* The journey's page sets a monospace body for its debug readout: the Chronicle's own surfaces always read in Alegreya. */
+.cx-vellum, .cx-map, .cx-folio, .cx-card, body.cx .plate, body.cx #caption, .cx-hudmap { font-family: var(--f-read); }
+/* Off the route at a standard, the chapter pages step aside so the standard and the camp stay in view; the folio covers the card. */
+html.cx-held body.cx .plate-wrap { visibility: hidden; }
+html.cx-held body.cx #discover { display: none; }
+.cx-folio:not([hidden]) ~ .cx-card, body:has(.cx-folio:not([hidden])) .cx-card { visibility: hidden; }
+.cx-folio .body { max-width: 760px; }
+
+/* Phones: the journal is one page at a time (the two pages stack), inside the chapter's own bottom sheet, which scrolls. */
+@media (max-width: 760px) {
+  body.cx .plate-vael { max-width: none; margin: 0 10px; max-height: 58vh; overflow: auto; }
+  body.cx .spread { grid-template-columns: 1fr; filter: none; }
+  body.cx .spread .page { max-height: none; overflow: visible; padding: 18px 18px 20px; box-shadow: none; }
+  body.cx .spread .recto { border-top: 1px solid rgb(42 33 26 / .4); }
+  body.cx .plate-maphall { max-width: none; }
+}
+/* The Map Hall's hold is short (about one screen): its sheet is wider and lower so it stays fixed while the camera holds. */
+@media (min-width: 761px) {
+  body.cx .plate-maphall { max-width: 640px; padding: 20px 26px 16px; }
+  body.cx .plate-maphall h3 { font-size: 24px; margin-bottom: 4px; }
+  body.cx .plate-maphall .lede { margin-bottom: 6px; font-size: 16px; }
+  body.cx .plate-maphall .fig { margin-bottom: 6px; padding: 4px 6px 2px; }
+  body.cx .plate-maphall .fig svg { max-height: 190px; }
+  body.cx .plate-maphall ul { columns: 2; column-gap: 18px; margin-bottom: 6px; }
+  body.cx .plate-maphall li { font-size: 15px; break-inside: avoid; }
+  body.cx .plate-maphall .k { margin: 6px 0 4px; }
+}

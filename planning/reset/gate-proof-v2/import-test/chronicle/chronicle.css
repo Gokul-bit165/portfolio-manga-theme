@@ -1,0 +1,108 @@
+/* The Chronicle Interface: shared tokens and parts for the three prototypes (map, field journal, project folio).
+   One book, three openings: the same vellum, the same iron-gall ink, the same red as the Red Line in the worlds, one type family.
+   Fonts are self-hosted, SIL Open Font Licence 1.1 (chronicle/fonts/OFL-*.txt). Prototype: not wired into the journey. */
+
+@font-face { font-family: "Alegreya"; src: url("fonts/Alegreya-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("fonts/Alegreya-Italic-VF.ttf") format("truetype"); font-weight: 400 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "Alegreya SC"; src: url("fonts/AlegreyaSC-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Alegreya SC"; src: url("fonts/AlegreyaSC-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Alegreya SC"; src: url("fonts/AlegreyaSC-ExtraBold.ttf") format("truetype"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "IM Fell English SC"; src: url("fonts/IMFellEnglishSC.ttf") format("truetype"); font-display: swap; }
+
+:root {
+  /* Colour roles. Contrast on vellum: ink 11.1, faded ink 5.3, rubric 5.2 (text-safe). Cord is the Red Line as drawn: strokes only. */
+  --vellum: #e5d7bb;
+  --vellum-deep: #d6c4a0;
+  --ink: #2a211a;
+  --ink-faded: #5a5448;
+  --rubric: #9c2e1e;
+  --cord: #d94527;
+  --leaf: #c9b27e;          /* gold leaf: the "here" mark and seals; on night 8.7 */
+  --night: #181715;         /* plates laid over the world */
+  --on-night: #e8ddc5;      /* 13.3 on night */
+  --muted-on-night: #a59d8e;/* 6.7 on night */
+
+  /* Type. One family: Alegreya for reading, its small capitals for titles and inscriptions; IM Fell only for place names on the map. */
+  --f-read: "Alegreya", "Iowan Old Style", Georgia, serif;
+  --f-title: "Alegreya SC", "Alegreya", Georgia, serif;
+  --f-map: "IM Fell English SC", "Alegreya SC", Georgia, serif;
+  --t-note: 0.875rem;   /* 14: margin notes, captions */
+  --t-small: 1rem;      /* 16: ledger, list */
+  --t-read: 1.125rem;   /* 18: reading text */
+  --t-sub: 1.375rem;    /* 22 */
+  --t-title: 1.875rem;  /* 30: a chapter title; never larger in a panel */
+  --lh-read: 1.62;
+
+  /* Space: a 4 px base; the page's margins follow a manuscript's proportions (inner < head < outer < foot). */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+
+  /* Motion: the book's own pace. Opening and turning, nothing else moves by itself. */
+  --ease-page: cubic-bezier(.22, .7, .2, 1);
+  --t-open: 520ms;
+  --t-turn: 360ms;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--night); color: var(--ink); font: 400 var(--t-read)/var(--lh-read) var(--f-read); -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--rubric); outline-offset: 3px; }
+.on-night :focus-visible, .hud :focus-visible { outline-color: var(--leaf); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- The world behind: the live journey in the real interface; a still of it in these prototypes. */
+.world { position: fixed; inset: 0; background: center / cover no-repeat; }
+.world::after { content: ""; position: absolute; inset: 0; background: var(--dim, transparent); }
+
+/* ---- Vellum: a sheet of the book. Its edge is cut by script (deckle.js), its frame is a double ink rule with a red rule inside. */
+.vellum { background: var(--vellum) url("assets/vellum.jpg") center / cover; color: var(--ink); position: relative; }
+.vellum::before { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 60px rgb(90 60 30 / .18); }
+.framed { --frame: 14px; }
+.framed::after { content: ""; position: absolute; inset: var(--frame); pointer-events: none;
+  border: 1.5px solid var(--ink); outline: 0.75px solid var(--ink); outline-offset: 3px; box-shadow: inset 0 0 0 4px transparent, inset 0 0 0 5px rgb(217 69 39 / .75); opacity: .9; }
+.framed::after { box-shadow: inset 0 0 0 5px #e2d4b7, inset 0 0 0 6px rgb(217 69 39 / .85); }
+.sheet-shadow { filter: drop-shadow(0 18px 30px rgb(0 0 0 / .45)) drop-shadow(0 2px 3px rgb(0 0 0 / .35)); }
+
+/* ---- Type parts. */
+.title { font: 700 var(--t-title)/1.15 var(--f-title); letter-spacing: .01em; margin: 0; color: var(--ink); }
+.sub { font: 500 var(--t-sub)/1.25 var(--f-title); margin: 0; }
+.place { font-family: var(--f-map); letter-spacing: .04em; }
+.note { font: italic 400 var(--t-note)/1.4 var(--f-read); color: var(--rubric); }
+.faded { color: var(--ink-faded); }
+.read p { margin: 0 0 var(--s4); max-width: 34em; hyphens: auto; }
+.rule { height: 0; border: 0; border-top: 1px solid var(--ink); margin: var(--s4) 0; position: relative; }
+.rule::after { content: ""; position: absolute; left: 0; right: 0; top: 2px; border-top: 1px solid var(--ink); opacity: .55; }
+
+/* A stake: the Red Line's own mark, used where a list needs a point. */
+.stake { display: inline-block; width: 7px; height: 13px; margin-right: .55em; vertical-align: -1px; position: relative; }
+.stake::before { content: ""; position: absolute; left: 3px; top: 0; bottom: 0; width: 1.5px; background: var(--ink); }
+.stake::after { content: ""; position: absolute; left: 0; right: 0; top: 3px; height: 2px; background: var(--cord); }
+
+/* ---- Seal button: wax in the Red Line's colour, the action's name beside it. Primary action of a panel. */
+.seal-btn { display: inline-flex; align-items: center; gap: var(--s3); min-height: 44px; padding: 0 var(--s4) 0 0; border: 0; background: none; cursor: pointer;
+  font: 700 var(--t-small)/1 var(--f-title); color: var(--ink); }
+.seal-btn .wax { width: 40px; height: 40px; flex: none; border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%; background: radial-gradient(circle at 38% 34%, #c2523a, #8f2a1b 62%, #6d1f13);
+  box-shadow: inset 0 0 0 3px rgb(0 0 0 / .14), inset 0 0 0 6px rgb(255 220 190 / .08), 0 1px 2px rgb(0 0 0 / .4); display: grid; place-items: center; color: #f3dcc8; font: 800 15px/1 var(--f-title); }
+.seal-btn:hover .wax { filter: brightness(1.08); }
+.link-btn { min-height: 44px; padding: 0 var(--s2); border: 0; background: none; cursor: pointer; font: italic 500 var(--t-small)/1 var(--f-read); color: var(--ink); text-decoration: underline; text-decoration-color: var(--cord); text-underline-offset: 4px; }
+.link-btn:hover { color: var(--rubric); }
+
+/* ---- The exploration HUD: three quiet marks on the world, the same in every chapter.
+   Top left the chapter, top right the map, along the foot the line of the journey with a stake per world. */
+.hud { position: fixed; z-index: 30; color: var(--on-night); }
+.hud-chapter { left: 24px; top: 20px; display: grid; gap: 2px; padding: 10px 14px 11px; background: rgb(24 23 21 / .9); border-left: 3px solid var(--cord); }
+.hud-chapter .n { font: italic 400 14px/1.2 var(--f-read); color: var(--muted-on-night); }
+.hud-chapter .t { font: 700 19px/1.2 var(--f-title); }
+.hud-map { right: 20px; top: 16px; }
+.hud-map .seal-btn { color: var(--on-night); background: rgb(24 23 21 / .9); padding: 0 16px 0 4px; border-radius: 26px; }
+.hud-thread { left: 24px; right: 24px; bottom: 18px; height: 22px; pointer-events: none; }
+.hud-thread svg { width: 100%; height: 100%; overflow: visible; }
+
+@media (max-width: 640px) {
+  .hud-chapter { left: 12px; top: 12px; padding: 8px 11px 9px; }
+  .hud-chapter .t { font-size: 17px; }
+  .hud-map { right: 10px; top: 10px; }
+  .hud-thread { left: 0; right: 0; bottom: 0; height: 30px; padding: 4px 12px; background: rgb(24 23 21 / .94); }   /* on phones the thread sits on its own strip, never across text */
+}
+@media (prefers-reduced-motion: reduce) { :root { --t-open: 0ms; --t-turn: 0ms; } }

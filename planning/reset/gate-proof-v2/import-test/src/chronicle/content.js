@@ -1,0 +1,72 @@
+// The Chronicle Interface's words. Verified facts only (context/MY_PROFILE.md, context/PROJECTS.md). Where a fact is missing, the section is
+// left empty: visitors never see it; the owner sees what to add when the page is opened with ?review=1.
+
+// The nine places of the map, in journey order, and which of the journey's chapters belong to each.
+export const PLACES = [
+  { id: "plain", n: "I", name: "The Long Plain", chapter: "Prologue", seen: "The plain, its far spires and the First Gate.", chapters: ["plain", "first-gate", "passage"], go: "plain" },
+  { id: "vael", n: "II", name: "Vael", chapter: "Identity", seen: "A walled hill town at late sun.", chapters: ["vael"], go: "vael" },
+  { id: "forge", n: "III", name: "The Undercroft Forge", chapter: "Philosophy", seen: "A vaulted forge gathered round one fire.", chapters: ["forge"], go: "forge" },
+  { id: "muster", n: "IV", name: "The Muster Field", chapter: "Selected works", seen: "A camp the morning after. Six standards, one for each project.", chapters: ["muster"], go: "muster" },
+  { id: "maphall", n: "V", name: "The Map Hall", chapter: "Engineering", seen: "Plans and maps round a slow orrery.", chapters: ["maphall"], go: "maphall" },
+  { id: "standards", n: "VI", name: "The Field of Standards", chapter: "Recognition", seen: "Banners planted for what was won.", chapters: ["standards"], go: "standards" },
+  { id: "highroad", n: "VII", name: "The High Road", chapter: "Journey", seen: "A gorge, a waterfall and a rope bridge.", chapters: ["highroad"], go: "highroad" },
+  { id: "camp", n: "VIII", name: "The Quiet Camp", chapter: "Beyond code", seen: "One fire in a forest clearing.", chapters: ["camp"], go: "camp" },
+  { id: "ridge", n: "IX", name: "The Last Ridge", chapter: "Contact", seen: "Dawn, a far castle, and the end of the line.", chapters: ["ridge"], go: "ridge" },
+];
+export const placeOfChapter = (id) => Math.max(0, PLACES.findIndex((p) => p.chapters.includes(id)));
+
+// The six projects, in the order their standards stand round the Muster Field's ring (west to east; muster.js STANDARDS).
+// Sections: overview, problem, solution, architecture, technologies, implementation, evidence, links. null = not yet known.
+export const PROJECTS = [
+  { id: "aira", n: "I", name: "Aira Agentic Ecosystem", carve: ["Aira"],
+    overview: "An agentic AI ecosystem, with a FastAPI backend and a Flutter mobile app.",
+    problem: null,
+    solution: ["Vision processing", "Contextual reasoning", "Spatial memory", "Similarity search with FAISS", "Safety prioritisation"],
+    architecture: null,
+    technologies: ["FastAPI", "Flutter", "FAISS"],
+    implementation: null, evidence: null, links: null,
+    needs: { problem: "Its purpose and who it is for.", architecture: "How the backend, the app and the models fit together, and which models it uses.", implementation: "How safety prioritisation works; your role; its status.", evidence: "A demo or video, and screenshots.", links: "The repository and a demo link." } },
+  { id: "weaving", n: "II", name: "Weaving Intelligence", carve: ["Weaving", "Intelligence"],
+    overview: "An industrial intelligence dashboard for textile weaving.",
+    problem: null,
+    solution: ["Machine production", "Power consumption", "Compressed-air consumption", "Abnormalities", "Machine performance"],
+    solutionLead: "It analyses:",
+    architecture: null, technologies: null,
+    implementation: "Built to work from real machine data.",
+    evidence: null, links: null,
+    needs: { problem: "The mill's problem it answers.", architecture: "Data source and pipeline.", technologies: "The stack.", evidence: "Screenshots, once the data's confidentiality is settled; whether it is deployed; real findings only.", links: "Repository or demo, if they can be shared." } },
+  { id: "learnquest", n: "III", name: "LearnQuest", carve: ["LearnQuest"],
+    overview: "A gamified learning and assessment platform.",
+    problem: null,
+    solution: ["HTML, CSS and JavaScript challenges with live previews", "DOM and visual evaluation", "Proctoring"],
+    architecture: null,
+    technologies: ["React", "Node.js", "MySQL"],
+    implementation: null, evidence: null, links: null,
+    needs: { problem: "Who it is for and what it fixes.", architecture: "How the parts fit.", implementation: "How the visual evaluation and the proctoring work; your role.", evidence: "Demo and screenshots (no user numbers unless verified).", links: "Repository and demo." } },
+  { id: "rescuecore", n: "IV", name: "RescueCore", carve: ["RescueCore"],
+    overview: "An AI disaster-management command portal.",
+    problem: null,
+    solution: ["A React command interface", "IoT devices", "ESP32-CAM rover concepts"],
+    architecture: null,
+    technologies: ["React", "IoT devices", "ESP32-CAM"],
+    implementation: "The rovers are concepts.",
+    evidence: null, links: null,
+    needs: { problem: "The situation it is meant for.", architecture: "The backend, and what the AI does.", implementation: "Which parts are built and which are concepts.", evidence: "Demo; photos of the hardware.", links: "Repository and demo." } },
+  { id: "cad-heart", n: "V", name: "CAD Detection and 3D Heart Visualization", carve: ["CAD", "3D Heart"],
+    overview: "Coronary artery disease concepts, with an interactive 3D heart.",
+    problem: null,
+    solution: ["Vessel visualisation", "3D anatomical assets", "An interactive Three.js view"],
+    architecture: null,
+    technologies: ["Three.js"],
+    implementation: null, evidence: null, links: null,
+    needs: { problem: "What it is for.", architecture: "Whether there is a detection model (dataset; no accuracy claims).", implementation: "Where the heart model comes from and its licence; a medical disclaimer.", evidence: "Demo.", links: "Repository and demo." } },
+  { id: "inaippu", n: "VI", name: "InaippuAI", carve: ["InaippuAI"],
+    overview: "An India-focused networking app.",
+    problem: null,
+    solution: ["A Flutter mobile app", "Credit-based monetisation", "Subscriptions", "A React admin dashboard"],
+    architecture: null,
+    technologies: ["Flutter", "React"],
+    implementation: null, evidence: null, links: null,
+    needs: { problem: "Who it connects, and why.", architecture: "The backend and the payments provider.", implementation: "Its status, live or prototype.", evidence: "Screenshots (no user numbers unless verified).", links: "Store listing or repository." } },
+];
+export const SECTIONS = [["overview", "Overview"], ["problem", "Problem"], ["solution", "Solution"], ["architecture", "Architecture"], ["technologies", "Technologies"], ["implementation", "Implementation"], ["evidence", "Evidence"], ["links", "Links"]];

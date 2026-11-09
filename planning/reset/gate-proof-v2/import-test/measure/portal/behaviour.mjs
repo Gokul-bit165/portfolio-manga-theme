@@ -31,10 +31,10 @@ await page.evaluate(() => scrollTo(0, 0));
 const reachedStart = await until(page, () => window.__where === "plain" && window.__p() < 0.001, null, 120000);
 s = await state(page);
 check("and back to the start on the plain, through every portal in reverse", reachedStart, JSON.stringify(s));
-await page.close();
-
 // ---- Direct navigation: a link into a painted world opens in it, from the first frame.
+// The new tab opens before the old one closes: closing a persistent context's last tab now closes its window (Chrome, 2026-11-09).
 const p2 = await ctx.newPage();
+await page.close();
 await p2.goto(URL_ + "#standards");
 await p2.waitForFunction(() => window.__ready === true, null, { timeout: 180000, polling: 100 });
 const first = await p2.evaluate(() => ({ where: window.__where, p: +window.__p().toFixed(4), y: Math.round(scrollY) }));
