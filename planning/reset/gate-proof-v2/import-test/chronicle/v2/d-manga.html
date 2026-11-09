@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>V2 D: manga opening</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css">
+<style>
+  /* The Long Plain and the First Gate in the manga language only: paper white, black ink, panels and gutters, lettering drawn into the page.
+     The large panel is the live world (the plain in ink); the two smaller panels are frames from the camera's own route, inked. */
+  body { background: #f3efe5; }
+  .page { position: absolute; inset: 0; background: #f3efe5; }
+  .panel { position: absolute; overflow: hidden; border: 5px solid #111; background: #fff center / cover no-repeat; }
+  .p1 { left: 28px; top: 28px; width: 1046px; height: 844px; background-image: url(bg/plain.png); background-position: 46% 50%; background-size: 1700px auto; }
+  .p2 { left: 1096px; top: 28px; width: 476px; height: 470px; background-image: url(bg/first-gate.png); background-size: 900px auto; background-position: 52% 60%; filter: grayscale(1) contrast(1.9) brightness(1.1); transform: rotate(.6deg); }
+  .p3 { left: 1096px; top: 520px; width: 476px; height: 352px; background-image: url(bg/plain.png); background-size: 2600px auto; background-position: 63% 55%; }
+  .ttl { position: absolute; left: 70px; top: 560px; color: #111; }
+  .ttl .c { font: 400 26px/1 var(--f-fell); letter-spacing: .38em; }
+  .ttl .n { font: 800 74px/1 var(--f-sc); letter-spacing: .02em; margin-top: 10px; }
+  .ttl .rule { margin-top: 10px; }
+  .cap { position: absolute; background: #fff; border: 2.5px solid #111; padding: 12px 16px; font: italic 500 19px/1.35 var(--f-read); color: #111; box-shadow: 4px 4px 0 #111; }
+  .sfx { position: absolute; font: 400 64px/1 var(--f-fell); color: #111; letter-spacing: .32em; transform: rotate(-7deg); opacity: .88; }
+  .tags { position: absolute; left: 70px; bottom: 60px; display: flex; gap: 14px; }
+  .tag { display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px; background: #fff; border: 2px solid #111; font: 500 13px/1 var(--f-mono); letter-spacing: .08em; color: #111; border-radius: 2px 8px 3px 9px / 9px 3px 8px 2px; }
+  .tag .key { color: #111; border-color: #111; background: #fff; }
+  .num { position: absolute; font: 500 12px/1 var(--f-mono); color: #111; letter-spacing: .1em; }
+</style></head>
+<body>
+<div class="frame page">
+  <div class="panel p1"></div>
+  <div class="panel p2"></div>
+  <div class="panel p3"></div>
+  <svg width="1600" height="900" style="position:absolute;inset:0" aria-hidden="true">
+    <!-- speed lines for the wind across the plain's sky, in panel 1 -->
+    <g stroke="#111" stroke-linecap="round">${""}</g>
+  </svg>
+  <div class="sfx" style="left:520px;top:132px">SHAAA</div>
+  <div class="ttl"><div class="c">CHAPTER I</div><div class="n">THE LONG PLAIN</div><div class="rule" id="rule"></div></div>
+  <div class="cap" style="left:1124px;top:60px;width:280px">Every road in this chronicle begins at the gate.</div>
+  <div class="cap" style="left:1260px;top:780px;width:290px;transform:rotate(-1deg)">And a red line runs on from it, through every world.</div>
+  <div class="tags"><span class="tag">SCROLL <span>↓</span> Walk</span><span class="tag"><span class="key">M</span>Chronicle</span></div>
+  <span class="num" style="left:40px;top:878px">THE JOURNEY OF AN ENGINEER · 1</span>
+  <span class="label" style="color:rgb(0 0 0 / .45)">D · The manga opening</span>
+</div>
+<script type="module">
+import { brush } from "./v2.js";
+document.getElementById("rule").innerHTML = brush(560, "#111");
+// Speed lines: long, tapering, uneven strokes across the upper sky of the large panel.
+let g = ""; let s = 3; const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+for (let i = 0; i < 16; i++) { const y = 70 + r() * 150, x0 = 60 + r() * 300, L = 300 + r() * 520; g += `<path d="M${x0} ${y} L${x0 + L} ${y - L * .12}" stroke-width="${(0.6 + r() * 1.8).toFixed(2)}" opacity="${(0.35 + r() * .5).toFixed(2)}"/>`; }
+document.querySelector("svg g").innerHTML = g;
+</script>
+</body></html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>V2 C: the chronicle map</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css">
+<style>
+  /* State: the Chronicle map, opened with M. The scene behind drains to ink, the camera pulls back and up, and the chart washes in over
+     it: no box, no button. Its edge is the paint's own edge, fading into the world. */
+  .world { position: absolute; inset: 0; background: url(bg/muster-route.png) center / cover; filter: grayscale(1) contrast(1.15) brightness(.82) blur(1.2px); transform: scale(1.06); }
+  .wash { position: absolute; inset: 0; background: #e8dcc1 url("../assets/vellum.jpg") center / cover;
+    -webkit-mask: radial-gradient(ellipse 760px 430px at 50% 50%, #000 62%, rgb(0 0 0 / .85) 72%, transparent 100%); mask: radial-gradient(ellipse 760px 430px at 50% 50%, #000 62%, rgb(0 0 0 / .85) 72%, transparent 100%); }
+  .title { position: absolute; left: 50%; top: 58px; transform: translateX(-50%); text-align: center; color: #1d1712; }
+  .title .a { font: 400 16px/1 var(--f-fell); letter-spacing: .3em; }
+  .title .b { font: 800 34px/1.1 var(--f-sc); letter-spacing: .05em; margin-top: 6px; }
+  .lbl { font: 18px var(--f-fell); fill: #1d1712; letter-spacing: .05em; }
+  .lbl.ahead { fill: #5a5448; }
+  .num { font: 700 13px var(--f-sc); fill: #9c2e1e; }
+  .side { position: absolute; right: 120px; top: 600px; width: 290px; color: #1d1712; }
+  .side h3 { margin: 0; font: 800 21px/1.15 var(--f-sc); }
+  .side p { margin: 4px 0 0; font: italic 16px/1.4 var(--f-read); color: #3f372d; }
+  .maphint { position: absolute; left: 50%; bottom: 46px; transform: translateX(-50%); display: flex; gap: 22px; font: 500 12px/1 var(--f-mono); letter-spacing: .06em; color: #1d1712; }
+  .maphint .key { color: #1d1712; border-color: rgb(29 23 18 / .75); background: rgb(255 250 240 / .45); }
+  .maphint span.g { display: inline-flex; gap: 7px; align-items: center; }
+</style></head>
+<body>
+<div class="frame">
+  <div class="world"></div>
+  <div class="wash"></div>
+  <svg id="chart" width="1600" height="900" style="position:absolute;inset:0" aria-hidden="true"></svg>
+  <div class="title"><div class="a">THE CHRONICLE</div><div class="b">The Red Line</div></div>
+  <div class="side"><h3>The Field of Standards</h3><p>Chapter VI, Recognition. Ahead on the line.</p></div>
+  <div class="maphint"><span class="g"><span class="key">1</span>–<span class="key">9</span>Choose</span><span class="g"><span class="key">ENTER</span>Travel</span><span class="g"><span class="key">ESC</span>Return</span></div>
+  <span class="label">C · The Chronicle map (M)</span>
+</div>
+<script type="module">
+const P = [["plain", "Long Plain"], ["vael", "Vael"], ["forge", "Forge"], ["muster", "Muster Field"], ["maphall", "Map Hall"], ["standards", "Standards"], ["highroad", "High Road"], ["camp", "Quiet Camp"], ["ridge", "Last Ridge"]];
+const HERE = 3, SEL = 5, R = 46, ink = "#1d1712", cord = "#d94527";
+const AT = [[380, 690], [560, 640], [440, 520], [630, 440], [820, 505], [910, 372], [748, 268], [1030, 236], [1200, 320]];
+let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+let s = `<defs>${P.map((p, i) => `<clipPath id="c${i}"><circle cx="${AT[i][0]}" cy="${AT[i][1]}" r="${R - 3}"/></clipPath>`).join("")}</defs>`;
+// Terrain in pen strokes, sparse: a range at the head, hills, a river, small woods.
+const peak = (x, y, w, h) => `<path d="M${x - w / 2} ${y} L${x - w * .08} ${y - h} L${x} ${y - h * .86} L${x + w * .1} ${y - h * 1.04} L${x + w / 2} ${y}" fill="none" stroke="${ink}" stroke-width="1.3"/>` + [1, 2, 3, 4].map((i) => `<path d="M${x + w * .1 + w * .1 * i} ${y - h * 1.04 + h * .26 * i} l${-w * .06} ${h * .2}" stroke="${ink}" stroke-width=".8"/>`).join("");
+[[560, 210, 130, 50], [660, 196, 110, 44], [880, 200, 150, 60], [1130, 214, 130, 50], [1260, 226, 110, 40]].forEach((a) => (s += peak(...a)));
+const tree = (x, y, z) => `<path d="M${x} ${y} v${-z * .5}" stroke="${ink}"/><path d="M${x - z * .36} ${y - z * .45} L${x} ${y - z * 1.35} L${x + z * .36} ${y - z * .45} Z" fill="rgb(29 23 18 / .1)" stroke="${ink}"/>`;
+for (const [cx, cy, n] of [[300, 600, 6], [1110, 470, 8], [690, 640, 5], [460, 330, 4]]) for (let i = 0; i < n; i++) s += tree(cx + (rnd() - .5) * 90, cy + (rnd() - .5) * 40, 13 + rnd() * 6);
+s += `<path d="M860 160 C 880 260, 840 330, 880 420 S 960 560, 930 640 S 990 760, 960 820" fill="none" stroke="${ink}" stroke-width="1.2"/><path d="M872 160 C 892 260, 852 330, 892 420 S 972 560, 942 640 S 1002 760, 972 820" fill="none" stroke="${ink}" stroke-width=".8" opacity=".7"/>`;
+// The road: still to walk, in faint pencil; walked, in red, drawing itself as far as here (a nib at its head).
+let d = `M${AT[0][0]} ${AT[0][1]}`; for (let i = 1; i < AT.length; i++) { const [x0, y0] = AT[i - 1], [x1, y1] = AT[i]; d += ` Q${(x0 + x1) / 2 + (y1 - y0) * .2} ${(y0 + y1) / 2 - (x1 - x0) * .2} ${x1} ${y1}`; }
+s += `<path id="road" d="${d}" fill="none" stroke="#5a5448" stroke-width="1.4" stroke-dasharray="3 6" opacity=".8"/><path id="walked" d="${d}" fill="none" stroke="${cord}" stroke-width="3" stroke-linecap="round"/>`;
+document.getElementById("chart").innerHTML = s;
+const svg = document.getElementById("chart"), road = svg.querySelector("#road"), L = road.getTotalLength();
+let best = 0, bd = 1e9; for (let t = 0; t <= L; t += 2) { const q = road.getPointAtLength(t), dd = Math.hypot(q.x - AT[HERE][0], q.y - AT[HERE][1]); if (dd < bd) { bd = dd; best = t; } }
+svg.querySelector("#walked").setAttribute("stroke-dasharray", `${best} ${L}`);
+let more = "";
+P.forEach(([id, name], i) => {
+  const [x, y] = AT[i], st = i === HERE ? "here" : i < HERE ? "seen" : "ahead";
+  more += `<circle cx="${x}" cy="${y}" r="${R + 1}" fill="#ece1c8"/><image href="../assets/roundels/${id}-${st === "ahead" ? "ink.png" : "paint.jpg"}" x="${x - R}" y="${y - R}" width="${R * 2}" height="${R * 2}" clip-path="url(#c${i})" preserveAspectRatio="xMidYMid slice"/>
+    <circle cx="${x}" cy="${y}" r="${R - 3}" fill="none" stroke="${ink}" stroke-width="1.6"/>
+    ${st === "here" ? `<circle cx="${x}" cy="${y}" r="${R + 3}" fill="none" stroke="#c9b27e" stroke-width="5"/><circle cx="${x}" cy="${y}" r="${R + 7}" fill="none" stroke="${ink}" stroke-width=".8"/>` : ""}
+    ${i === SEL ? `<circle cx="${x}" cy="${y}" r="${R + 10}" fill="none" stroke="#9c2e1e" stroke-width="2.2" stroke-dasharray="4 4"/>` : ""}
+    <text class="num" x="${x}" y="${y - R - 12}" text-anchor="middle">${["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][i]}</text>
+    <text class="lbl ${st === "ahead" ? "ahead" : ""}" x="${x}" y="${y + R + 24}" text-anchor="middle">${name}</text>`;
+});
+// The engraved marker at the current place: a stake with a red pennant, and the nib still wet at the line's head.
+const [hx, hy] = AT[HERE];
+more += `<line x1="${hx + R + 16}" y1="${hy - 2}" x2="${hx + R + 16}" y2="${hy - 52}" stroke="${ink}" stroke-width="1.6"/><path d="M${hx + R + 17} ${hy - 52} l30 6 l-30 7 z" fill="${cord}"/>
+  <text x="${hx + R + 54}" y="${hy - 40}" style="font:italic 600 16px Alegreya, serif" fill="#9c2e1e">You are here</text>`;
+const q = road.getPointAtLength(best - 60);
+more += `<path d="M${q.x - 4} ${q.y - 26} l10 22 l4 -4 z" fill="${ink}"/>`;
+svg.insertAdjacentHTML("beforeend", more);
+</script>
+</body></html>

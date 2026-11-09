@@ -1,0 +1,97 @@
+[
+ {
+  "name": "eleven chapter sections, each with a heading",
+  "ok": true,
+  "detail": "plain first-gate passage vael forge muster maphall standards highroad camp ridge"
+ },
+ {
+  "name": "nine chapters carry a content plate in the page",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "scrolling is the browser's own",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "the page's end carries the camera through all eight portals to the last ridge",
+  "ok": true,
+  "detail": "{\"p\":0.9996,\"where\":\"ridge\",\"y\":49428,\"max\":49428}"
+ },
+ {
+  "name": "only the worlds near the camera are held: the ones far behind were freed",
+  "ok": true,
+  "detail": "vael:idle forge:idle muster:idle maphall:idle standards:idle highroad:ready camp:ready ridge:ready"
+ },
+ {
+  "name": "and back to the start on the plain, through every portal in reverse",
+  "ok": true,
+  "detail": "{\"p\":0.0002,\"where\":\"plain\",\"y\":0,\"max\":49428}"
+ },
+ {
+  "name": "#standards: first frame is already in the Field of Standards",
+  "ok": true,
+  "detail": "{\"where\":\"standards\",\"p\":0.6307,\"y\":31176}"
+ },
+ {
+  "name": "Tab reaches the chapter index, in view",
+  "ok": true,
+  "detail": "{\"text\":\"1. The Long Plain\",\"top\":12}"
+ },
+ {
+  "name": "Enter on 'Vael' takes the page and the camera there",
+  "ok": true,
+  "detail": "{\"p\":0.2184,\"where\":\"vael\",\"y\":10836,\"max\":49428}"
+ },
+ {
+  "name": "reduced motion: every chapter is its one still",
+  "ok": true,
+  "detail": "[]"
+ },
+ {
+  "name": "reduced motion: the last world does not move between frames (banners, sprites, grain)",
+  "ok": true,
+  "detail": "0 differing bytes across 48 frames"
+ },
+ {
+  "name": "worlds fail to load: the camera waits on the plain before the inner gate, the page still scrolls",
+  "ok": true,
+  "detail": "{\"p\":0.2127,\"where\":\"plain\",\"y\":49428,\"max\":49428}"
+ },
+ {
+  "name": "1440px: the visible plate sits inside the screen",
+  "ok": true,
+  "detail": "{\"l\":867.7999877929688,\"r\":1367.7999877929688,\"t\":126,\"b\":524.8999938964844,\"vw\":1440,\"vh\":900}"
+ },
+ {
+  "name": "1440px: no sideways scrolling",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "1440px: no console errors",
+  "ok": true,
+  "detail": "warning: THREE.WebGLProgram: Program Info Log: (452,1): warning X4000: use of potentially uninitialized variable (f_ramp)\n(832,1): warning X4000: use of potentially uninitialized variable (f_styled_int)\n(840,1): warning X4000: use of potentially uninitialized variable (f_styled_int) | warning: THREE.WebGLProgram: Program Info Log: (1072,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1039,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0) | warning: THREE.WebGLProgram: Program Info Log: (1055,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1033,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0)"
+ },
+ {
+  "name": "390px: the visible plate sits inside the screen",
+  "ok": true,
+  "detail": "{\"l\":10,\"r\":365.20001220703125,\"t\":451.7875061035156,\"b\":769.2375183105469,\"vw\":390,\"vh\":844}"
+ },
+ {
+  "name": "390px: no sideways scrolling",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "390px: no console errors",
+  "ok": true,
+  "detail": "warning: THREE.WebGLProgram: Program Info Log: (452,1): warning X4000: use of potentially uninitialized variable (f_ramp)\n(832,1): warning X4000: use of potentially uninitialized variable (f_styled_int)\n(840,1): warning X4000: use of potentially uninitialized variable (f_styled_int) | warning: THREE.WebGLProgram: Program Info Log: (1072,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1039,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0) | warning: THREE.WebGLProgram: Program Info Log: (1055,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1033,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0)"
+ },
+ {
+  "name": "no console errors in the main run",
+  "ok": true,
+  "detail": "warning: THREE.WebGLProgram: Program Info Log: (452,1): warning X4000: use of potentially uninitialized variable (f_ramp)\n(832,1): warning X4000: use of potentially uninitialized variable (f_styled_int)\n(840,1): warning X4000: use of potentially uninitialized variable (f_styled_int) | warning: THREE.WebGLProgram: Program Info Log: (1072,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1039,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0) | warning: THREE.WebGLProgram: Program Info Log: (1055,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1033,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__Surf_0)"
+ }
+]

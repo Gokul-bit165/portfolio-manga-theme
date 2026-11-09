@@ -51,22 +51,22 @@ async function fresh(url, opts = {}) { const L = await launch(gpu, { width: opts
 
 // ---- 3. A project by its own address; its folio by its own address; visitor mode shows no owner notes.
 {
-  const { ctx, page, errors } = await fresh(`${BASE}#project/aira`);
-  const ok = await until(page, () => window.__cx.state().open === "aira" && window.__cx.state().t >= 1, null, 90000);
-  check("#project/aira: arrives in the Muster Field, off the route before Aira's standard, its card open", ok && (await st(page)).where === "muster", JSON.stringify(await st(page)));
+  const { ctx, page, errors } = await fresh(`${BASE}#project/loom`);
+  const ok = await until(page, () => window.__cx.state().open === "loom" && window.__cx.state().t >= 1, null, 90000);
+  check("#project/loom: arrives in the Muster Field, off the route before Loom AI.s standard, its card open", ok && (await st(page)).where === "muster", JSON.stringify(await st(page)));
   check("visitor mode: no owner review notes are shown", (await visibleReview(page)) === 0);
   await ctx.close();
-  const B = await fresh(`${BASE}#project/learnquest/folio`);
+  const B = await fresh(`${BASE}#project/texas/folio`);
   await until(B.page, () => window.__cx.state().folio, null, 90000);
   const snap = await B.page.locator(".cx-folio").ariaSnapshot();
-  check("#project/learnquest/folio: the folio opens, as a dialog headed with the project", /heading "LearnQuest"/.test(snap), snap.slice(0, 200));
-  check("folio: shows only sections that have content, with Overview, Solution and Technologies", /heading "Overview"/.test(snap) && /heading "Technologies"/.test(snap) && !/heading "Evidence"/.test(snap), snap.slice(0, 400));
-  check("folio: no 'To add' text for a visitor", !(await B.page.evaluate(() => document.querySelector(".cx-folio").innerText.includes("To add"))));
+  check("#project/texas/folio: the folio opens, as a dialog headed with the project", /heading "Texas Wildfire Ignition Model"/.test(snap), snap.slice(0, 200));
+  check("folio: shows its sections; the owner-only contribution draft is hidden from visitors", /heading "Overview"/.test(snap) && /heading "Evaluation and evidence"/.test(snap) && !/heading "My contribution"/.test(snap), snap.slice(0, 400));
+  check("folio: no owner notes or drafts for a visitor", !(await B.page.evaluate(() => /Draft, not shown|For the owner/.test(document.querySelector(".cx-folio").innerText))));
   check("project links: no console errors", [...errors, ...B.errors].filter((e) => !e.includes("X4000")).length === 0, [...errors, ...B.errors].join(" | "));
   await B.ctx.close();
-  const C = await fresh(`${BASE}&review=1#project/learnquest/folio`);
+  const C = await fresh(`${BASE}&review=1#project/texas/folio`);
   await until(C.page, () => window.__cx.state().folio, null, 90000);
-  check("owner mode (?review=1): the folio lists what is missing", (await visibleReview(C.page)) > 0 && (await C.page.evaluate(() => document.querySelector(".cx-folio").innerText.includes("To add"))));
+  check("owner mode (?review=1): the folio shows the owner notes and the contribution draft", (await visibleReview(C.page)) > 0 && (await C.page.evaluate(() => document.querySelector(".cx-folio").innerText.includes("Draft, not shown to visitors"))));
   await C.ctx.close();
 }
 
@@ -77,15 +77,15 @@ async function fresh(url, opts = {}) { const L = await launch(gpu, { width: opts
   const y0 = await page.evaluate(() => { const sec = document.getElementById("muster"), w = sec.querySelector(".plate-wrap"); const y = sec.offsetTop + w.offsetTop + Math.min(w.offsetHeight * 0.4, innerHeight); scrollTo(0, y); return y; });
   await page.waitForTimeout(2500);
   const before = await page.evaluate(() => ({ y: Math.round(scrollY), cam: window.__cxCamera.position.toArray().map((v) => +v.toFixed(3)), p: window.__p() }));
-  await page.click('a[href="#project/rescuecore"]');
+  await page.click('a[href="#project/assessment"]');
   await until(page, () => window.__cx.state().t >= 1, null, 20000);
   { const p0 = await page.evaluate(() => window.__p()); for (let i = 0; i < 6; i++) { await page.mouse.wheel(0, 400); await page.waitForTimeout(80); } await page.waitForTimeout(500);
     const s = await page.evaluate(() => ({ held: window.__cx.state().held, p: window.__p(), t: window.__cx.state().t }));
     check("from the route: choosing a standard holds the walk (the wheel does not move it)", s.held && Math.abs(s.p - p0) < 1e-6 && s.t === 1, JSON.stringify({ p0, ...s })); }
-  await page.click('.cx-card a[href="#project/rescuecore/folio"]'); await until(page, () => window.__cx.state().folio, null, 5000);
+  await page.click('.cx-card a[href="#project/assessment/folio"]'); await until(page, () => window.__cx.state().folio, null, 5000);
   await page.goBack(); await page.waitForTimeout(400);
   const back1 = await st(page);
-  check("Back from the folio: the card and the standard again", back1.hash === "#project/rescuecore" && !back1.cx.folio && back1.cx.open === "rescuecore", JSON.stringify(back1));
+  check("Back from the folio: the card and the standard again", back1.hash === "#project/assessment" && !back1.cx.folio && back1.cx.open === "assessment", JSON.stringify(back1));
   await page.goBack();
   await until(page, () => !window.__cx.state().held, null, 20000); await page.waitForTimeout(1500);
   const after = await page.evaluate(() => ({ y: Math.round(scrollY), cam: window.__cxCamera.position.toArray().map((v) => +v.toFixed(3)), p: window.__p() }));
@@ -93,7 +93,7 @@ async function fresh(url, opts = {}) { const L = await launch(gpu, { width: opts
   check("Back again: on the route, at the same scroll position", Math.abs(after.y - before.y) <= 2, JSON.stringify({ before, after }));
   check("... and the same camera place", camD < 0.05 && Math.abs(after.p - before.p) < 1e-4, `moved ${camD.toFixed(4)} m`);
   await page.goForward();
-  check("Forward: the project opens again", await until(page, () => window.__cx.state().open === "rescuecore", null, 10000));
+  check("Forward: the project opens again", await until(page, () => window.__cx.state().open === "assessment", null, 10000));
   await page.keyboard.press("Escape");
   check("Esc on a project returns to the route", await until(page, () => !window.__cx.state().held, null, 20000));
   await ctx.close();
@@ -101,8 +101,8 @@ async function fresh(url, opts = {}) { const L = await launch(gpu, { width: opts
 
 // ---- 5. Reduced motion: no camera travel to a standard, no moving letter, the still holds.
 {
-  const { ctx, page } = await fresh(`${BASE}#project/weaving`, { reduced: true });
-  await until(page, () => window.__cx.state().open === "weaving", null, 90000);
+  const { ctx, page } = await fresh(`${BASE}#project/nenai`, { reduced: true });
+  await until(page, () => window.__cx.state().open === "nenai", null, 90000);
   check("reduced motion: the camera is at the standard at once (no travel)", (await st(page)).cx.t === 1);
   const dur = await page.evaluate(() => getComputedStyle(document.querySelector(".cx-card")).transitionDuration);
   check("reduced motion: panels open without animation", /^0s/.test(dur), dur);
@@ -116,7 +116,7 @@ async function fresh(url, opts = {}) { const L = await launch(gpu, { width: opts
 
 // ---- 6. Phone width: the map is the strip itinerary; a project card fits the screen.
 {
-  const { ctx, page } = await fresh(`${BASE}#project/inaippu`, { w: 390, h: 844 });
+  const { ctx, page } = await fresh(`${BASE}#project/hac-few`, { w: 390, h: 844 });
   await until(page, () => window.__cx.state().t >= 1, null, 90000);
   const box = await page.evaluate(() => { const r = document.querySelector(".cx-card").getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom, vw: innerWidth, vh: innerHeight }; });
   check("390 px: the project card sits inside the screen", box.l >= 0 && box.r <= box.vw + 1 && box.t >= 0 && box.b <= box.vh + 1, JSON.stringify(box));

@@ -22,9 +22,9 @@ if (await page.$("[data-cx-seal]")) { await page.click("[data-cx-seal]"); await 
 // The map, from the HUD.
 await toPlate("muster"); await page.click(".cx-hudmap button"); await page.waitForTimeout(900); await shot("map"); await page.keyboard.press("Escape"); await page.waitForTimeout(500);
 // A project: from the Muster page's list.
-await page.click('a[href="#project/weaving"]'); await page.waitForTimeout(700); await shot("project-branching");
+await page.click('a[href="#project/texas"]'); await page.waitForTimeout(700); await shot("project-branching");
 await until(() => window.__cx.state().t >= 1, null, 20000); await page.waitForTimeout(500); await shot("project-card");
-await page.click('.cx-card a[href="#project/weaving/folio"]'); await page.waitForTimeout(900); await shot("project-folio");
+await page.click('.cx-card a[href="#project/texas/folio"]'); await page.waitForTimeout(900); await shot("project-folio");
 await page.goBack(); await page.waitForTimeout(700); await page.goBack(); await until(() => window.__cx.state().t <= 0 && !window.__cx.state().held, null, 20000); await page.waitForTimeout(600); await shot("project-returned");
 console.log("state", JSON.stringify(await page.evaluate(() => ({ hash: location.hash, y: scrollY, where: window.__where, cx: window.__cx.state() }))));
 console.log("errors", JSON.stringify(errors.filter((e) => !e.includes("X4000"))));

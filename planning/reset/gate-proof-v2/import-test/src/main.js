@@ -9,7 +9,8 @@ import { buildShots, createRig, CHAPTERS, LANGUAGE, curve1 } from "./camera-rig.
 import { createEvents } from "./events.js";
 import { createJourney, buildJourneyShots, LANGUAGE as J_LANGUAGE, CHAPTERS as J_CHAPTERS, TOTAL as J_TOTAL, UNIT_VH } from "./journey.js";
 import { FS_VERT, SHADOW_VERT, SHADOW_FRAG, CLOUD_FRAG, COMPOSITE_FRAG, STAR_VERT, STAR_FRAG } from "./shaders.js";
-import { initChronicle, chapterForHash } from "./chronicle/ui.js";
+import { initChronicle, chapterForHash as chapterForHash1 } from "./chronicle/ui.js";
+import { chapterHash2 } from "./chronicle2/route.js";
 
 const q = new URLSearchParams(location.search);
 const CAPTURE = q.has("capture");
@@ -23,6 +24,8 @@ const COARSE_POINTER = matchMedia("(pointer: coarse)").matches;
 // untouched without ?portal=1.
 const PORTAL = DIRECTOR && q.get("portal") === "1";
 const STORY = PORTAL ? J_CHAPTERS : CHAPTERS;
+const CHRONICLE2 = PORTAL && q.get("chronicle") === "2";   // the diegetic interface (src/chronicle2/); without the flag the journey keeps Chronicle V1
+const chapterForHash = (h) => (CHRONICLE2 ? chapterHash2(h) : chapterForHash1(h));
 if (DIRECTOR) document.body.classList.add("director");
 if (DIRECTOR && q.get("hud") !== "1") document.body.classList.add("no-hud");   // the debug readout is for tests only
 
@@ -436,7 +439,9 @@ async function boot() {
   buildHud();
   if (DIRECTOR) setupScroll();
   // The Chronicle Interface: the HUD, the map, the project standards (src/chronicle/). Not in capture mode, which the regression tests use.
-  if (PORTAL && !CAPTURE) chronicle = initChronicle({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth });
+  if (PORTAL && !CAPTURE) chronicle = CHRONICLE2
+    ? await (await import("./chronicle2/index.js")).initChronicle2({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth, travelTo })
+    : initChronicle({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth });
   if (!CAPTURE) requestAnimationFrame(loop);
 
   // 4. The full language programs, in the background.
@@ -572,13 +577,13 @@ async function prewarmPortalRoute() {
 // portal texture, scissored to the inner gate, then the plain's ink program, which shows that texture through the arch.
 function renderPortalFrame(time) {
   applyCamera(state.smooth);
-  chronicle?.camera(camera);   // a branch off the route (a project standard) moves the camera from here
   uFig.value.set(0, -50, 0);
   shared.uTime.value = time; lastT = time;
   U.uGrainT.value = REDUCED_MOTION ? 0 : Math.floor(time * 12);   // reduced motion: the film grain holds still too
   const c = journey.worldAt(state.smooth, camera), pw = U.uRes.value.x, ph = U.uRes.value.y;
   journey.stream(c, camera);
   window.__world = c;
+  chronicle?.camera(camera);   // off the route (a standard, walking, the map): after the world is chosen, so leaving the route can never cross a portal
   if (c >= 1) {
     const w = journey.worlds[c - 1];
     window.__where = w.def.id; window.__compUsed = "painted";
@@ -737,6 +742,13 @@ function updateDiscover() {
 // The page is six real sections, one per chapter, sized in proportion to the story; the story maps linearly onto the scroll.
 let scrollProgress = null, chapterIndex = -1, chapterTimer = 0, scrollSpan = 0;
 // The page position for journey progress p: what the map and a project link use to walk the page somewhere.
+// The map's travel: straight to a place, waiting for its world, without flying through every world on the way.
+async function travelTo(p) {
+  state.p = state.smooth = p; state.scrolled = true; applyCamera(p);
+  const c = journey.worldAt(p, camera); journey.stream(c, camera);
+  await Promise.all(journey.worlds.filter((w) => w.status.state === "loading").map((w) => w.load(camera)));
+  scrollToP(p); scrollProgress = p; state.p = state.smooth = p;
+}
 function scrollToP(p) { const story = document.getElementById("story"); scrollTo(0, story.offsetTop + p * (scrollSpan / 100) * innerHeight); }
 function setupScroll() {
   const story = document.getElementById("story");

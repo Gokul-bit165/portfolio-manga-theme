@@ -130,23 +130,27 @@ export function initChronicle({ STORY, journey, reduced, scrollToP, getP }) {
     return `<div class="head" aria-hidden="true"><span>Selected works</span><span>Standard ${p.n} of VI</span></div>
       <div class="branch"><svg width="70" height="36" viewBox="0 0 86 44" aria-hidden="true"><line x1="2" y1="36" x2="84" y2="36" stroke="#d94527" stroke-width="2"/>${[10, 26, 58, 74].map((x) => `<line x1="${x}" y1="32" x2="${x}" y2="40" stroke="#2a211a" stroke-width="1.2"/>`).join("")}<path d="M42 36 Q 46 18 66 12" fill="none" stroke="#d94527" stroke-width="1.6" stroke-dasharray="3 3"/><line x1="42" y1="30" x2="42" y2="42" stroke="#2a211a" stroke-width="2.4"/><line x1="68" y1="3" x2="68" y2="20" stroke="#2a211a" stroke-width="1.4"/><path d="M68 4 h12 l-3 4 l3 4 h-12z" fill="#9c2e1e"/></svg>
         <span>Off the route, standing before this standard.</span></div>
-      <h2 id="cx-card-t">${esc(p.name)}</h2><p class="ov">${esc(p.overview)}</p>
-      ${p.technologies ? `<p class="tech">${p.technologies.map((t) => `<span><span class="cx-stake" aria-hidden="true"></span>${esc(t)}</span>`).join("")}</p>` : ""}
+      <h2 id="cx-card-t">${esc(p.name)}</h2><p class="status">${esc(p.status)}</p><p class="ov">${esc(p.line)}</p>
       <a class="cx-seal" href="#project/${p.id}/folio"><span class="wax" aria-hidden="true">${p.n}</span>Read the folio</a>
       <div class="row"><a class="cx-link" href="#project/${PROJECTS[(i + 5) % 6].id}" aria-label="Previous standard: ${esc(PROJECTS[(i + 5) % 6].name)}">Previous</a><a class="cx-link" href="#project/${PROJECTS[(i + 1) % 6].id}" aria-label="Next standard: ${esc(PROJECTS[(i + 1) % 6].name)}">Next</a></div>
       <div class="row"><button class="cx-link" type="button" data-back>Return to the route</button><span style="font:italic 13px var(--f-read);color:var(--ink-faded)">Esc returns</span></div>`;
   }
   function folioHtml(p) {
-    const has = (k) => p[k] && (!Array.isArray(p[k]) || p[k].length);
-    const shown = SECTIONS.filter(([k]) => has(k) || document.body.classList.contains("cx-review"));
+    // Links are built from verified URLs only; "My contribution" is the owner's to write, so visitors see it only once it is no longer a draft.
+    const review = document.body.classList.contains("cx-review");
+    const links = [p.github && `<li><span class="cx-stake" aria-hidden="true"></span><a href="${esc(p.github)}" rel="noopener">Source on GitHub</a></li>`, p.demo && `<li><span class="cx-stake" aria-hidden="true"></span><a href="${esc(p.demo)}" rel="noopener">Live system</a></li>`].filter(Boolean);
+    const val = (k) => (k === "links" ? (links.length ? links : null) : k === "contribution" ? (review ? p.contribution : p.contributionFinal ?? null) : p[k]);
+    const has = (k) => { const v = val(k); return v && (!Array.isArray(v) || v.length); };
+    const shown = SECTIONS.filter(([k]) => has(k));
     const body = (k) => {
-      if (!has(k)) return `<p class="review"><b>To add</b>${esc(p.needs?.[k] ?? "")}</p>`;
-      const v = p[k];
-      if (Array.isArray(v)) return `${k === "solution" && p.solutionLead ? `<p>${esc(p.solutionLead)}</p>` : ""}<ul>${v.map((x) => `<li><span class="cx-stake" aria-hidden="true"></span>${esc(x)}</li>`).join("")}</ul>`;
+      const v = val(k);
+      if (k === "links") return `<ul>${v.join("")}</ul>`;
+      if (k === "contribution") return `<p class="review"><b>Draft, not shown to visitors</b>${esc(v)}</p>`;
+      if (Array.isArray(v)) return `<ul>${v.map((x) => `<li><span class="cx-stake" aria-hidden="true"></span>${esc(x)}</li>`).join("")}</ul>`;
       return `<p>${esc(v)}</p>`;
     };
     return `<nav aria-label="Sections of this folio"><p>Standard ${p.n} of VI</p><ol>${shown.map(([k, t]) => `<li><a href="#cx-sec-${k}" data-sec="${k}">${t}</a></li>`).join("")}</ol></nav>
-      <div class="body"><h2 class="cx-title" id="cx-folio-t">${esc(p.name)}</h2>
+      <div class="body"><h2 class="cx-title" id="cx-folio-t">${esc(p.name)}</h2><p class="status">${esc(p.status)}</p>${p.review ? `<p class="review"><b>For the owner</b>${esc(p.review)}</p>` : ""}
         ${shown.map(([k, t]) => `<section id="cx-sec-${k}" aria-labelledby="cx-h-${k}"><h3 id="cx-h-${k}">${t}</h3>${body(k)}</section>`).join("")}
         <div class="foot"><a class="cx-link" href="#project/${p.id}">Back to the standard</a><button class="cx-link" type="button" data-back>Return to the route</button></div></div>`;
   }

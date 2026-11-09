@@ -1,0 +1,258 @@
+/* Chronicle V2: the world is the interface. Only with ?chronicle=2 (body.cx2). Exploring leaves the screen to the world; reading happens only on request.
+   Type: IM Fell for chapter numbers and the map, Alegreya small capitals for names, Alegreya for reading, a mono for controls and technical labels. */
+@font-face { font-family: "Alegreya SC"; src: url("../../assets/chronicle/fonts/AlegreyaSC-ExtraBold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "Chronicle Mono"; src: url("../../assets/chronicle/fonts/ChronicleMono-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+/* The native scrollbar still works; it is simply not drawn over the world. */
+html:has(body.cx2) { scrollbar-gutter: auto; scrollbar-width: none; }
+html:has(body.cx2)::-webkit-scrollbar { display: none; }
+body.cx2 { --ink2: #1d1712; --f-mono: "Chronicle Mono", ui-monospace, monospace; --paper: #f3efe5; }
+
+/* The page's chapter plates stay in the document for readers and search, off screen. */
+body.cx2 .plate-wrap { width: 1px; height: 1px !important; overflow: hidden; clip-path: inset(50%); }
+body.cx2 #caption { position: fixed; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 1; }
+body.cx2 kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; font: 500 11px/1 var(--f-mono); border: 1.4px solid currentColor; border-radius: 4px 5px 4px 6px / 5px 4px 6px 4px; }
+body.cx2 :focus-visible { outline: 2px solid #c9b27e; outline-offset: 3px; }
+body.cx2 .cx2-note :focus-visible, body.cx2 .cx2-read :focus-visible, body.cx2 .cx2-folio :focus-visible, body.cx2 .cx2-map :focus-visible { outline-color: #9c2e1e; }
+body.cx2 [tabindex="-1"]:focus-visible { outline: none; }   /* a heading or sheet that was moved to by script, not a control */
+.cx2-note, .cx2-folio, .cx2-read, .cx2-map { font-family: var(--f-read); }
+.spread2 .right, .cx2-read .sheet { scrollbar-color: rgb(29 23 18 / .35) transparent; }
+
+/* ---- The three persistent marks. */
+.cx2-mark { position: fixed; left: 44px; bottom: 40px; z-index: 30; display: block; padding: 0; border: 0; background: none; color: #f3ead6; text-align: left; cursor: pointer; text-shadow: 0 1px 2px rgb(0 0 0 / .65), 0 0 18px rgb(0 0 0 / .35); }
+.cx2-mark .n { display: block; font: 400 15px/1 var(--f-map); letter-spacing: .14em; opacity: .85; }
+.cx2-mark .t { display: block; font: 700 22px/1.15 var(--f-title); letter-spacing: .03em; margin-top: 4px; text-transform: uppercase; }
+.cx2-mark svg { display: block; margin-top: 6px; }
+.cx2-mark.manga { padding: 8px 14px 9px; background: #fff; border: 2.5px solid #111; color: #111; text-shadow: none; box-shadow: 4px 4px 0 #111; border-radius: 2px 8px 3px 9px / 9px 3px 8px 2px; }
+.cx2-mark.manga svg path { fill: #111; }
+.cx2-hint { position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); z-index: 30; display: flex; gap: 22px; align-items: center; color: #efe6d2; font: 500 12px/1 var(--f-mono); letter-spacing: .06em; text-shadow: 0 1px 2px rgb(0 0 0 / .75); opacity: 0; transition: opacity 700ms; pointer-events: none; cursor: pointer; }
+.cx2-hint.on { opacity: .8; }
+.cx2-hint .grp, .cx2-keys .grp { display: inline-flex; align-items: center; gap: 7px; }
+.cx2-compass { position: fixed; right: 40px; bottom: 34px; width: 44px; height: 44px; z-index: 30; opacity: .85; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .6)); touch-action: none; display: none; cursor: grab; }
+.cx2-compass text { font-family: var(--f-map); }
+body.cx2-muster .cx2-compass { display: block; }
+.cx2-focus { position: fixed; left: 50%; bottom: 76px; transform: translateX(-50%); z-index: 31; display: flex; gap: 8px; align-items: center; color: #f3ead6; font: 500 13px/1.2 var(--f-mono); text-shadow: 0 1px 2px #000; }
+body.cx2-page .cx2-mark, body.cx2-page .cx2-hint { display: none; }
+body.cx2-modal .cx2-mark, body.cx2-modal .cx2-hint, body.cx2-modal .cx2-compass, body.cx2-mapping .cx2-ink, body.cx2-mapping .cx2-insc { visibility: hidden; }
+
+/* ---- Discovery. */
+.cx2-ink { position: fixed; left: 0; top: 0; z-index: 22; pointer-events: none; overflow: visible; }
+.cx2-ink path { fill: none; stroke-linecap: round; }
+.cx2-ink .gold { stroke: #c9b27e; stroke-width: 2.6; opacity: .95; }
+.cx2-ink .pen { stroke: #1d1712; stroke-width: 1.1; opacity: .7; }
+.cx2-ink .ring { stroke: #c9b27e; stroke-width: 2.2; opacity: .85; }
+.cx2-ink .tie { stroke: #1d1712; stroke-width: 1.6; }
+.cx2-ink .knot { fill: #d94527; stroke: #1d1712; display: none; }
+.cx2-insc { position: fixed; z-index: 23; transform: translateX(-50%); color: #f6ecd3; text-align: center; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 3px rgb(0 0 0 / .85), 0 0 22px rgb(0 0 0 / .45); }
+.cx2-insc .t { font: 800 26px/1 var(--f-title); letter-spacing: .06em; text-transform: uppercase; }
+.cx2-insc .s { margin-top: 8px; display: flex; gap: 8px; justify-content: center; align-items: center; font: 500 12px/1 var(--f-mono); letter-spacing: .08em; }
+
+/* ---- Inspection: the torn note, about 7% of a desktop frame. */
+.cx2-note { position: fixed; z-index: 26; width: 420px; padding: 44px 46px 34px 58px; color: var(--ink2); background: url("../../assets/chronicle/note.webp") center / 100% 100% no-repeat; filter: drop-shadow(0 10px 14px rgb(0 0 0 / .42)); opacity: 0; transform: translateY(8px) rotate(-.6deg); transition: opacity 340ms, transform 340ms var(--ease-page); }
+.cx2-note.in { opacity: 1; transform: rotate(-.6deg); }
+.cx2-note h2 { margin: 4px 0 1px; font: 800 26px/1.1 var(--f-title); letter-spacing: .02em; outline: none; padding-right: 58px; }
+.cx2-note .kicker, .cx2-folio .kicker { margin: 0; font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #5a5448; }
+.cx2-note .status, .cx2-folio .status { margin: 0 0 8px; font: italic 500 14px/1.3 var(--f-read); color: #9c2e1e; }
+.cx2-note .line { margin: 0 0 12px; font: 400 17px/1.45 var(--f-read); }
+.cx2-note .emb { position: absolute; right: 44px; top: 36px; opacity: .9; }
+.cx2-note .acts { display: flex; gap: 16px; align-items: center; padding-top: 9px; border-top: 1px solid rgb(29 23 18 / .35); }
+.cx2-note .step { display: inline-flex; gap: 2px; margin-left: 8px; vertical-align: middle; }
+.cx2-note .step a { display: inline-grid; place-items: center; width: 22px; height: 16px; color: var(--ink2); text-decoration: none; font: 500 19px/1 var(--f-mono); }
+.cx2-note .step a:hover { color: #9c2e1e; }
+.act { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; padding: 0; border: 0; background: none; color: var(--ink2); text-decoration: none; cursor: pointer; font: 500 12px/1 var(--f-mono); letter-spacing: .05em; }
+.act:hover { color: #9c2e1e; }
+
+/* ---- The Chronicle map: the world drains to ink, the chart washes in. No box. */
+body.cx2 canvas#world { transition: filter 700ms; }
+body.cx2-mapping canvas#world { filter: grayscale(1) contrast(1.15) brightness(.82); }
+@media (prefers-reduced-motion: reduce) { body.cx2 canvas#world { transition: none; } }
+.cx2-map { position: fixed; inset: 0; z-index: 40; color: var(--ink2); opacity: 0; transition: opacity 420ms; }
+.cx2-map.in { opacity: 1; }
+.cx2-map .wash { position: absolute; inset: 0; background: #e8dcc1 url("../../assets/chronicle/vellum.jpg") center / cover; -webkit-mask: radial-gradient(ellipse 48vw 49vh at 50% 50%, #000 62%, rgb(0 0 0 / .85) 72%, transparent 100%); mask: radial-gradient(ellipse 48vw 49vh at 50% 50%, #000 62%, rgb(0 0 0 / .85) 72%, transparent 100%); }
+.cx2-map.manga .wash { background: var(--paper); }
+.cx2-map header { position: absolute; left: 50%; top: 5.8vh; transform: translateX(-50%); text-align: center; }
+.cx2-map header p { margin: 0; }
+.cx2-map header .a { font: 400 16px/1 var(--f-map); letter-spacing: .3em; }
+.cx2-map header .b { font: 800 34px/1.1 var(--f-title); letter-spacing: .05em; margin-top: 6px; }
+.cx2-map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cx2-map .road { fill: none; stroke: #5a5448; stroke-width: 1.4; stroke-dasharray: 3 6; opacity: .8; }
+.cx2-map .walked { fill: none; stroke: #d94527; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1400ms 420ms cubic-bezier(.4, 0, .3, 1); }
+.cx2-terrain, .cx2-land, .cx2-st, .cx2-marker { opacity: 0; transition: opacity 500ms; }
+.cx2-map.in .cx2-terrain { opacity: .95; transition-delay: 200ms; }
+.cx2-map.in .cx2-land, .cx2-map.in .cx2-st { opacity: 1; }
+.cx2-map.in .cx2-marker { opacity: 1; transition-delay: 1700ms; }
+.cx2-st { cursor: pointer; }
+.cx2-st .sel { opacity: 0; }
+.cx2-st.on .sel { opacity: 1; }
+.cx2-st .n { font: 700 13px var(--f-title); fill: #9c2e1e; }
+.cx2-st .nm { font: 18px var(--f-map); fill: #1d1712; letter-spacing: .05em; }
+.cx2-st .nm.ahead { fill: #5a5448; }
+.cx2-marker text { font: italic 600 16px var(--f-read); fill: #9c2e1e; }
+.cx2-stops { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: 0; padding: 0; list-style: none; }
+.cx2-mapside { position: absolute; right: 8vw; bottom: 22vh; width: 290px; pointer-events: none; }
+.cx2-mapside h3 { margin: 0; font: 800 21px/1.15 var(--f-title); }
+.cx2-mapside p { margin: 4px 0 0; font: italic 16px/1.4 var(--f-read); color: #3f372d; }
+.cx2-keys { position: absolute; left: 50%; bottom: 5vh; transform: translateX(-50%); display: flex; gap: 22px; align-items: center; font: 500 12px/1 var(--f-mono); letter-spacing: .06em; }
+.cx2-keys button { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+
+/* ---- A chapter's page, on request: a torn sheet at the side. The world stays in view beside it. */
+.cx2-read { position: fixed; z-index: 38; left: 5vw; top: 7vh; bottom: 7vh; width: min(620px, 90vw); filter: drop-shadow(0 16px 26px rgb(0 0 0 / .45)); opacity: 0; transition: opacity 320ms; }
+.cx2-read.in { opacity: 1; }
+.cx2-read .sheet { position: absolute; inset: 0; padding: 40px 44px 56px; overflow: auto; scrollbar-width: thin; outline: none; background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; color: var(--ink2); font: 400 17px/1.58 var(--f-read); }
+.cx2-read .sheet.plate-vael { position: relative; inset: auto; padding: 0; background: none; overflow: visible; }
+.cx2-read:has(.plate-vael) { bottom: auto; }
+.cx2-read .sheet.plate-vael > .n { display: none; }
+.cx2-read:has(.plate-vael) .cx2-readclose { right: 4px; bottom: -40px; color: #f3ead6; text-shadow: 0 1px 2px #000; }
+.cx2-read:has(.plate-vael) { width: min(960px, 92vw); }
+.cx2-read .sheet > .n { font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #5a5448; margin: 0 0 10px; }
+.cx2-read .sheet h3 { font: 800 28px/1.15 var(--f-title); margin: 0 0 10px; }
+.cx2-read .sheet p { margin: 0 0 12px; }
+.cx2-read .sheet a { color: var(--ink2); text-decoration-color: #d94527; text-underline-offset: 3px; }
+.cx2-read .sheet ul { list-style: none; padding: 0; margin: 0 0 12px; }
+.cx2-read .sheet li { display: flex; align-items: baseline; margin: 0 0 4px; }
+.cx2-read .sheet .k { font: 700 15px/1.3 var(--f-title); margin: 12px 0 6px; }
+.cx2-read .sheet .credit { font: italic 13px/1.4 var(--f-read); color: #5a5448; }
+.cx2-read .sheet .faded { font-style: italic; color: #5a5448; }
+.cx2-read .sheet .lede { font-style: italic; }
+.cx2-read .sheet .turn { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgb(29 23 18 / .5); }
+.cx2-readclose { position: absolute; right: 18px; bottom: 14px; }
+
+/* ---- The folio: a book of its own, opened by an ink bleed from the standard. The camp is not behind it. */
+.cx2-folio { position: fixed; inset: 0; z-index: 42; display: grid; place-items: center; background: #14110e; clip-path: circle(0 at var(--ox, 50%) var(--oy, 50%)); transition: clip-path 520ms cubic-bezier(.5, 0, .3, 1); }
+.cx2-folio.in { clip-path: circle(150vmax at var(--ox, 50%) var(--oy, 50%)); }
+@media (prefers-reduced-motion: reduce) { .cx2-folio { transition: none; } .cx2-note { transition: none; } .cx2-map { transition: none; } .cx2-read { transition: none; } .cx2-map .walked { transition: none; } .cx2-terrain, .cx2-land, .cx2-st, .cx2-marker { transition: none; } }
+.spread2 { display: grid; grid-template-columns: 380px minmax(0, 1fr); width: min(1180px, 94vw); height: min(780px, 90vh); filter: drop-shadow(0 18px 34px rgb(0 0 0 / .6)); color: var(--ink2); }
+.spread2 .pg { background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; padding: 36px 38px 28px; position: relative; min-height: 0; }
+.spread2 .left { box-shadow: inset -36px 0 40px -30px rgb(80 55 30 / .4); display: flex; flex-direction: column; align-items: flex-start; }
+.spread2 .right { box-shadow: inset 36px 0 40px -30px rgb(80 55 30 / .4); overflow: auto; scrollbar-width: thin; padding-left: 46px; }
+.spread2 svg { margin: 10px 0 6px; }
+.spread2 .ttl { margin: 4px 0 2px; font: 800 30px/1.1 var(--f-title); outline: none; }
+.spread2 .line { margin: 0 0 12px; font: italic 400 17px/1.45 var(--f-read); }
+.spread2 nav { flex: 1; min-height: 0; overflow: auto; width: 100%; }
+.spread2 ol { list-style: none; margin: 0; padding: 0; }
+.spread2 nav a { display: flex; align-items: center; min-height: 30px; color: var(--ink2); text-decoration: none; font: 700 15px/1.2 var(--f-title); }
+.spread2 nav a:hover { color: #9c2e1e; }
+.spread2 .foot { padding-top: 10px; border-top: 1px solid rgb(29 23 18 / .4); width: 100%; }
+.spread2 section { padding: 12px 0 10px; border-top: 1px solid rgb(29 23 18 / .28); max-width: 40em; }
+.spread2 section:first-child { border-top: 0; padding-top: 0; }
+.spread2 h3 { margin: 0 0 6px; font: 700 18px/1.3 var(--f-title); }
+.spread2 p { font-size: 17px; line-height: 1.6; margin: 0 0 8px; }
+.spread2 ul { list-style: none; margin: 0 0 6px; padding: 0; }
+.spread2 li { display: flex; align-items: baseline; font-size: 17px; line-height: 1.55; }
+.spread2 section a { color: var(--ink2); text-decoration-color: #d94527; text-underline-offset: 3px; }
+
+/* ---- The manga opening: paper, ink, panels. Nothing here is parchment. */
+.cx2-manga { position: fixed; inset: 0; z-index: 20; pointer-events: none; overflow: hidden; color: #111; }
+.cx2-manga[hidden] { display: none; }
+.m-hole { position: absolute; box-shadow: 0 0 0 300vmax var(--paper); outline: 5px solid #111; }
+.m-panel { position: absolute; background: #fff center / cover no-repeat; outline: 5px solid #111; left: calc(65.5vw + 50px); right: 28px; }
+.m-gate { top: 28px; height: calc(55vh - 28px); }
+.m-plain { top: calc(55vh + 22px); bottom: 28px; background-size: 260% auto; background-position: 63% 55%; }
+.m-cap { position: absolute; margin: 0; background: #fff; border: 2.5px solid #111; padding: 10px 14px; font: italic 500 18px/1.35 var(--f-read); box-shadow: 4px 4px 0 #111; max-width: 300px; }
+.m-gate .m-cap { left: 22px; top: 24px; }
+.m-plain .m-cap { right: 18px; bottom: 16px; transform: rotate(-1deg); }
+.m-sfx { position: absolute; left: 32vw; top: 14vh; margin: 0; font: 400 64px/1 var(--f-map); letter-spacing: .32em; transform: rotate(-7deg); opacity: .88; }
+.m-lines { position: absolute; left: 28px; top: 28px; width: 65.5vw; height: 300px; }
+.m-title { position: absolute; left: 70px; top: 58vh; }
+.m-title p { margin: 0; }
+.m-title .c { font: 400 26px/1 var(--f-map); letter-spacing: .38em; }
+.m-title .t { font: 800 74px/1 var(--f-title); margin-top: 10px; }
+.m-tags { position: absolute; left: 70px; bottom: 60px; display: flex; gap: 14px; }
+.m-tag { display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px; background: #fff; border: 2px solid #111; font: 500 13px/1 var(--f-mono); letter-spacing: .06em; border-radius: 2px 8px 3px 9px / 9px 3px 8px 2px; }
+
+/* ---- Phones: no keys to show; a tap examines; the note rises from the foot; a tap on the chapter mark opens the map. */
+@media (max-width: 760px) {
+  .cx2-mark { left: 16px; top: 16px; bottom: auto; }
+  .cx2-mark .n { font-size: 12px; } .cx2-mark .t { font-size: 17px; }
+  .cx2-hint { bottom: 20px; }
+  .cx2-compass { right: 14px; bottom: 14px; width: 64px; height: 64px; }
+  .cx2-note { left: 8px !important; right: 8px; top: auto !important; bottom: 10px; width: auto; padding: 38px 34px 28px 46px; }
+  .cx2-note .emb { right: 30px; top: 28px; }
+  .cx2-note .acts { gap: 14px; } .act { min-height: 44px; }
+  .cx2-insc .t { font-size: 20px; }
+  .cx2-read { left: 8px; right: 8px; top: 8px; bottom: 8px; width: auto; }
+  .cx2-read:has(.plate-vael) { width: auto; }
+  .cx2-read .sheet { padding: 28px 24px 60px; }
+  .spread2 { grid-template-columns: 1fr; height: 100%; width: 100%; overflow: auto; }
+  .spread2 .pg { padding: 22px 20px; } .spread2 .right { overflow: visible; padding-left: 20px; }
+  .spread2 nav { display: none; }
+  /* The map becomes a strip of places down a paper sheet. */
+  .cx2-map > svg, .cx2-mapside, .cx2-keys { display: none; }
+  .cx2-map .wash { -webkit-mask: none; mask: none; }
+  .cx2-map header { position: relative; left: auto; top: auto; transform: none; padding: 22px 0 10px; }
+  .cx2-stops { position: relative; width: auto; height: calc(100% - 110px); clip-path: none; overflow: auto; padding: 0 16px; }
+  .cx2-stops::before { content: ""; position: absolute; left: 41px; top: 20px; bottom: 20px; border-left: 2px solid #d94527; }
+  .cx2-stops button { display: grid; grid-template-columns: 64px 1fr; align-items: center; width: 100%; min-height: 62px; border: 0; background: none; color: var(--ink2); text-align: left; padding: 4px 0; }
+  .cx2-stops .th { grid-row: 1 / 3; width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid #1d1712; background: #e5d7bb center / cover; position: relative; }
+  .cx2-stops [aria-current] .th { border: 3px solid #c9b27e; }
+  .cx2-stops .nm { font: 700 16px/1.2 var(--f-title); } .cx2-stops .ch { font: italic 14px/1.3 var(--f-read); color: #5a5448; }
+  /* The manga page: one tall panel, the gate below it. */
+  .m-plain, .m-sfx, .m-lines { display: none; }
+  .m-gate { left: 8px; right: 8px; top: calc(62vh + 26px); height: auto; bottom: 8px; }
+  .m-gate .m-cap { font-size: 15px; left: 10px; top: 10px; max-width: 74%; }
+  .m-title { left: 22px; top: 36vh; } .m-title .c { font-size: 16px; } .m-title .t { font-size: 38px; } .m-title svg { width: 280px; }
+  .m-tags { left: 22px; bottom: auto; top: calc(62vh - 44px); }
+}
+
+/* ---- The chapter pages' own parts: generated once from Chronicle V1's rules, scoped to the V2 reading sheet, so that V1 stays untouched. */
+.cx2-read .sheet .spread { display: grid; grid-template-columns: 1fr 1fr; filter: drop-shadow(0 16px 26px rgb(0 0 0 / .42)); }
+.cx2-read .sheet .spread .page { background: var(--vellum) url("../../assets/chronicle/vellum.jpg") center / cover; padding: 24px 32px 28px; position: relative; max-height: 76vh; overflow: auto; scrollbar-width: thin; }
+.cx2-read .sheet .spread .verso { box-shadow: inset -36px 0 40px -30px rgb(80 55 30 / .35); }
+.cx2-read .sheet .spread .recto { box-shadow: inset 36px 0 40px -30px rgb(80 55 30 / .35); }
+.cx2-read .sheet .runhead { display: flex; justify-content: space-between; font: 500 14px/1 var(--f-title); color: var(--ink-faded); padding-bottom: 9px; border-bottom: 1px solid rgb(42 33 26 / .5); margin-bottom: 14px; }
+.cx2-read .sheet .sketch { margin: 0 0 12px; }
+.cx2-read .sheet .sketch .art { aspect-ratio: 880 / 360; background: url("../../assets/chronicle/plate-vael-ink.png") center / cover; border: 1px solid var(--ink); outline: .6px solid var(--ink); outline-offset: 3px; }
+.cx2-read .sheet .sketch figcaption { font: italic 14px/1.4 var(--f-read); color: var(--ink-faded); margin-top: 8px; }
+.cx2-read .sheet .opening::first-letter { float: left; font: 700 46px/1 var(--f-title); color: var(--rubric); padding: 8px 10px 4px; margin: 3px 10px 0 0; border: 1px solid var(--ink); outline: .6px solid var(--ink); outline-offset: -5px; background: rgb(229 215 187 / .6); }
+.cx2-read .sheet .gloss { display: block; margin: 6px 0 0; padding-left: 12px; border-left: 2px solid var(--cord); font: italic 14px/1.4 var(--f-read); color: var(--rubric); }
+.cx2-read .sheet .ledger { margin: 0 0 14px; display: grid; grid-template-columns: max-content 1fr; column-gap: 12px; }
+.cx2-read .sheet .ledger dt { font: 700 15px/1.45 var(--f-title); padding: 5px 0; border-bottom: 1px solid rgb(42 33 26 / .28); }
+.cx2-read .sheet .ledger dd { margin: 0; padding: 5px 0; font-size: 16px; line-height: 1.45; border-bottom: 1px solid rgb(42 33 26 / .28); }
+.cx2-read .sheet .stds { list-style: none; padding: 0; margin: 4px 0 8px; }
+.cx2-read .sheet .stds li { display: block; margin: 0; border-bottom: 1px solid rgb(42 33 26 / .25); }
+.cx2-read .sheet .stds a { display: grid; grid-template-columns: 34px 1fr; gap: 0 8px; padding: 8px 0; text-decoration: none; min-height: 44px; }
+.cx2-read .sheet .stds .num { font: 500 15px/1.4 var(--f-title); color: var(--rubric); text-align: right; }
+.cx2-read .sheet .stds .nm { font: 700 17px/1.3 var(--f-title); }
+.cx2-read .sheet .stds .ln { grid-column: 2; font: italic 15px/1.35 var(--f-read); color: var(--ink-faded); }
+.cx2-read .sheet .stds a:hover .nm { color: var(--rubric); }
+.cx2-read .sheet .fig { margin: 4px 0 12px; border: 1px solid var(--ink); padding: 8px 8px 4px; background: rgb(229 215 187 / .5); }
+.cx2-read .sheet .fig svg { width: 100%; height: auto; display: block; }
+.cx2-read .sheet .fig figcaption { font: italic 13px/1.35 var(--f-read); color: var(--ink-faded); padding: 6px 2px 2px; }
+.cx2-read .sheet .tools { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 10px; }
+.cx2-read .sheet .tools span { display: inline-flex; align-items: baseline; font-size: 16px; }
+.cx2-read .sheet .record { list-style: none; padding: 0; margin: 0 0 10px; }
+.cx2-read .sheet .record li { display: grid; grid-template-columns: 30px 1fr; gap: 0 12px; padding: 10px 0; border-bottom: 1px solid rgb(42 33 26 / .3); align-items: start; }
+.cx2-read .sheet .record svg { grid-row: span 3; margin-top: 2px; }
+.cx2-read .sheet .record .rank { font: 700 14px/1.3 var(--f-title); color: var(--rubric); }
+.cx2-read .sheet .record .what { font: 700 17px/1.3 var(--f-title); }
+.cx2-read .sheet .record .note { font: italic 15px/1.4 var(--f-read); color: var(--ink-faded); }
+.cx2-read .sheet .letter .sealed { display: grid; justify-items: center; gap: 10px; padding: 14px 0 6px; text-align: center; }
+.cx2-read .sheet .letter .fold { width: 100%; aspect-ratio: 16 / 9; position: relative; border: 1px solid rgb(42 33 26 / .5); background: linear-gradient(155deg, transparent 49.6%, rgb(42 33 26 / .35) 50%, transparent 50.4%), linear-gradient(25deg, transparent 49.6%, rgb(42 33 26 / .35) 50%, transparent 50.4%), rgb(214 196 160 / .45); }
+.cx2-read .sheet .letter .fold .to { position: absolute; left: 0; right: 0; top: 18%; font: italic 18px/1.3 var(--f-read); }
+.cx2-read .sheet .letter .fold .cx-seal { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); flex-direction: column; gap: 4px; padding: 0; font: 700 14px/1 var(--f-title); }
+.cx2-read .sheet .letter .fold .cx-seal .wax { width: 58px; height: 58px; font-size: 18px; }
+.cx2-read .sheet .letter .opened { display: none; }
+.cx2-read .sheet .letter.open .sealed { display: none; }
+.cx2-read .sheet .letter.open .opened { display: block; animation: cx-unfold var(--t-open) var(--ease-page) both; }
+.cx2-read .sheet .letter .sign { font: italic 600 20px/1 var(--f-read); margin: 14px 0 4px; }
+.cx2-insc.side { transform: none; text-align: left; }
+.cx2-insc.side .s { justify-content: flex-start; }
+.cx2-folio[hidden], .cx2-focus[hidden], .cx2-insc[hidden], .cx2-note[hidden], .cx2-read[hidden], .cx2-map[hidden] { display: none; }
+/* V1's phone rules for the chapter pages, scoped to the reading sheet. */
+@media (max-width: 760px) {
+ .cx2-read .sheet .spread { grid-template-columns: 1fr; filter: none; }
+ .cx2-read .sheet .spread .page { max-height: none; overflow: visible; padding: 18px 18px 20px; box-shadow: none; }
+ .cx2-read .sheet .spread .recto { border-top: 1px solid rgb(42 33 26 / .4); }
+}
+@media (min-width: 761px) {
+}
+
+/* The map, opened from the manga chapters, hides the page behind it. */
+body.cx2-mapping .cx2-manga { visibility: hidden; }
+.m-mapbtn { pointer-events: auto; cursor: pointer; color: #111; }
+/* A chapter's page is as tall as its words, up to most of the screen. */
+.cx2-read { bottom: auto; }
+.cx2-read .sheet:not(.plate-vael) { position: relative; inset: auto; max-height: 86vh; }
+.cx2-read .cx2-readclose { z-index: 1; }
+/* No key caps and no compass on top of a note where there is no keyboard. */
+@media (max-width: 760px), (hover: none) { body.cx2 .cx2-note kbd, body.cx2 .cx2-folio kbd, body.cx2 .cx2-read kbd, body.cx2 .m-mapbtn kbd { display: none; } body.cx2-inspecting .cx2-compass { display: none; } }
+@media (max-width: 760px) { body.cx2 .cx2-read { top: 8px; } }

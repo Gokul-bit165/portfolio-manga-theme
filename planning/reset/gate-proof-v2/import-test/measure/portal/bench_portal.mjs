@@ -39,7 +39,7 @@ async function run(gpu, extra) {
   const dir = mkdtempSync(join(tmpdir(), "ptl-"));
   const { ctx, page, errors } = await launch(gpu, { width: 1920, height: 1080, profile: dir });
   await page.addInitScript(OBSERVE);
-  const url = `${BASE}/?portal=1&scale=1${extra}`, r = {};
+  const url = `${BASE}/?portal=1${process.env.EXTRA ?? ""}&scale=1${extra}`, r = {};
   r.cold = await loadRun(page, url);
   r.warm = await loadRun(page, url);
   r.gpu = await page.evaluate(() => window.__stats().gpu);
@@ -48,7 +48,7 @@ async function run(gpu, extra) {
   r.scroll = await scrollRun(page, notches);
   r.shots = [];
   // Shots are timed in capture mode, where the page's own loop is off: with it on, the loop pulled the camera back to the scroll position.
-  await open(page, `${BASE}/?portal=1&scale=1&capture=1&quality=${r.cold.tier.tier}`);
+  await open(page, `${BASE}/?portal=1${process.env.EXTRA ?? ""}&scale=1&capture=1&quality=${r.cold.tier.tier}`);
   const SHOTS = await page.evaluate(() => { const ch = window.__chapters, T = window.__journey.total; return [...ch.map((c) => [c.id, c.still]), ...window.__journey.starts.slice(1).map((u, i) => [`into ${ch[i + 4].id}`, (u - 0.08) / T])]; });
   for (const [name, p] of SHOTS) {
     await page.evaluate((p) => window.__goto(p), p);

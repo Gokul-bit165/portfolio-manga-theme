@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>V2 phone fallback</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css">
+<style>
+  /* Phone fallback, 390 x 844: no WASD. The page scrolls the route as before; a tap on a standard examines it; the note rises from the
+     foot and leaves the standard in view; Back returns. The chapter mark is the only persistent element. */
+  html, body { width: 390px; height: 844px; }
+  .frame { width: 390px; height: 844px; }
+  .bg { background-image: url(bg/approach-assessment.png); background-size: auto 844px; background-position: 51% 0; }
+  .chapter { left: 18px; top: 18px; bottom: auto; }
+  .chapter .name { font-size: 17px; }
+  .chapter .num { font-size: 12px; }
+  .ring { position: absolute; }
+  .note { left: 10px; right: 10px; bottom: 16px; width: auto; padding: 18px 20px 16px; }
+  .note h2 { font-size: 23px; }
+  .note p { font-size: 16px; }
+  .tapnote { position: absolute; left: 183px; top: 322px; transform: translateX(-50%); display: inline-flex; gap: 7px; align-items: center; font: 500 11px/1 var(--f-mono); letter-spacing: .08em;
+    color: #f3ead6; text-shadow: 0 1px 2px #000; }
+  .tapnote i { width: 22px; height: 22px; border-radius: 50%; border: 1.6px solid #f3ead6; display: inline-block; position: relative; }
+  .tapnote i::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: #d94527; }
+</style></head>
+<body>
+<div class="frame">
+  <div class="bg"></div>
+  <svg width="390" height="844" style="position:absolute;inset:0" aria-hidden="true">
+    <path d="M126 354 C 150 348, 214 347, 240 356 C 244 410, 243 470, 240 510 C 200 515, 160 516, 124 508 C 121 460, 122 400, 129 359" fill="none" stroke="#c9b27e" stroke-width="2.6"/>
+  </svg>
+  <div class="tapnote"><i></i>ASSESSMENT</div>
+  <article class="note" id="note">
+    <div class="emb" id="emb"></div>
+    <div style="font:500 11px/1 var(--f-mono);letter-spacing:.08em;color:#5a5448">STANDARD IV OF VI</div>
+    <h2>Assessment Platform</h2>
+    <p class="status">Production system, live</p>
+    <p>A live institutional platform that grades web assessments by how they render and how they are built.</p>
+    <div class="acts"><span style="font:600 13px var(--f-sc);letter-spacing:.04em">Read the folio</span><span style="margin-left:auto;font:italic 15px var(--f-read)">Back</span></div>
+  </article>
+  <div id="hud"></div>
+</div>
+<script type="module">
+import { chapter, emblems, emblemSvg, deckle } from "./v2.js";
+const E = await emblems();
+document.getElementById("emb").innerHTML = emblemSvg(E.assessment, { size: 46, ink: "#1d1712" });
+document.getElementById("hud").innerHTML = chapter("CHAPTER IV", "THE MUSTER FIELD");
+deckle(document.getElementById("note"), 4, 41);
+</script>
+</body></html>

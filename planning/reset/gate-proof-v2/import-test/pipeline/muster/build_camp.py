@@ -127,7 +127,64 @@ for e in (-1, 1):
 # and under each banner a framed name board facing the ring, the project's name raised in gilt letters cut from Alegreya SC ExtraBold's own
 # outlines (SIL OFL 1.1, import-test/chronicle/fonts/), with the project's plain brass charge on a small plaque above it.
 FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "chronicle", "fonts", "AlegreyaSC-ExtraBold.ttf")
-NAMES = [["Aira"], ["Weaving", "Intelligence"], ["LearnQuest"], ["RescueCore"], ["CAD", "3D Heart"], ["InaippuAI"]]
+# The featured projects (src/chronicle/projects.js, 2026-11-09 reselection): the board's name, and the emblem from assets/chronicle/emblems.json.
+NAMES = [["Loom AI"], ["TerraTrace"], ["NENAI"], ["Assessment"], ["Texas", "Wildfire"], ["HAC-FEW"]]
+EMBLEM_IDS = ["loom", "terratrace", "nenai", "assessment", "texas", "hac-few"]
+EMBLEMS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "assets", "chronicle", "emblems.json")))
+
+
+RELIEF = []   # vertices of the low brass relief (emblems, names): flush on their plates, their occlusion bake reads black, so it is lifted after
+SHIELD = [(-.62, .74), (-.31, .69), (0, .74), (.31, .69), (.62, .74), (.63, .34), (.59, -.06), (.47, -.42), (.27, -.72), (0, -.92), (-.27, -.72), (-.47, -.42), (-.59, -.06), (-.63, .34)]
+
+
+def emblem(P, parts, scale, mid, cy=.04, lift=.034, h=.03):
+    """The project's emblem as a true relief on the shield: every stroke and shape has a top face and sloped walls, the walls a darker tone."""
+    n0 = b.n; TOP, WALL = (1.0, .42) if mid == BRASS else (.05, .0)   # dark iron on the ochre fields: the contrast is the point
+    pt = lambda q, z: P(q[0] * scale, q[1] * scale + cy, z)
+    def wall(a, c):   # one side wall, from the field up to the top face
+        q = [b.v(pt(a, lift), mid, WALL), b.v(pt(c, lift), mid, WALL), b.v(pt(c, lift + h), mid, WALL), b.v(pt(a, lift + h), mid, WALL)]; b.quad(*q)
+    def strip(a, c, w):
+        a, c = np.array(a, float), np.array(c, float); d = c - a; L = np.linalg.norm(d)
+        if L < 1e-6: return
+        n = np.array((-d[1], d[0])) / L * max(w, .05) / 2
+        q = [a + n, c + n, c - n, a - n]
+        b.quad(*[b.v(pt(x, lift + h), mid, TOP) for x in q])
+        for i in range(4): wall(q[i], q[(i + 1) % 4])
+    def fan(pts):
+        pts = [np.array(q, float) for q in pts]; c = sum(pts) / len(pts); ic = b.v(pt(c, lift + h), mid, TOP); ids = [b.v(pt(q, lift + h), mid, TOP) for q in pts]
+        for i in range(len(ids)): b.F.append((ic, ids[i], ids[(i + 1) % len(ids)])); wall(pts[i], pts[(i + 1) % len(ids)])
+    circle = lambda cx, cy_, r, n=18: [(cx + math.cos(i / n * 6.2832) * r, cy_ + math.sin(i / n * 6.2832) * r) for i in range(n)]
+    for part in parts:
+        if "line" in part: x1, y1, x2, y2, w = part["line"]; strip((x1, y1), (x2, y2), w)
+        elif "path" in part: pts, w = part["path"][:-1], part["path"][-1]; [strip(pts[i], pts[i + 1], w) for i in range(len(pts) - 1)]
+        elif "disc" in part: fan(circle(*part["disc"]))
+        elif "poly" in part: fan(part["poly"])
+        elif "ring" in part: cx, cy_, r, w = part["ring"]; c_ = circle(cx, cy_, r, 22); [strip(c_[i], c_[(i + 1) % 22], w) for i in range(22)]
+    RELIEF.extend(range(n0, b.n))
+
+
+def shield(P, k):
+    """A heater shield: an oak back, the field painted in the standard's banner colour, a raised iron rim with rivets."""
+    tone = .28 if k < 3 else .82   # the program paints BANNER red below .6 and ochre above it, the same pair as the banners
+    rings = (1.0, .9, .62, .3, .0)
+    F_ = lambda q, s, z, mid, t: b.v(P(q[0] * s, q[1] * s - .02 if s else -.02, z), mid, t)
+    n0_ = b.n
+    R_ = [[F_(q, s, .03, BANNER, tone) for q in SHIELD] for s in rings[1:]]     # the field; its points lie under the rim and the relief, so it is lifted after the bake, like them
+    RELIEF.extend(range(n0_, b.n))
+    for r0, r1 in zip(R_, R_[1:]):
+        for i in range(len(SHIELD)): b.quad(r0[i], r0[(i + 1) % len(SHIELD)], r1[(i + 1) % len(SHIELD)], r1[i])
+    n = len(SHIELD)
+    for (s0, z0), (s1, z1) in (((1.02, -.05), (1.02, .058)), ((1.02, .058), (.9, .058)), ((.9, .058), (.9, .03))):   # the rim: side, top, inner lip
+        a_ = [F_(q, s0, z0, IRON, .55) for q in SHIELD]; c_ = [F_(q, s1, z1, IRON, .55) for q in SHIELD]
+        for i in range(n): b.quad(a_[i], a_[(i + 1) % n], c_[(i + 1) % n], c_[i])
+    back = [F_(q, 1.0, -.05, WOOD, .3) for q in SHIELD]; c0 = b.v(P(0, -.02, -.05), WOOD, .3)
+    for i in range(n): b.F.append((c0, back[(i + 1) % n], back[i]))
+    for q in SHIELD[::1]:   # rivets round the rim
+        x, y = q[0] * .96, q[1] * .96 - .02; rv = [b.v(P(x + math.cos(i / 6 * 6.2832) * .018, y + math.sin(i / 6 * 6.2832) * .018, .066), BRASS, .9) for i in range(6)]
+        for i in range(1, 5): b.F.append((rv[0], rv[i], rv[i + 1]))
+        RELIEF.extend(rv)
+
+
 _font = None
 def lettering(lines, size):
     """Each line as a Blender text object, extruded, converted to a mesh: (verts in metres, u right / v up / w out of the board, tris)."""
@@ -155,20 +212,6 @@ def frame_at(cx, cy, cz, yaw):
     return lambda a, b_, c=0.0: np.array((cx, cy, cz)) + u * a + v * b_ + w * c
 
 
-def charge(P, k):
-    def poly(pts, lift=0.012):
-        ids = [b.v(P(u, v_, lift), BRASS, 0.6) for u, v_ in pts]
-        for i in range(1, len(ids) - 1): b.F.append((ids[0], ids[i], ids[i + 1]))
-    disc = lambda cx, rad: poly([(cx + math.cos(i / 14 * 6.2832) * rad, math.sin(i / 14 * 6.2832) * rad) for i in range(14)])
-    sc = 0.42
-    if k == 0: disc(0, 0.36 * sc)
-    if k == 1: poly([(-0.5 * sc, -0.12 * sc), (0.5 * sc, -0.12 * sc), (0.5 * sc, 0.12 * sc), (-0.5 * sc, 0.12 * sc)])
-    if k == 2: poly([(x * sc, y_ * sc) for x, y_ in ((-0.5, -0.25), (0, 0.25), (0, 0.45), (-0.5, -0.05))]); poly([(x * sc, y_ * sc) for x, y_ in ((0, 0.25), (0.5, -0.25), (0.5, -0.05), (0, 0.45))])
-    if k == 3: poly([(0, -0.5 * sc), (0.36 * sc, 0), (0, 0.5 * sc), (-0.36 * sc, 0)])
-    if k == 4: disc(-0.24 * sc, 0.2 * sc); disc(0.24 * sc, 0.2 * sc)
-    if k == 5: poly([(-0.1 * sc, -0.5 * sc), (0.1 * sc, -0.5 * sc), (0.1 * sc, 0.5 * sc), (-0.1 * sc, 0.5 * sc)]); poly([(-0.45 * sc, -0.1 * sc), (0.45 * sc, -0.1 * sc), (0.45 * sc, 0.1 * sc), (-0.45 * sc, 0.1 * sc)])
-
-
 def box(P, u0, u1, v0, v1, w0, w1, mid, tone):
     c = [P(u, v_, w) for u in (u0, u1) for v_ in (v0, v1) for w in (w0, w1)]
     # Each face its own corners: shared corners averaged the normals diagonally and the occlusion bake shot half its rays into the box.
@@ -188,21 +231,25 @@ for k, st in enumerate(hdr["standards"]):
     bw, bh = max(1.45, ext[0] + 0.42), max(0.5, ext[1] + 0.34)
     P = frame_at(x + lean * (BOARD_Z / 7.3), y, z + BOARD_Z, yaw)
     P = (lambda P0: (lambda a, b_, c=0.0: P0(a, b_, c + 0.12)))(P)   # the board hangs just in front of the pole
-    box(P, -bw / 2, bw / 2, -bh / 2, bh / 2, -0.035, 0.03, WOOD, 0.5)                      # the plank
+    box(P, -bw / 2, bw / 2, -bh / 2, bh / 2, -0.035, 0.03, WOOD, 0.14)                     # the plank
     # Its face as a grid: four corner vertices sit inside the frame, where the occlusion bake reads black, and would darken the whole face.
-    nu_, nv_ = 10, 4; G = [[b.v(P(-bw / 2 + bw * i / nu_, -bh / 2 + bh * j / nv_, 0.035), WOOD, 0.5) for j in range(nv_ + 1)] for i in range(nu_ + 1)]
+    nu_, nv_ = 10, 4; G = [[b.v(P(-bw / 2 + bw * i / nu_, -bh / 2 + bh * j / nv_, 0.035), WOOD, 0.14) for j in range(nv_ + 1)] for i in range(nu_ + 1)]
     for i in range(nu_):
         for j in range(nv_): b.quad(G[i][j], G[i + 1][j], G[i + 1][j + 1], G[i][j + 1])
     for u0, u1, v0, v1 in ((-bw / 2 - 0.04, bw / 2 + 0.04, bh / 2, bh / 2 + 0.06), (-bw / 2 - 0.04, bw / 2 + 0.04, -bh / 2 - 0.06, -bh / 2),
                            (-bw / 2 - 0.04, -bw / 2 + 0.02, -bh / 2, bh / 2), (bw / 2 - 0.02, bw / 2 + 0.04, -bh / 2, bh / 2)):
         box(P, u0, u1, v0, v1, -0.04, 0.05, DARK, 0.3)                                     # its frame
     ids = [b.v(P(q[0], q[1], 0.035 + q[2]), BRASS, 0.75) for q in L]                        # the name, raised in gilt
+    RELIEF.extend(ids)
     for f in F_: b.F.append(tuple(ids[i] for i in f))
     for su in (-bw * 0.32, bw * 0.32): box(P, su - 0.012, su + 0.012, bh / 2 + 0.06, bh / 2 + 0.42, -0.012, 0.012, IRON, 0.4)
     box(P, -bw * 0.42, bw * 0.42, bh / 2 + 0.42, bh / 2 + 0.48, -0.06, 0.0, WOOD, 0.35)     # the arm
     # The charge on its plaque above, as on the folio's cloth.
-    Pc = (lambda P0, dv: (lambda a, b_, c=0.0: P0(a, b_ + dv, c)))(P, bh / 2 + 0.85)
-    box(Pc, -0.28, 0.28, -0.28, 0.28, -0.03, 0.03, WOOD, 0.45); charge((lambda P0: (lambda a, b_, c=0.0: P0(a, b_, c + 0.03)))(Pc), k)
+    Pc = (lambda P0, dv: (lambda a, b_, c=0.0: P0(a, b_ + dv, c)))(P, bh / 2 + 1.34)
+    for su in (-.2, .2): box(Pc, su - .022, su + .022, -.5, .74, -.03, .0, IRON, .4)     # two iron straps carry the shield on the pole
+    shield(Pc, k)
+    # Metal on colour, colour on metal, the old rule of heraldry: brass on the red fields, dark iron on the ochre ones.
+    emblem(Pc, EMBLEMS[EMBLEM_IDS[k]], .42, BRASS if k < 3 else IRON)
     # Stones heaped round each pole's foot.
     for i in range(6): a = i / 6 * 6.28 + k; b.lump((x + math.cos(a) * 0.45, y + math.sin(a) * 0.45, z - 0.05), 0.22, 0.18, 0.16, ROCK, 0.5, seed=600 + k * 7 + i, n=7)
 print("standards with name boards", len(hdr["standards"]), flush=True)
@@ -414,6 +461,7 @@ ao = me.color_attributes.new("AO", "FLOAT_COLOR", "POINT"); me.color_attributes.
 bpy.ops.object.select_all(action="DESELECT"); camp.select_set(True); bpy.context.view_layer.objects.active = camp
 scene.render.bake.target = "VERTEX_COLORS"; bpy.ops.object.bake(type="AO", target="VERTEX_COLORS", margin=0)
 A = np.empty(b.n * 4, np.float32); ao.data.foreach_get("color", A); A = A.reshape(-1, 4)[:, 0]
+if RELIEF: A[np.array(RELIEF)] = np.maximum(A[np.array(RELIEF)], 0.85)   # brass relief: lit as the plate under it, not black
 print("ao range", float(A.min()), float(np.median(A)), float(A.max()), flush=True)
 nor = np.empty(b.n * 3); me.vertex_normals.foreach_get("vector", nor); nor = nor.reshape(-1, 3)
 C = np.zeros((b.n, 4), np.float32); C[:, 0] = np.clip(A, 0, 1); C[:, 1] = np.clip((V[:, 2] - np.array([ground(float(x), float(y)) for x, y in V[:, :2]])) / 4.0, 0, 1); C[:, 2] = (MID + 0.5) / 32; C[:, 3] = BL   # G: height above the ground, for the MUSTER program's mud on canvas

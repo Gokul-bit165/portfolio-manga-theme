@@ -42,7 +42,7 @@ export const PAGES = {
 
   // Selected works: the index of the six standards. Each link takes the camera off the route to stand before that standard.
   muster: `<h2>Selected works</h2><p class="lede">Six standards stand round the ring, one for each project. Choose one to stand before it, here or in the camp.</p>
-    <ol class="stds">${PROJECTS.map((p) => `<li><a href="#project/${p.id}"><span class="num" aria-hidden="true">${p.n}</span><span class="nm">${p.name}</span><span class="ln">${p.overview}</span></a></li>`).join("")}</ol>`,
+    <ol class="stds">${PROJECTS.map((p) => `<li><a href="#project/${p.id}"><span class="num" aria-hidden="true">${p.n}</span><span class="nm">${p.name}</span><span class="ln">${p.line}</span></a></li>`).join("")}</ol>`,
 
   // Engineering: a blueprint. The figure is the engine of this journey, which is verified by being built; the areas are the owner's own.
   maphall: `<h2>Engineering</h2><p class="lede">The fields worked in, the tools the projects were built with, and how this journey itself is drawn.</p>

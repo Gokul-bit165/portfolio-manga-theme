@@ -16,7 +16,7 @@ export const RING = { x: 0, y: 92, r: 17 };
 export const GATE_Y = 182;
 export const EXIT = { x: 0, y: GATE_Y + 0.3, z: groundAt(0, GATE_Y + 0.3), opening: [-3.1, 3.1, groundAt(0, GATE_Y) - 0.6, groundAt(0, GATE_Y) + 5.6] };
 // The six standards, west to east round the ring's north side. Order is the proposed display order in context/PROJECTS.md.
-export const STANDARDS = ["aira", "weaving", "learnquest", "rescuecore", "cad-heart", "inaippu"].map((id, i) => {
+export const STANDARDS = ["loom", "terratrace", "nenai", "assessment", "texas", "hac-few"].map((id, i) => {   // the featured projects (src/chronicle/projects.js), 2026-11-09
   const a = Math.PI * (0.92 - (i / 5) * 0.84), x = RING.x + Math.cos(a) * RING.r, y = RING.y + Math.sin(a) * RING.r;
   return { id, x, y, z: groundAt(x, y) };
 });

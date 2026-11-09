@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>V2 A: exploration</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css"></head>
+<body>
+<!-- State A, exploration. The six standards are the only project navigation; the HUD is a chapter mark, a fading control hint and a compass. -->
+<div class="frame">
+  <div class="bg" style="background-image:url(bg/muster-route.png)"></div>
+  <div id="hud"></div>
+  <span class="label">A · Exploration</span>
+</div>
+<script type="module">
+import { chapter, compass, hint } from "./v2.js";
+document.getElementById("hud").innerHTML = chapter("CHAPTER IV", "THE MUSTER FIELD") + compass(-12)
+  + hint([[["W", "A", "S", "D"], "Explore"], [["E"], "Interact"], [["M"], "Chronicle"]]);
+</script>
+</body></html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>V2 B2: inspection</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css"></head>
+<body>
+<!-- State C, inspection: the camera has walked up to Loom AI's standard. A torn note is pinned beside the board by an ink line:
+     title, status, one line, the actions. About 7% of the frame. The folio opens only on Enter. -->
+<div class="frame">
+  <div class="bg" style="background-image:url(bg/standard-loom.png)"></div>
+  <svg width="1600" height="900" style="position:absolute;inset:0" aria-hidden="true">
+    <path d="M668 548 C 690 540, 700 500, 742 470" fill="none" stroke="#1d1712" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="666" cy="549" r="4" fill="#d94527" stroke="#1d1712" stroke-width="1"/>
+  </svg>
+  <article class="note" id="note" style="left:740px;top:300px">
+    <div class="emb" id="emb"></div>
+    <div style="font:500 11px/1 var(--f-mono);letter-spacing:.08em;color:#5a5448">STANDARD I OF VI</div>
+    <h2>Loom AI</h2>
+    <p class="status">Working product, team project</p>
+    <p>Textile manufacturing intelligence: every number traced to the factory's own logs.</p>
+    <div class="acts"><span><span class="key">ENTER</span>Read the folio</span><span><span class="key">ESC</span>Return</span></div>
+  </article>
+  <div id="hud"></div>
+  <span class="label">B2 · Inspection: a standard examined</span>
+</div>
+<script type="module">
+import { chapter, compass, emblems, emblemSvg, deckle } from "./v2.js";
+const E = await emblems();
+document.getElementById("emb").innerHTML = emblemSvg(E.loom, { size: 54, ink: "#1d1712" });
+document.getElementById("hud").innerHTML = chapter("CHAPTER IV", "THE MUSTER FIELD") + compass(8);
+deckle(document.getElementById("note"), 5, 31);
+</script>
+</body></html>

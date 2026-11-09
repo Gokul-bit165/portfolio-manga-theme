@@ -1,0 +1,300 @@
+{
+ "gpu": "intel",
+ "results": [
+  {
+   "name": "opening: the manga page is up, with no parchment in it and no chapter plate",
+   "ok": true,
+   "detail": "{\"open\":true,\"mark\":\"none\",\"vellum\":false}"
+  },
+  {
+   "name": "opening: scrolling opens the panel to the whole world",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "the Long Plain's chapter mark stays in the manga style",
+   "ok": true,
+   "detail": "cx2-mark cx2-ui manga"
+  },
+  {
+   "name": "exploring: persistent interface covers under 5% of the screen",
+   "ok": true,
+   "detail": "0.96%"
+  },
+  {
+   "name": "exploring: no plate, list, card or map button on screen",
+   "ok": true,
+   "detail": "{\"pct\":0.9613732530673346,\"big\":1,\"hintOpacity\":\"0\"}"
+  },
+  {
+   "name": "exploring: the control hint has faded when nothing is happening",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "name": "exploring: no console errors",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "W walks: the Muster Field's walking mode starts and the camera moves",
+   "ok": true,
+   "detail": "{\"x\":-0.6974728767261216,\"y\":88.09853756815991}"
+  },
+  {
+   "name": "walking never scrolls the page",
+   "ok": true,
+   "detail": "25387 -> 25387"
+  },
+  {
+   "name": "releasing the key comes smoothly to rest",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "collision: the camera never entered a tent, standard, fire or grave",
+   "ok": true,
+   "detail": "84 samples"
+  },
+  {
+   "name": "limits: the walk stops inside the palisade, well short of the gate",
+   "ok": true,
+   "detail": "furthest north 175.0 m"
+  },
+  {
+   "name": "Esc returns to the exact place on the road",
+   "ok": true,
+   "detail": "{\"from\":[-16.493,47.325,-338.848],\"to\":[-16.493,47.325,-338.848]}"
+  },
+  {
+   "name": "scrolling while walking simply returns to the road (no scroll hijack)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "hover: only the name and one action appear, no description",
+   "ok": true,
+   "detail": "{\"s\":{\"mode\":\"route\",\"inspected\":null,\"discovered\":\"nenai\",\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"muster\",\"here\":3,\"walk\":null},\"insc\":\"NENAI\\nE\\nEXAMINE\",\"hidden\":false,\"cursor\":\"pointer\",\"note\":true}"
+  },
+  {
+   "name": "hover: the pointer shows it can be clicked",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "click: the camera walks up and a note appears",
+   "ok": true,
+   "detail": "#project/nenai"
+  },
+  {
+   "name": "the note is under 25% of the screen, and inside it",
+   "ok": true,
+   "detail": "9.5%"
+  },
+  {
+   "name": "the note holds no detail beyond its one line",
+   "ok": true,
+   "detail": "STANDARD III OF VI ‹ › NENAI Working product, team project A personal memory that stays on the phone: an offline language model and local vector search. Enter Read the folio Esc Return"
+  },
+  {
+   "name": "Enter opens the project's folio, at its own address",
+   "ok": true,
+   "detail": "#project/nenai/folio"
+  },
+  {
+   "name": "the folio is set in Alegreya, not the page's monospace",
+   "ok": true,
+   "detail": "Alegreya, \"Iowan Old Style\", Georgia, serif"
+  },
+  {
+   "name": "Esc, Esc: back on the road at the exact camera place and scroll",
+   "ok": true,
+   "detail": "{\"a\":[-16.493,47.325,-338.848],\"b\":[-16.493,47.325,-338.848],\"y\":[25387,25387],\"hash\":\"\"}"
+  },
+  {
+   "name": "the page scrolls again after returning",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "mouse run: no console errors",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: Tab reaches a project's real link in the page",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: the focused project lights up in the world",
+   "ok": true,
+   "detail": "{\"d\":\"nenai\",\"shown\":true,\"t\":\"NENAI\\nE\\nEXAMINE\"}"
+  },
+  {
+   "name": "keyboard: Enter walks to the standard, and focus moves to its note",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: the arrow keys step to the next standard",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "returning from a standard restores the exact walking position",
+   "ok": true,
+   "detail": "{\"a\":[-16.993,46.544,-317.954],\"b\":[-16.993,46.545,-317.954]}"
+  },
+  {
+   "name": "M opens the map, at its own address; the camera pulls back",
+   "ok": true,
+   "detail": "[-20.184,62.325,-325.343]"
+  },
+  {
+   "name": "map: a named dialog holding the nine places as a list",
+   "ok": true,
+   "detail": "- dialog \"The Chronicle map\":\n  - banner:\n    - paragraph: THE CHRONICLE\n    - paragraph: The Red Line\n  - list:\n    - listitem:\n      - button \"I. The Long PlainPrologue. Visited.\"\n    - listitem:\n      - button \"II. VaelIdentity. Visited."
+  },
+  {
+   "name": "map: focus starts on the current place",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "map: every place has its own drawing; visited painted, ahead in ink",
+   "ok": true,
+   "detail": "{\"marks\":9,\"painted\":4,\"ink\":5}"
+  },
+  {
+   "name": "map: no button at the top right of the world",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Esc closes the map and restores the exact place",
+   "ok": true,
+   "detail": "{\"a\":[-16.493,47.325,-338.848],\"b\":[-16.493,47.325,-338.848],\"hash\":\"\"}"
+  },
+  {
+   "name": "map: a number key chooses a place",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "map: travelling goes straight there",
+   "ok": true,
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"vael\",\"here\":1,\"walk\":null,\"hash\":\"#vael\",\"y\":14688,\"where\":\"vael\",\"cam\":[-18.798,22.651,-71.525],\"overflow\":\"\"}"
+  },
+  {
+   "name": "map: the address shows where you went, and the map has lifted",
+   "ok": true,
+   "detail": "#vael"
+  },
+  {
+   "name": "browser Back returns to where you travelled from",
+   "ok": true,
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"\",\"y\":25387,\"where\":\"muster\",\"cam\":[-14.311,44.953,-268.062],\"overflow\":\"\"}"
+  },
+  {
+   "name": "map run: no console errors",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "direct link to a project: arrives at its standard, note open",
+   "ok": true,
+   "detail": "{\"mode\":\"inspect\",\"inspected\":\"loom\",\"discovered\":null,\"moving\":false,\"off\":true,\"locked\":true,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"#project/loom\",\"y\":24768,\"where\":\"muster\",\"cam\":[-22.136,47.173,-351.408],\"overflow\":\"hidden\"}"
+  },
+  {
+   "name": "Back from the folio: the standard",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Forward: the folio again",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Esc with no history behind it still leaves cleanly, to the Muster Field",
+   "ok": true,
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":true,\"off\":true,\"locked\":true,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"#muster\",\"y\":24768,\"where\":\"muster\",\"cam\":[-22.136,47.173,-351.407],\"overflow\":\"hidden\"}"
+  },
+  {
+   "name": "direct link to a folio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "visitors see no owner notes, drafts or drainage claim",
+   "ok": true,
+   "detail": "STANDARD V OF VI\n\nTexas Wildfire Ignition Model\n\nWorking product, deployed, team project\n\nDaily wildfire ignition likeli"
+  },
+  {
+   "name": "folio: a dialog headed with the project, its sections as headings",
+   "ok": true,
+   "detail": "- dialog \"Texas Wildfire Ignition Model\":\n  - paragraph: Standard V of VI\n  - heading \"Texas Wildfire Ignition Model\" [level=2]\n  - paragraph: Working product, deployed, team project\n  - paragraph: Da"
+  },
+  {
+   "name": "owner mode alone shows the private notes",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "direct link to the map, without walking the journey",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "direct link to a chapter page",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "reduced motion: the camera is at the standard at once",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "reduced motion: panels appear without animation",
+   "ok": true,
+   "detail": "0s 0s 0s"
+  },
+  {
+   "name": "reduced motion: at a standard, the world does not change by a byte",
+   "ok": true,
+   "detail": "0 bytes"
+  },
+  {
+   "name": "reduced motion: returning is a cut too",
+   "ok": true,
+   "detail": "{\"mode\":\"route\",\"inspected\":null,\"discovered\":null,\"moving\":false,\"off\":false,\"locked\":false,\"chapterId\":\"muster\",\"here\":3,\"walk\":null,\"hash\":\"#muster\",\"y\":24768,\"where\":\"muster\",\"cam\":[-17.873,47.62,-332.717],\"overflow\":\"\"}"
+  },
+  {
+   "name": "390 px: the manga opening holds",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 px: no sideways scrolling",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 px: a tap examines; the note fits, rising from the foot",
+   "ok": true,
+   "detail": "{\"l\":6.515417575836182,\"r\":383.88461923599243,\"t\":546.5475463867188,\"b\":835.9525756835938,\"vw\":390,\"vh\":844}"
+  },
+  {
+   "name": "390 px: the chapter mark opens the map, as a strip of places",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 px: no console errors",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

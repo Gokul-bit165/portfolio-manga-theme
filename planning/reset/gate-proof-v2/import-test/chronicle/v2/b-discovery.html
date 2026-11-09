@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>V2 B: discovery</title><link rel="icon" href="data:,"><link rel="stylesheet" href="v2.css">
+<style>
+  /* State B, discovery: walking up to a standard (WASD or pointer). Only the object answers: a loose ink-and-gold outline drawn round it,
+     its name sharpened as an inscription, one action. The rest of the camp quietly steps back. */
+  .focus { position: absolute; inset: 0; background: radial-gradient(ellipse 340px 300px at 797px 470px, transparent 60%, rgb(10 8 6 / .26)); }
+</style></head>
+<body>
+<div class="frame">
+  <div class="bg" style="background-image:url(bg/approach-assessment.png)"></div>
+  <div class="focus"></div>
+  <svg width="1600" height="900" style="position:absolute;inset:0" aria-hidden="true">
+    <!-- The outline is drawn as a pen would: two passes, not quite closed, slightly off the object. -->
+    <path d="M736 378 C 760 372, 830 371, 864 380 C 868 430, 866 490, 862 536 C 820 541, 770 542, 734 534 C 731 480, 733 420, 739 383" fill="none" stroke="#c9b27e" stroke-width="2.6" stroke-linecap="round" opacity=".95"/>
+    <path d="M742 374 C 790 368, 840 370, 868 386 M866 395 C 870 450, 869 500, 866 530" fill="none" stroke="#1d1712" stroke-width="1.1" stroke-linecap="round" opacity=".7"/>
+    <!-- At its foot, the ground mark the folio already uses: a gold ring trodden into the mud. -->
+    <ellipse cx="797" cy="666" rx="58" ry="12" fill="none" stroke="#c9b27e" stroke-width="2.2" opacity=".85"/>
+  </svg>
+  <div class="inscription" style="left:597px;width:400px;top:300px">
+    <div class="t">ASSESSMENT</div>
+    <div class="s"><span class="key">E</span><span>EXAMINE</span></div>
+  </div>
+  <div id="hud"></div>
+  <span class="label">B · Discovery: a standard within reach</span>
+</div>
+<script type="module">
+import { chapter, compass, hint } from "./v2.js";
+document.getElementById("hud").innerHTML = chapter("CHAPTER IV", "THE MUSTER FIELD") + compass(-4) + hint([[["E"], "Examine"], [["W", "A", "S", "D"], "Move on"]]);
+</script>
+</body></html>

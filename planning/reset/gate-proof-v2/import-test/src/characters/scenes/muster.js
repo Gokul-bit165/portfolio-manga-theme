@@ -1,17 +1,12 @@
 // The Muster Field's stage: the character-system proof (2026-11-06). Every figure is the neutral CC0 stand-in in a technical role; roles
 // are slot names only, so an authorised cast can fill them later through a cast configuration without touching this script.
-// Coordinates are the Muster Field's own (Blender axes, metres). Words come only from context/PROJECTS.md.
+// Coordinates are the Muster Field's own (Blender axes, metres). Words come only from src/chronicle/projects.js (verified, see project-audit/).
 import { groundAt, RING, STANDARDS, FIRES } from "../../worlds/muster.js";
 import { walkTo, talk, spar, hold } from "../actor.js";
 
-const PROJECTS = {
-  aira: ["Aira Agentic Ecosystem", "Agentic AI · FastAPI · vision processing · spatial memory · FAISS · Flutter app"],
-  weaving: ["Weaving Intelligence", "Textile weaving dashboard: production, power, compressed air, abnormalities"],
-  learnquest: ["LearnQuest", "Gamified learning and assessment · React · Node.js · MySQL · proctoring"],
-  rescuecore: ["RescueCore", "AI disaster-management portal · IoT · ESP32-CAM rover concepts · React"],
-  "cad-heart": ["CAD Detection and 3D Heart", "Coronary artery disease concepts · vessel visualisation · Three.js"],
-  inaippu: ["InaippuAI", "India-focused networking app · Flutter · credits and subscriptions · React admin"],
-};
+// The featured projects (src/chronicle/projects.js, 2026-11-09): name and one line, keyed by standard id.
+import { PROJECTS as FEATURED } from "../../chronicle/projects.js";
+const PROJECTS = Object.fromEntries(FEATURED.map((p) => [p.id, [p.name, p.line]]));
 const HOLD = [0.62, 1.05];   // the ring's held shot, in the world's own progress
 
 export async function setup(S) {

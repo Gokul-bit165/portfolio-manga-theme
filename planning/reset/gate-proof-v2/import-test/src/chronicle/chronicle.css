@@ -245,3 +245,5 @@ html.cx-held body.cx #discover { display: none; }
   body.cx .plate-maphall li { font-size: 15px; break-inside: avoid; }
   body.cx .plate-maphall .k { margin: 6px 0 4px; }
 }
+/* A project's status (production, prototype, team): a quiet line under its name, never a badge. */
+.cx-card .status, .cx-folio .status { font: italic 500 14px/1.3 var(--f-read); color: var(--rubric); margin: -2px 0 8px; }
