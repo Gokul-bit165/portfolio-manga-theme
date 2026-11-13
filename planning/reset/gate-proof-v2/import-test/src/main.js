@@ -24,7 +24,8 @@ const COARSE_POINTER = matchMedia("(pointer: coarse)").matches;
 // untouched without ?portal=1.
 const PORTAL = DIRECTOR && q.get("portal") === "1";
 const STORY = PORTAL ? J_CHAPTERS : CHAPTERS;
-const CHRONICLE2 = PORTAL && q.get("chronicle") === "2";   // the diegetic interface (src/chronicle2/); without the flag the journey keeps Chronicle V1
+const CHRONICLE3 = PORTAL && q.get("chronicle") === "3";   // V3: V2 with case studies in place of the folio (src/chronicle3/)
+const CHRONICLE2 = PORTAL && (q.get("chronicle") === "2" || CHRONICLE3);   // the diegetic interface (src/chronicle2/); without the flag the journey keeps Chronicle V1
 const chapterForHash = (h) => (CHRONICLE2 ? chapterHash2(h) : chapterForHash1(h));
 if (DIRECTOR) document.body.classList.add("director");
 if (DIRECTOR && q.get("hud") !== "1") document.body.classList.add("no-hud");   // the debug readout is for tests only
@@ -440,7 +441,7 @@ async function boot() {
   if (DIRECTOR) setupScroll();
   // The Chronicle Interface: the HUD, the map, the project standards (src/chronicle/). Not in capture mode, which the regression tests use.
   if (PORTAL && !CAPTURE) chronicle = CHRONICLE2
-    ? await (await import("./chronicle2/index.js")).initChronicle2({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth, travelTo })
+    ? await (await import("./chronicle2/index.js")).initChronicle2({ v3: CHRONICLE3, STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth, travelTo })
     : initChronicle({ STORY, journey, reduced: REDUCED_MOTION, scrollToP, getP: () => state.smooth });
   if (!CAPTURE) requestAnimationFrame(loop);
 

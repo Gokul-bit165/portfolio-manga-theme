@@ -1,0 +1,153 @@
+{
+ "gpu": "rtx",
+ "date": "2026-11-13T13:29:43.063Z",
+ "pass": 29,
+ "total": 29,
+ "results": [
+  {
+   "name": "note: says what the case holds, counted from the data",
+   "ok": true,
+   "detail": "{\"inside\":[\"9 evaluation figures\",\"5-step diagram\",\"Live system\"],\"act\":\"EnterOpen the case study\"}"
+  },
+  {
+   "name": "Enter opens the case study on its overview",
+   "ok": true,
+   "detail": "{\"leaf\":\"overview\",\"light\":false,\"shot\":0,\"node\":0,\"shots\":9}"
+  },
+  {
+   "name": "the world stays in view: the standard stands clear of the plate",
+   "ok": true,
+   "detail": "{\"left\":368,\"w\":1600,\"sx0\":91,\"sx1\":341,\"note\":\"0\",\"hscroll\":0}"
+  },
+  {
+   "name": "the note stands down while the case is open",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "name": "no sideways scrolling inside the case",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "name": "five bookmarks, as real tabs, the first selected",
+   "ok": true,
+   "detail": "[[\"overview\",\"true\"],[\"how\",\"false\"],[\"evidence\",\"false\"],[\"context\",\"false\"],[\"stack\",\"false\"]]"
+  },
+  {
+   "name": "right arrow turns the leaf",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "a diagram step explains itself when chosen",
+   "ok": true,
+   "detail": "4CalibrateIsotonicIsotonic calibration, fitted on the validation year only. Brie"
+  },
+  {
+   "name": "the temporal split carries the real row counts",
+   "ok": true,
+   "detail": "Temporal split: Train 2018–2020, 671,455 rows; Validate 2021, 268,332 rows; Test 2022–2026, 1,261,502 rows"
+  },
+  {
+   "name": "a number key jumps to a leaf",
+   "ok": true,
+   "detail": "{\"leaf\":\"evidence\",\"light\":false,\"shot\":0,\"node\":0,\"shots\":9}"
+  },
+  {
+   "name": "every gallery image loads and is labelled",
+   "ok": true,
+   "detail": "10"
+  },
+  {
+   "name": "a thumbnail changes the image, its caption and its source",
+   "ok": true,
+   "detail": "Top 20 features by XGBoost gain | github.com/Gokul-bit165/tdis-ML, TDIS_Ignition_BIT_V2/results/figures/06_feature_importance.png"
+  },
+  {
+   "name": "clicking the image opens it full size",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "right arrow shows the next image with count and source; the case behind is inert",
+   "ok": true,
+   "detail": "6 of 9 | Source: github.com/Gokul-bit165/tdis-ML, TDIS_Ignition_BIT_V2/results/figures/04_confusion_matrix_calibrated.png | true"
+  },
+  {
+   "name": "Esc closes only the image",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "recognition shows only records that can be checked",
+   "ok": true,
+   "detail": "[\"Deployed\",\"Team project\"]"
+  },
+  {
+   "name": "no institute is named or endorsed, and the drainage work is not mentioned",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "stepping to another project changes the case, its theme and the address",
+   "ok": true,
+   "detail": "cx3-case theme-exam in #project/assessment/folio"
+  },
+  {
+   "name": "a visitor is not shown an empty Screens leaf",
+   "ok": true,
+   "detail": "overview,how,context,stack"
+  },
+  {
+   "name": "the unconfirmed usage figures are not shown to visitors",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Esc returns to the note beside the standard",
+   "ok": true,
+   "detail": "#project/assessment"
+  },
+  {
+   "name": "Esc again returns to the exact place in the camp",
+   "ok": true,
+   "detail": "moved 0.000 m, scroll 0px"
+  },
+  {
+   "name": "Forward steps back into a project",
+   "ok": true,
+   "detail": "#project/texas"
+  },
+  {
+   "name": "no console errors",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "a direct link opens the case study",
+   "ok": true,
+   "detail": "overview,how,evidence,context,stack"
+  },
+  {
+   "name": "the owner sees exactly which evidence is missing",
+   "ok": true,
+   "detail": "For you only: evidence neededScreens of the real platform, with student names hidden. The "
+  },
+  {
+   "name": "reduced motion: the diagram does not animate",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "name": "phone: the plate fills the width, nothing overflows, touch targets are 44px",
+   "ok": true,
+   "detail": "{\"over\":false,\"plate\":390.3999938964844,\"small\":0}"
+  },
+  {
+   "name": "phone: the diagram becomes a numbered list",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

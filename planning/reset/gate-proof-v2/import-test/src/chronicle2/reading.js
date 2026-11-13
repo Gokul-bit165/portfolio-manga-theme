@@ -10,7 +10,7 @@ export function noteHtml(p, emblems) {
   const i = PROJECTS.indexOf(p), prev = PROJECTS[(i + 5) % 6], next = PROJECTS[(i + 1) % 6];
   return `<div class="emb">${emblemSvg(emblems[p.id], { size: 54, ink: "#1d1712" })}</div>
     <p class="kicker">Standard ${p.n} of VI<span class="step"><a href="#project/${prev.id}" data-step aria-label="Previous standard: ${esc(prev.name)}">‹</a><a href="#project/${next.id}" data-step aria-label="Next standard: ${esc(next.name)}">›</a></span></p><h2 id="cx2-note-t" tabindex="-1">${esc(p.name)}</h2><p class="status">${esc(p.status)}</p><p class="line">${esc(p.line)}</p>
-    <div class="acts"><a class="act" href="#project/${p.id}/folio"><kbd>Enter</kbd>Read the folio</a><button class="act" type="button" data-back><kbd>Esc</kbd>Return</button></div>`;
+    <div class="acts"><a class="act" href="#project/${p.id}/folio"><kbd>Enter</kbd>${document.body.classList.contains("cx3") ? "Open the case study" : "Read the folio"}</a><button class="act" type="button" data-back><kbd>Esc</kbd>Return</button></div>`;
 }
 
 export function folioHtml(p, emblems) {

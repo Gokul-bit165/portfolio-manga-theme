@@ -1,0 +1,145 @@
+{
+ "gpu": "rtx",
+ "results": [
+  {
+   "name": "#map: the map opens on arrival, from the start of the journey",
+   "ok": true,
+   "detail": "{\"hash\":\"#map\",\"y\":0,\"where\":\"plain\",\"cx\":{\"open\":null,\"t\":0,\"held\":false,\"map\":true,\"folio\":false},\"active\":\"IThe Long PlainYou are herePrologue\"}"
+  },
+  {
+   "name": "map: a dialog named 'The journey', its nine places as a list of buttons",
+   "ok": true,
+   "detail": "- dialog \"The journey\":\n  - img \"An illustrated map of the nine places on the journey, joined by the Red Line. The list beside it holds the same places.\":\n    - button \"I. The Long Plain, Prologue. You are here\": I Long Plain\n    - button \"II. Vael, Identity. Ahead\": II Vael\n    - button \"III. The U"
+  },
+  {
+   "name": "map: focus is inside the map",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "map: Tab keeps focus inside while it is open",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "map: Esc closes it and the address loses #map",
+   "ok": true,
+   "detail": "{\"hash\":\"\",\"y\":0,\"where\":\"plain\",\"cx\":{\"open\":null,\"t\":0,\"held\":false,\"map\":false,\"folio\":false},\"active\":\"1. The Long Plain2. The First Gate3. The Hidden Passage4. Va\"}"
+  },
+  {
+   "name": "map: no console errors",
+   "ok": true,
+   "detail": "warning: THREE.WebGLProgram: Program Info Log: (452,1): warning X4000: use of potentially uninitialized variable (f_ramp)\n(832,1): warning X4000: use of potentially uninitialized variable (f_styled_int)\n(840,1): warning X4000: use of potentially uninitialized variable (f_styled_int) | warning: THREE.WebGLProgram: Program Info Log: (1072,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1039,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__sSurf_0) | warning: THREE.WebGLProgram: Program Info Log: (1055,1): warning X4000: use of potent"
+  },
+  {
+   "name": "keyboard: Tab reaches the map seal",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: Enter opens the map",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: the place opens and its travel seal is reachable (forge)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "keyboard: travelling closes the map and walks the page and the camera there",
+   "ok": true,
+   "detail": "{\"hash\":\"#forge\",\"y\":18254,\"where\":\"forge\",\"cx\":{\"open\":null,\"t\":0,\"held\":false,\"map\":false,\"folio\":false},\"active\":\"✦Map\"}"
+  },
+  {
+   "name": "#project/loom: arrives in the Muster Field, off the route before Loom AI.s standard, its card open",
+   "ok": true,
+   "detail": "{\"hash\":\"#project/loom\",\"y\":24768,\"where\":\"muster\",\"cx\":{\"open\":\"loom\",\"t\":1,\"held\":true,\"map\":false,\"folio\":false},\"active\":\"Selected worksStandard I of VI\\n      \\n        Off the route,\"}"
+  },
+  {
+   "name": "visitor mode: no owner review notes are shown",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "#project/texas/folio: the folio opens, as a dialog headed with the project",
+   "ok": true,
+   "detail": "- dialog \"Texas Wildfire Ignition Model\":\n  - navigation \"Sections of this folio\":\n    - paragraph: Standard V of VI\n    - list:\n      - listitem:\n        - link \"Overview\":\n          - /url: \"#cx-sec"
+  },
+  {
+   "name": "folio: shows its sections; the owner-only contribution draft is hidden from visitors",
+   "ok": true,
+   "detail": "- dialog \"Texas Wildfire Ignition Model\":\n  - navigation \"Sections of this folio\":\n    - paragraph: Standard V of VI\n    - list:\n      - listitem:\n        - link \"Overview\":\n          - /url: \"#cx-sec-overview\"\n      - listitem:\n        - link \"Problem\":\n          - /url: \"#cx-sec-problem\"\n      - listitem:\n        - link \"Architecture\":\n          - /url: \"#cx-sec-architecture\"\n      - listitem:\n "
+  },
+  {
+   "name": "folio: no owner notes or drafts for a visitor",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "project links: no console errors",
+   "ok": true,
+   "detail": "warning: THREE.WebGLProgram: Program Info Log: (452,1): warning X4000: use of potentially uninitialized variable (f_ramp)\n(832,1): warning X4000: use of potentially uninitialized variable (f_styled_int)\n(840,1): warning X4000: use of potentially uninitialized variable (f_styled_int) | warning: THREE.WebGLProgram: Program Info Log: (1072,1): warning X4000: use of potentially uninitialized variable (f_shadeSky_float4)\n(1039,1): warning X4000: use of potentially uninitialized variable (f_shadeSurface__sSurf_0) | warning: THREE.WebGLProgram: Program Info Log: (1055,1): warning X4000: use of potent"
+  },
+  {
+   "name": "owner mode (?review=1): the folio shows the owner notes and the contribution draft",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "from the route: choosing a standard holds the walk (the wheel does not move it)",
+   "ok": true,
+   "detail": "{\"p0\":0.49686815607929063,\"held\":true,\"p\":0.49686815607929063,\"t\":1}"
+  },
+  {
+   "name": "Back from the folio: the card and the standard again",
+   "ok": true,
+   "detail": "{\"hash\":\"#project/assessment\",\"y\":24559,\"where\":\"muster\",\"cx\":{\"open\":\"assessment\",\"t\":1,\"held\":true,\"map\":false,\"folio\":false},\"active\":\"Selected worksStandard IV of VI\\n      \\n        Off the route\"}"
+  },
+  {
+   "name": "Back again: on the route, at the same scroll position",
+   "ok": true,
+   "detail": "{\"before\":{\"y\":24559,\"cam\":[-18.091,47.688,-331.889],\"p\":0.49686815607276785},\"after\":{\"y\":24559,\"cam\":[-18.091,47.688,-331.889],\"p\":0.49686815608056123}}"
+  },
+  {
+   "name": "... and the same camera place",
+   "ok": true,
+   "detail": "moved 0.0000 m"
+  },
+  {
+   "name": "Forward: the project opens again",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Esc on a project returns to the route",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "reduced motion: the camera is at the standard at once (no travel)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "reduced motion: panels open without animation",
+   "ok": true,
+   "detail": "0s"
+  },
+  {
+   "name": "reduced motion: standing at a standard, the world does not move between frames",
+   "ok": true,
+   "detail": "0 differing bytes"
+  },
+  {
+   "name": "390 px: the project card sits inside the screen",
+   "ok": true,
+   "detail": "{\"l\":0,\"r\":375.20001220703125,\"t\":440.3999938964844,\"b\":816,\"vw\":390,\"vh\":844}"
+  },
+  {
+   "name": "390 px: no sideways scrolling",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

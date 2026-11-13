@@ -27,10 +27,11 @@ function deckle(node, amount = 3, seed = 7) {
 }
 function link(href) { return new Promise((res) => { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; l.onload = l.onerror = res; document.head.append(l); }); }
 
-export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP, travelTo }) {
+export async function initChronicle2({ v3 = false, STORY, journey, reduced, scrollToP, getP, travelTo }) {
   document.body.classList.add("cx2");
   if (new URLSearchParams(location.search).get("review") === "1") document.body.classList.add("cx-review");
   await link("./src/chronicle2/v2.css");
+  if (v3) { document.body.classList.add("cx3"); await link("./src/chronicle3/v3.css"); }
   const [emblems, meta] = await Promise.all([loadEmblems(), fetch("./assets/muster/camp_meta.json").then((r) => r.json())]);
   const muster = journey.worlds.find((w) => w.def.id === "muster");
   const touch = matchMedia("(hover: none)").matches || innerWidth <= 760;
@@ -51,6 +52,9 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
   const folio = el(`<section class="cx2-folio" role="dialog" aria-modal="true" aria-labelledby="cx2-folio-t" hidden></section>`);
   const mangaRoot = el(`<div class="cx2-manga" aria-hidden="true"></div>`);
   document.body.append(mangaRoot, ink, insc, mark, hint, compass, focusLabel, note, read, folio, mapRoot);
+  const kase = v3 ? (await import("../chronicle3/case.js")).createCase({ reduced, emblems, onBack: () => back(), onStep: (d) => { const i = PROJECTS.indexOf(inspected.p), n = PROJECTS[(i + d + 6) % 6]; history.replaceState({ cx: 1, skip: 1 }, "", `#project/${n.id}/folio`); route(); } }) : null;
+  if (kase) await kase.ready;
+  const noteFor = (p) => { const h = noteHtml(p, emblems); return kase ? h.replace('<div class="acts">', `${kase.preview(p)}<div class="acts">`) : h; };
   const manga = createManga({ reduced, root: mangaRoot, onMap: () => go("#map") });
   // The discreet way in for keyboards and screen readers: first in the chapter index, which appears only when focused.
   index.insertAdjacentHTML("afterbegin", `<a href="#map">The Chronicle map (M)</a>`);
@@ -159,7 +163,7 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
     firstArrival = false;
     if (mode === "route" || mode === "roam") { backTo = mode; lock(); opener = opener ?? document.activeElement; hint.classList.remove("on"); roam.keys.clear(); document.body.classList.add("cx2-inspecting"); }
     if (mode !== "folio" && inspected !== it || mode === "route" || mode === "roam") {
-      inspected = it; note.innerHTML = noteHtml(it.p, emblems); note.hidden = true; note.classList.remove("in"); mode = "inspect"; inkKey = "";
+      inspected = it; note.innerHTML = noteFor(it.p); note.hidden = true; note.classList.remove("in"); mode = "inspect"; inkKey = "";
       rig.tween(st.standing(it, narrow()), withFolio ? 0 : 1.6, { arc: .6, after: showNote });
     }
     if (withFolio) openFolio(it); else closeFolio();
@@ -173,12 +177,18 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
     refocus();
   }
   function openFolio(it) {
+    if (kase) {   // V3: the case study. The camera steps aside so the standard stays in view beside the plate.
+      if (inspected !== it) { inspected = it; note.innerHTML = noteFor(it.p); inkKey = ""; }
+      mode = "folio"; modal(true); note.classList.remove("in"); document.body.classList.add("cx3-casing"); rig.tween(st.standing(it, narrow(), true), reduced ? 0 : 1.1, { arc: .2 }); kase.open(it.p); return;
+    }
     folio.innerHTML = folioHtml(it.p, emblems); folio.hidden = false; mode = "folio"; modal(true);
     const f = cam && st.frame(it, cam, W, H); folio.style.setProperty("--ox", `${f ? (f.x0 + f.x1) / 2 : W / 2}px`); folio.style.setProperty("--oy", `${f ? (f.y0 + f.y1) / 2 : H / 2}px`);
     deckle(folio.querySelector(".spread2"), 3.5, 17);
     requestAnimationFrame(() => requestAnimationFrame(() => folio.classList.add("in"))); folio.querySelector("h2").focus({ preventScroll: true });
   }
-  function closeFolio() { if (folio.hidden) return; folio.classList.remove("in"); modal(false); if (reduced) folio.hidden = true; else setTimeout(() => { if (!folio.classList.contains("in")) folio.hidden = true; }, 520); if (mode === "folio") { mode = "inspect"; note.querySelector("h2")?.focus({ preventScroll: true }); } }
+  function closeFolio() {
+    if (kase) { if (!document.body.classList.contains("cx3-casing")) return; document.body.classList.remove("cx3-casing"); kase.close(); modal(false); if (mode === "folio") { mode = "inspect"; rig.tween(st.standing(inspected, narrow()), reduced ? 0 : 1, { arc: .2, after: showNote }); } return; }
+    if (folio.hidden) return; folio.classList.remove("in"); modal(false); if (reduced) folio.hidden = true; else setTimeout(() => { if (!folio.classList.contains("in")) folio.hidden = true; }, 520); if (mode === "folio") { mode = "inspect"; note.querySelector("h2")?.focus({ preventScroll: true }); } }
   folio.addEventListener("click", (e) => { const a = e.target.closest("[data-sec]"); if (a) { e.preventDefault(); folio.querySelector(`#cx2-sec-${a.dataset.sec}`)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }); } if (e.target.closest("[data-back]")) back(); });
   note.addEventListener("click", (e) => { if (e.target.closest("[data-back]")) back(); });
 
@@ -229,6 +239,8 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
   // ---- Addresses. In-page views are pushed as marked entries, so closing one steps back exactly once.
   function go(h) { if (location.hash === h) return; history.pushState({ cx: 1 }, "", h); route(); }
   function back() {
+    // After stepping between case studies the entry beneath still names the first project: close onto this project's note, and from there leave past the stale entry.
+    if (history.state?.skip) { const r = routeOf(location.hash); if (r.kind === "project" && r.folio) { history.replaceState({ cx: 1, skip: 1 }, "", `#project/${r.id}`); route(); } else history.go(-2); return; }
     if (history.state?.cx) { history.back(); return; }
     const r = routeOf(location.hash);
     const to = r.kind === "project" && r.folio ? `#project/${r.id}` : r.kind === "project" ? "#muster" : r.kind === "read" ? `#${r.id}` : "";
@@ -249,9 +261,10 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
   });
 
   // ---- Input.
-  const uiTarget = (t) => t.closest?.(".cx2-ui, .cx2-note, .cx2-map, .cx2-read, .cx2-folio, a, button");
+  const uiTarget = (t) => t.closest?.(".cx2-ui, .cx2-note, .cx2-map, .cx2-read, .cx2-folio, .cx3-case, .cx3-light, a, button");
   addEventListener("keydown", (e) => {
     activity(); if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.("input,textarea,select")) return;
+    if (kase && mode === "folio" && kase.key(e)) return;
     const k = e.key.toLowerCase();
     if (k === "escape") { if (mode === "roam") leaveRoam(); else if (mode !== "route" && mode !== "return") back(); return; }
     if (k === "m" && !e.repeat) { if (mode === "map") back(); else if (mode === "route" || mode === "roam") go("#map"); return; }
@@ -294,6 +307,6 @@ export async function initChronicle2({ STORY, journey, reduced, scrollToP, getP,
     const open = !manga.update(); document.body.classList.toggle("cx2-page", open);
   }
   route();
-  window.__cx2 = { cam: () => cam ? cam.position.toArray().map((v) => +v.toFixed(3)) : [0, 0, 0], boxes: () => st.items.map((x) => ({ id: x.p.id, f: cam && st.frame(x, cam, W, H) })), state: () => ({ mode, inspected: inspected?.p.id ?? null, discovered: discovered?.p.id ?? null, moving: rig.moving(), off: rig.isOff(), locked, chapterId, here, walk: mode === "roam" ? roam.pos() : null }), circles: roam.circles, radius: roam.RADIUS };
+  window.__cx2 = { cam: () => cam ? cam.position.toArray().map((v) => +v.toFixed(3)) : [0, 0, 0], boxes: () => st.items.map((x) => ({ id: x.p.id, f: cam && st.frame(x, cam, W, H) })), kase: () => kase?.state() ?? null, state: () => ({ mode, inspected: inspected?.p.id ?? null, discovered: discovered?.p.id ?? null, moving: rig.moving(), off: rig.isOff(), locked, chapterId, here, walk: mode === "roam" ? roam.pos() : null }), circles: roam.circles, radius: roam.RADIUS };
   return { chapter, camera, holding: () => mode !== "route", picked: () => false };
 }

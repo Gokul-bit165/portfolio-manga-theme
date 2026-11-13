@@ -38,7 +38,11 @@ export function createStandards({ origin }) {
   }
   const inFront = (it, cam, cone) => { v.copy(it.foot).sub(cam.position).setY(0).normalize(); const f = new THREE.Vector3(0, 0, -1).applyQuaternion(cam.quaternion).setY(0).normalize(); return v.dot(f) > cone ? v.dot(f) : 0; };   // how squarely it lies ahead (0 if outside the cone)
   // Where the camera stands to examine a standard: in front of the board, the board left of centre so the note has room beside it.
-  function standing(it, narrow) {
+  function standing(it, narrow, aside) {
+    if (aside && !narrow) {   // the case study: the standard stands at the left edge of the frame, the plate takes the rest
+      const b = it.foot.clone(); b.y += 3.05; const pos = b.clone().addScaledVector(it.toRing, 10.4); pos.y -= .3; const look = b.clone().addScaledVector(it.right, 6.7);
+      return { pos, quat: new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(pos, look, UP)) };
+    }
     const board = it.foot.clone(); board.y += 3.05;
     const pos = board.clone().addScaledVector(it.toRing, narrow ? 10.5 : 8.6); pos.y -= narrow ? .1 : .3;
     const look = board.clone().addScaledVector(it.right, narrow ? 0 : 1.7); if (narrow) look.y -= 1.5;
